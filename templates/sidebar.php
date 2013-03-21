@@ -61,7 +61,7 @@ function renderAddonList(array $addons) {
 					*/
 					
 						// Build the Popular Add-Ons right hand slider slider
-						$popular = $db->get_results("SELECT * FROM addon WHERE id NOT LIKE '%Common%' ORDER BY downloads DESC LIMIT 5");
+						$popular = $db->get_results("SELECT * FROM addon WHERE id NOT LIKE '%Common%' AND id NOT LIKE '%script.module%' ORDER BY downloads DESC LIMIT 5");
 						echo renderAddonList($popular);
 						?>
 					</div>
