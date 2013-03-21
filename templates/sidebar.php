@@ -48,13 +48,18 @@ function renderAddonList(array $addons) {
 					<!-- Tab Container for menu with ID tabs-3 -->
 					<div class="tabs-inner" id="tabs-3">
 						<?php
-					//	$comment = $db->get_results("SELECT * FROM comment ORDER BY date DESC LIMIT 4"); 
-					//	foreach ($comment as $comments)
-					//	{
-					//		echo "<li><b><a href='details.php?t=".$comments->addonid."'>".$comments->name." says '".$comments->comment."'</a></b>";
-					//		echo "<span class='date'>".$comments->date."</span>";						
-					//		echo "</li>";
-					//	}
+					
+					/* // This is a sidebar to show the latest comments. Disabled for now as we are not launching comments yet.
+						
+						$comment = $db->get_results("SELECT * FROM comment ORDER BY date DESC LIMIT 4"); 
+						foreach ($comment as $comments)
+						{
+							echo "<li><b><a href='details.php?t=".$comments->addonid."'>".$comments->name." says '".$comments->comment."'</a></b>";
+							echo "<span class='date'>".$comments->date."</span>";						
+							echo "</li>";
+						} 
+					*/
+					
 						// Build the Popular Add-Ons right hand slider slider
 						$popular = $db->get_results("SELECT * FROM addon WHERE id NOT LIKE '%Common%' ORDER BY downloads DESC LIMIT 5");
 						echo renderAddonList($popular);
