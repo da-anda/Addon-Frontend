@@ -18,16 +18,16 @@ $page = new PageRenderer();
 				if (isset($xml->addon['id']))
 				{
 					$counter = 0;
-
+					// Loop through each addon
 					foreach ($xml->addon as $addons) 
 					{
 						$counter++;
 						$description = "";
 						$summary = "";
-						$log = "<b>ID: </b>".$addons['id']. " - ";
+						$log = "<b>ID: </b>".$addons['id']. " ";
 						foreach ($addons->children() as $nodeName => $node) {
 							if ($nodeName == 'extension' && $node['point'] == 'xbmc.addon.metadata' && $node->children()) {
-								$log .= '| meta data found |';
+								$log .= '| <b>Metadata:</b> <img src="images/icon_yes.png" height="12" width="12" /> |';
 								foreach ($node->children() as $subNodeName => $subNode) {
 									if ($subNodeName == 'description' 
 										&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
@@ -48,7 +48,7 @@ $page = new PageRenderer();
 								break;
 							}
 						}
-
+						// Set the individual variables for each add-on
 						$id = $addons['id'];
 						$name = $db->escape($addons['name']);
 						$provider_name = $db->escape($addons['provider-name']);
@@ -61,22 +61,26 @@ $page = new PageRenderer();
 						if (isset($check->id))
 						{
 							//Item exists
-							$log .= "match found ";
+							$log .= ' <b>Exists:</b> <img src="images/icon_yes.png" height="12" width="12" /> ';
 							//Check here to see if the addon needs to be updated
 							if ($check->version == $version)
 							{
-								$log .= "- versions the same";
+								$log .= ' | <b>Version:</b> no change';
 							// Update plugin here to new version number
 							}
+							
 							else
 							{
 								$db->query("UPDATE addon SET version = '$version', updated = NOW(), provider_name = '$provider_name', description = '$description' WHERE id = '$id'");
-								$log .= "<b>version updated</b>";
+								$log .= '<b>Version:</b> updated <img src="images/icon_screens.png" height="12" width="12" />';
 							}
 						}
+						
+						// Add a new add-on if it doesn't exist
 						else if ($description != "")
 						{
 							$db->query("INSERT INTO addon (id, name, provider_name, version, description, created, updated) VALUES ('$id', '$name', '$provider_name','$version', '$description', NOW(), NOW())");
+							$log .= ' <b>Exists:</b> <img src="images/icon_no.jpg" height="12" width="12" /> (Created new!)';
 						}
 						else
 						{
@@ -109,7 +113,7 @@ $page = new PageRenderer();
 						{
 							// To speed things up, don't check if the addon exists in the DB and then do the UPDATE query. If addon is not in DB, it won't update anything, but if it is, we saved 1 query per update
 							// Plugin was found update with the downloads.
-							if($db->query("UPDATE addon SET downloads = '$downloads' WHERE id = '" . $db->escape($addonId) . "'"))	$content .=  '<li>' . $addonId . " - " . $downloads . ' - <b> downloads updated</b></li>';
+							if($db->query("UPDATE addon SET downloads = '$downloads' WHERE id = '" . $db->escape($addonId) . "'"))	$content .=  '<li><b>ID</b>: ' . $addonId . " | <b>Downloads: </b> " . $downloads . ' </li>';
 						}
 					}
 					$content .=  '</ul>';
