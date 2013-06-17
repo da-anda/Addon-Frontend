@@ -167,3 +167,4 @@ pip-log.txt
 ## Custom
 #############
 includes/developmentConfiguration.php
+cache/

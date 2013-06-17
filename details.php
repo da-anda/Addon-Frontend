@@ -25,8 +25,8 @@ $content = '';
 		foreach ($detail as $details)
 		{
 			$content .= "<div id='addonDetail'><h2>$details->name ".$details->version."</h2>
-				<span class='thumbnail'><img src='http://mirrors.xbmc.org/addons/eden/$details->id/icon.png' alt='$details->name' width='256' height='256' class='pic' /></span>
-				<strong>Author:</strong> <a href='/browse.php?a=".$details->provider_name."'>".$details->provider_name."</a>";
+				<span class='thumbnail'><img src='" . getAddonThumbnail($details->id, 'large') . "' alt='$details->name' class='pic' /></span>
+				<strong>Author:</strong> <a href='browse.php?a=".$details->provider_name."'>".$details->provider_name."</a>";
 			#$content .= "<br /><br /><strong>Rating:</strong> <img src='images/star_full_off.png' width='14' height='14' /><img src='images/star_full_off.png' width='14' height='14' /><img src='images/star_full_off.png' width='14' height='14' /><img src='images/star_full_off.png' width='14' height='14' /><img src='images/star_full_off.png' width='14' height='14' />";
 			$content .= "<br /><br /><strong>Downloads:</strong> ".number_format($details->downloads);
 			$content .= "<br /><br /><strong>Description:</strong> ".str_replace("[CR]","<br />",$details->description)."<br /><br />";
@@ -53,7 +53,7 @@ $content = '';
 	}
 //	Else { $content = "none found"};
 					
-$content .= '
+/* $content .= '
 		<!-- Comments Javascript Livefyre Embed -->
 		<div id="livefyre-comments"></div>
 		<script type="text/javascript" src="http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js"></script>
@@ -74,7 +74,7 @@ $content .= '
 			}());
 		</script>
 		<!-- END: Livefyre Embed -->
-';
+'; */
 
 $content .= getDisclaimer();
 $page->setContent($content);

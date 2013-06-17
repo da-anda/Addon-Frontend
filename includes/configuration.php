@@ -22,11 +22,25 @@ $configuration = array(
 	),
 	// defines some settings needed to interact with the repositories
 	'repository' => array(
-		'version' => 'eden',
-		'importUrl' => 'http://mirrors.xbmc.org/addons/eden/addons.xml',
+		'version' => 'frodo',
+		'importUrl' => 'http://mirrors.xbmc.org/addons/frodo/addons.xml',
 		'statsUrl' => 'http://mirrors.xbmc.org/addons/addons_simplestats.xml',
 	),
+	// template and rendering related settings
 	'templatePath' => 'templates',
+	'images' => array(
+		'dummy' => 'images/addon-dummy.png',
+		'sizes' => array(
+			'addonThumbnail' => array(120,120),
+			'addonThumbnailSmall' => array(60,60),
+			'large' => array(256,256)
+		)
+	),
+	// cache settings
+	'cache' => array(
+		'pathWrite' => 'cache' . DIRECTORY_SEPARATOR,
+		'pathRead' => 'cache/'
+	)
 );
 
 

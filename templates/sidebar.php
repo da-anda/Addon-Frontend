@@ -9,7 +9,7 @@ function renderAddonList(array $addons) {
 		foreach ($addons as $addon)
 		{
 			$output .= "<li><a href='details.php?t=".$addon->id."'>";
-			$output .= "<img src='http://mirrors.xbmc.org/addons/eden/$addon->id/icon.png' width='60' height='60' alt='$addon->name' class='pic alignleft' />";
+			$output .= "<img src='" . getAddonThumbnail($addon->id, 'addonThumbnailSmall') . "' width='60' height='60' alt='$addon->name' class='pic alignleft' />";
 			$output .= "<b>$addon->name</b></a>";
 			$output .= "<span class='date'>".$addon->updated."</span>";
 			$output .= "</li>";
@@ -48,15 +48,20 @@ function renderAddonList(array $addons) {
 					<!-- Tab Container for menu with ID tabs-3 -->
 					<div class="tabs-inner" id="tabs-3">
 						<?php
-					//	$comment = $db->get_results("SELECT * FROM comment ORDER BY date DESC LIMIT 4"); 
-					//	foreach ($comment as $comments)
-					//	{
-					//		echo "<li><b><a href='details.php?t=".$comments->addonid."'>".$comments->name." says '".$comments->comment."'</a></b>";
-					//		echo "<span class='date'>".$comments->date."</span>";						
-					//		echo "</li>";
-					//	}
+					
+					/* // This is a sidebar to show the latest comments. Disabled for now as we are not launching comments yet.
+						
+						$comment = $db->get_results("SELECT * FROM comment ORDER BY date DESC LIMIT 4"); 
+						foreach ($comment as $comments)
+						{
+							echo "<li><b><a href='details.php?t=".$comments->addonid."'>".$comments->name." says '".$comments->comment."'</a></b>";
+							echo "<span class='date'>".$comments->date."</span>";						
+							echo "</li>";
+						} 
+					*/
+					
 						// Build the Popular Add-Ons right hand slider slider
-						$popular = $db->get_results("SELECT * FROM addon WHERE id NOT LIKE '%Common%' ORDER BY downloads DESC LIMIT 5");
+						$popular = $db->get_results("SELECT * FROM addon WHERE id NOT LIKE '%Common%' AND id NOT LIKE '%script.module%' ORDER BY downloads DESC LIMIT 5");
 						echo renderAddonList($popular);
 						?>
 					</div>
@@ -77,7 +82,7 @@ function renderAddonList(array $addons) {
 							echo '<ul class="overview">';
 							foreach ($random as $randoms)
 							{
-								echo "<li><div class='thumb'><a href='details.php?t=".$randoms->id."'><img src='http://mirrors.xbmc.org/addons/eden/$randoms->id/icon.png' height='125' alt='$randoms->name' class='pic' /></a></div>";
+								echo "<li><div class='thumb'><a href='details.php?t=".$randoms->id."'><img src='" . getAddonThumbnail($randoms->id, 'addonThumbnail') . "' height='125' alt='$randoms->name' class='pic' /></a></div>";
 								echo "<h5>".substr($randoms->name,0,22)." by ".substr($randoms->provider_name,0,15)."</h5>";
 								echo "<p>".str_replace("[CR]","",substr($randoms->description,0,100))."...</p></li>";
 							}
