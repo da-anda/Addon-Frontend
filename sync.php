@@ -6,8 +6,15 @@
 	require_once("includes/pageRenderer.php");
 //  ##############  Finish Includes  ############### //
 
-$page = new PageRenderer();
+//  ##############   Get Variables   ############### //
+	if (isset($_GET["go"])) {$go = $_GET["go"];}
+//  ##############  Finish Varibles  ############### //
 
+$page = new PageRenderer();
+			
+			// Check the site variable is set to yes and proceed.
+			if ($go == 'yes')
+			{
 				$content = '<h2>Status</h2>
 				<p>Syncing With Addons.XML, using ' . ucfirst($configuration['repository']['version']) . ' Repository.</p>
 				<ul>';
@@ -118,6 +125,7 @@ $page = new PageRenderer();
 					}
 					$content .=  '</ul>';
 				}
+			}
 
 $page->setTemplate('pageNoSideColumn');
 $page->setContent($content);
