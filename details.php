@@ -45,7 +45,7 @@ $content = '';
 
 			
 			// Check sourcecode link exists
-			$sourceLink = $details->sourcecode ? '<a href="' . $details->sourcecode .'"><img src="images/code.png" alt="Source code" /></a>' : '<img src="images/codebw.png" alt="Source code" />';
+			$sourceLink = $details->source ? '<a href="' . $details->source .'"><img src="images/code.png" alt="Source code" /></a>' : '<img src="images/codebw.png" alt="Source code" />';
 			$content .=  "<li><strong>Source Code:</strong><br />" . $sourceLink . '</li>';
 
 			$content .= '</ul></div>';
