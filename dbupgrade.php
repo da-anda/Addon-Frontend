@@ -19,8 +19,7 @@ $page = new PageRenderer();
 				    $db->query("ALTER TABLE addon ADD website VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER forum ;");
 					$content .= 'Creating Website Field: <img src="images/icon_yes.png" height="12" width="12" /> <b>Done</b><br />';
 					$worked ++;
-				}
-				else { 
+				} else { 
 					$content .= 'Creating Website Field: <img src="images/icon_no.jpg" height="12" width="12" /> <b>Already Exists</b><br />';
 				}
 				
@@ -30,8 +29,7 @@ $page = new PageRenderer();
 				    $db->query("ALTER TABLE addon ADD source VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER website ;");
 					$content .= 'Creating Source Field: <img src="images/icon_yes.png" height="12" width="12" /> <b>Done</b><br />';
 					$worked ++;
-				}
-				else {
+				} else {
 					$content .= 'Creating Source Field: <img src="images/icon_no.jpg" height="12" width="12" /> <b>Already Exists</b><br />';
 				}
 				
@@ -41,8 +39,7 @@ $page = new PageRenderer();
 				    $db->query("ALTER TABLE addon ADD license VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER source ;");
 					$content .= 'Creating License Field: <img src="images/icon_yes.png" height="12" width="12" /> <b>Done</b><br />';
 					$worked ++;
-				} 
-				else {
+				} else {
 					$content .= 'Creating License Field: <img src="images/icon_no.jpg" height="12" width="12" /> <b>Already Exists</b><br />';
 				}
 				
@@ -52,8 +49,7 @@ $page = new PageRenderer();
 				    $db->query("ALTER TABLE addon DROP sourcecode ;");
 					$content .= 'Deleting SourceCode Field: <img src="images/icon_yes.png" height="12" width="12" /> <b>Exists Deleting</b><br />';
 					$worked ++;
-				}
-				else {
+				} else {
 					$content .= 'Deleting SourceCode Field: <img src="images/icon_no.jpg" height="12" width="12" /> <b>Does Not Exist</b><br />';
 				}
 				
@@ -61,8 +57,7 @@ $page = new PageRenderer();
 				if ($worked == 4) {
 					$db->query("TRUNCATE TABLE addon;");
 					$content .= 'Emptying Table: <img src="images/icon_yes.png" height="12" width="12" /> <b>Done</b><br />';
-				}
-				else {
+				} else {
 					$content .= 'Emptying Table: <img src="images/icon_no.jpg" height="12" width="12" /> <b>Upgrade did not complete</b><br />';
 				}
 
