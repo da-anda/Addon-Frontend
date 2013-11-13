@@ -48,34 +48,16 @@ $content = '';
 			// Check sourcecode link exists
 			$sourceLink = $details->source ? '<a href="' . $details->source .'"><img src="images/code.png" alt="Source code" /></a>' : '<img src="images/codebw.png" alt="Source code" />';
 			$content .=  "<li><strong>Source Code:</strong><br />" . $sourceLink . '</li>';
+			
+			// Check website link exists
+			$websiteLink = $details->website ? '<a href="' . $details->website .'"><img src="images/website.png" alt="Website" /></a>' : '<img src="images/websitebw.png" alt="Source code" />';
+			$content .=  "<li><strong>Website Link:</strong><br />" . $websiteLink . '</li>';
 
 			$content .= '</ul></div>';
 		}
 	}
 //	Else { $content = "none found"};
 					
-/* $content .= '
-		<!-- Comments Javascript Livefyre Embed -->
-		<div id="livefyre-comments"></div>
-		<script type="text/javascript" src="http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js"></script>
-		<script type="text/javascript">
-			(function () {
-			var articleId = fyre.conv.load.makeArticleId(null, [\'t\']);
-			fyre.conv.load({}, [{
-			el: \'livefyre-comments\',
-			network: "livefyre.com",
-			siteId: "314161",
-			articleId: articleId,
-			signed: false,
-			collectionMeta: {
-							articleId: articleId,
-							url: fyre.conv.load.makeCollectionUrl(),
-							}
-			}], function() {});
-			}());
-		</script>
-		<!-- END: Livefyre Embed -->
-'; */
 
 $content .= getDisclaimer();
 $page->setContent($content);
