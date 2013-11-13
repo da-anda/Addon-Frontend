@@ -41,8 +41,8 @@ $content = '';
 			$content .=  '<li><strong>Wiki Documentation:</strong><br /><a href="http://wiki.xbmc.org/index.php?title=Add-on:' . $details->name . '"><img src="images/wiki.png" alt="Wiki page of this addon" /></a></li>';
 
 			// Donation stuff (**REMOVED FOR NOW**)
-			#$donateLink = $details->donate ? '<a href="' . $details->donate .'"><img src="images/paypal.jpg" alt="Donate" /></a>' : '<img src="images/paypalbw.jpg" alt="Donate" />';
-			#echo "<li><strong>Donate to Author:</strong><br />" . $donateLink . '</li>';
+			// $donateLink = $details->donate ? '<a href="' . $details->donate .'"><img src="images/paypal.jpg" alt="Donate" /></a>' : '<img src="images/paypalbw.jpg" alt="Donate" />';
+			// $content .=  "<li><strong>Donate to Author:</strong><br />" . $donateLink . '</li>';
 
 			
 			// Check sourcecode link exists
