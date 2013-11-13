@@ -29,7 +29,8 @@ $content = '';
 				<strong>Author:</strong> <a href='browse.php?a=".$details->provider_name."'>".$details->provider_name."</a>";
 			#$content .= "<br /><br /><strong>Rating:</strong> <img src='images/star_full_off.png' width='14' height='14' /><img src='images/star_full_off.png' width='14' height='14' /><img src='images/star_full_off.png' width='14' height='14' /><img src='images/star_full_off.png' width='14' height='14' /><img src='images/star_full_off.png' width='14' height='14' />";
 			$content .= "<br /><br /><strong>Downloads:</strong> ".number_format($details->downloads);
-			$content .= "<br /><br /><strong>Description:</strong> ".str_replace("[CR]","<br />",$details->description)."<br /><br />";
+			$content .= "<br /><br /><strong>Description:</strong> ".str_replace("[CR]","<br />",$details->description);
+			$content .= "<br /><br /><strong>License:</strong> ".str_replace("[CR]","<br />",$details->license)."<br /><br />";
 
 			$content .=  '<ul class="addonLinks">';
 			// forum link
