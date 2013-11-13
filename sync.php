@@ -31,24 +31,49 @@ $page = new PageRenderer();
 						$counter++;
 						$description = "";
 						$summary = "";
+						$forum = "";
+						$source = "";
+						$website = "";
+						$license = "";
 						$log = "<b>ID: </b>".$addons['id']. " ";
 						foreach ($addons->children() as $nodeName => $node) {
 							if ($nodeName == 'extension' && $node['point'] == 'xbmc.addon.metadata' && $node->children()) {
 								$log .= '| <b>Metadata:</b> <img src="images/icon_yes.png" height="12" width="12" /> |';
 								foreach ($node->children() as $subNodeName => $subNode) {
+									// Check for the Forum XML Subnode
+									if ($subNodeName == 'forum')
+									{
+											$forum = $subNode;
+									}
+									// Check for the Website XML Subnode
+									if ($subNodeName == 'website')
+									{
+											$website = $subNode;
+									}
+									// Check for the Source XML Subnode
+									if ($subNodeName == 'source')
+									{
+											$source = $subNode;
+									}
+									// Check for the License XML Subnode
+									if ($subNodeName == 'license')
+									{
+											$license = $subNode;
+									}
+									// Check for the Description XML Subnode
 									if ($subNodeName == 'description' 
 										&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
 									{
 											$description = $subNode;
-											break;
 									}
+									// Check for the Summary XML Subnode
 									if ($subNodeName == 'summary' 
 										&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
 									{
 											$summary = $subNode;
-											break;
 									}
 								}
+								// Merge the description and summary variables
 								if ($description == '' && $summary) {
 									$description = $summary;
 								}
@@ -78,7 +103,7 @@ $page = new PageRenderer();
 							
 							else
 							{
-								$db->query("UPDATE addon SET version = '$version', updated = NOW(), provider_name = '$provider_name', description = '$description' WHERE id = '$id'");
+								$db->query("UPDATE addon SET version = '$version', updated = NOW(), provider_name = '$provider_name', description = '$description', forum = '$forum', website = '$website', source = '$source', license = '$license' WHERE id = '$id'");
 								$log .= '<b>Version:</b> updated <img src="images/icon_screens.png" height="12" width="12" />';
 							}
 						}
@@ -86,7 +111,7 @@ $page = new PageRenderer();
 						// Add a new add-on if it doesn't exist
 						else if ($description != "")
 						{
-							$db->query("INSERT INTO addon (id, name, provider_name, version, description, created, updated) VALUES ('$id', '$name', '$provider_name','$version', '$description', NOW(), NOW())");
+							$db->query("INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license) VALUES ('$id', '$name', '$provider_name','$version', '$description', NOW(), NOW(),'$forum', '$website', '$source','$license')");
 							$log .= ' <b>Exists:</b> <img src="images/icon_no.jpg" height="12" width="12" /> (Created new!)';
 						}
 						else
