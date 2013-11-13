@@ -26,7 +26,7 @@ $content = <<<EOF
 					<li><a href="browse.php?t=script"><span class="thumbnail"><img src="images/mainicon-script.png" class="pic" alt="XBMC Script Add-Ons" /></span><strong>Scripts</strong></a></li>
 					<li><a href="browse.php?t=skin"><span class="thumbnail"><img src="images/mainicon-skin.png" class="pic" alt="XBMC Skins" /></span><strong>Skins</strong></a></li>
 				</ul>
-				<div class="resultCount">$totalcount Plugins found</div>
+				<div class="resultCount">$totalcount Add-Ons found</div>
 EOF;
 
 $content .= getDisclaimer();
