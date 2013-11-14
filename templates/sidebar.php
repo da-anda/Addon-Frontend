@@ -33,7 +33,7 @@ function renderAddonList(array $addons) {
 					<!-- Tab Container for menu with ID tabs-1 -->
 					<div class="tabs-inner" id="tabs-1">
 						<?php
-						// Build the Recent Add-Ons right hand slider slider
+						// Build the Recent Add-ons right hand slider slider
 						$recent = $db->get_results("SELECT * FROM addon WHERE id NOT LIKE '%script.module%' ORDER BY updated DESC LIMIT 5");
 						echo renderAddonList($recent);
 						?>
@@ -60,7 +60,7 @@ function renderAddonList(array $addons) {
 						} 
 					*/
 					
-						// Build the Popular Add-Ons right hand slider slider
+						// Build the Popular Add-ons right hand slider slider
 						$popular = $db->get_results("SELECT * FROM addon WHERE id NOT LIKE '%Common%' AND id NOT LIKE '%script.module%' ORDER BY downloads DESC LIMIT 5");
 						echo renderAddonList($popular);
 						?>
@@ -70,12 +70,12 @@ function renderAddonList(array $addons) {
 			</div>
 			<!-- Recent Projects Slider -->
 			<div class="widget-container widget_recent_projects">
-				<h2>Random Add-Ons</h2>
+				<h2>Random Add-ons</h2>
 				<div class="carousel_container">
 					<a class="buttons prev" href="#">left</a>
 					<div class="viewport">
 						<?php
-						// Show some random Add-Ons
+						// Show some random Add-ons
 						$random = $db->get_results("SELECT * FROM addon WHERE id NOT LIKE '%script.module%' AND id NOT LIKE '%metadata.common%' ORDER BY RAND() DESC LIMIT 3");
 						if (is_array($popular) && count($popular))
 						{
@@ -107,7 +107,7 @@ function renderAddonList(array $addons) {
 			?>
 			<!-- Any Widget -->
 			<div class="widget-container">
-				<h2>Top Uploaders</h2>
+				<h2>Top Developers</h2>
 				<ul>
 			<?php
 				foreach ($top5 as $top5s)
