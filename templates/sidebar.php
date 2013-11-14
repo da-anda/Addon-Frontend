@@ -119,6 +119,18 @@ function renderAddonList(array $addons) {
 			?>
 				</ul>
 			</div>
+			
+			<div class="widget-container">
+				<h2>Guides</h2>
+				<ul>
+			<?php
+					echo "<li><img src='images/pin.png' height='22' width='22' /><a href='http://wiki.xbmc.org/index.php?title=Official_add-on_repository' > How to submit an Add-on</a></li>";
+					echo "<li><img src='images/pin.png' height='22' width='22' /><a href='http://wiki.xbmc.org/index.php?title=Add-on_development' > Add-on Development</a></li>";
+					echo "<li><img src='images/pin.png' height='22' width='22' /><a href='http://wiki.xbmc.org/index.php?title=HOW-TO:HelloWorld_addon' > Hello World Tutorial</a></li>";
+					echo "<li><img src='images/pin.png' height='22' width='22' /><a href='http://wiki.xbmc.org/index.php?title=XBMC_Skinning_Tutorials'> Skinning Tutorials</a></li>";
+			?>
+				</ul>
+			</div>
 			<?php endif; ?>
 		<!-- End Content Wrapper -->
 		</div>
