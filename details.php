@@ -33,24 +33,24 @@ $content = '';
 			$content .= "<br /><br /><strong>License:</strong> ".str_replace("[CR]","<br />",$details->license)."<br /><br />";
 
 			$content .=  '<ul class="addonLinks">';
-			// forum link
-			$forumLink = $details->forum ? '<a href="' . $details->forum .'"><img src="images/forum.png" alt="Forum discussion" /></a>' : '<img src="images/forumbw.png" alt="Forum discussion" />';
+			// Check forum link exists
+			$forumLink = $details->forum ? '<a href="' . $details->forum .'" target="_blank"><img src="images/forum.png" alt="Forum discussion" /></a>' : '<img src="images/forumbw.png" alt="Forum discussion" />';
 			$content .=  "<li><strong>Forum Discussion:</strong><br />" . $forumLink . '</li>';
 
 			// Auto Generate Wiki Link
-			$content .=  '<li><strong>Wiki Documentation:</strong><br /><a href="http://wiki.xbmc.org/index.php?title=Add-on:' . $details->name . '"><img src="images/wiki.png" alt="Wiki page of this addon" /></a></li>';
+			$content .=  '<li><strong>Wiki Documentation:</strong><br /><a href="http://wiki.xbmc.org/index.php?title=Add-on:' . $details->name . '" target="_blank"><img src="images/wiki.png" alt="Wiki page of this addon" /></a></li>';
 
 			// Donation stuff (**REMOVED FOR NOW**)
-			// $donateLink = $details->donate ? '<a href="' . $details->donate .'"><img src="images/paypal.jpg" alt="Donate" /></a>' : '<img src="images/paypalbw.jpg" alt="Donate" />';
+			// $donateLink = $details->donate ? '<a href="' . $details->donate .'" target="_blank"><img src="images/paypal.jpg" alt="Donate" /></a>' : '<img src="images/paypalbw.jpg" alt="Donate" />';
 			// $content .=  "<li><strong>Donate to Author:</strong><br />" . $donateLink . '</li>';
 
 			
 			// Check sourcecode link exists
-			$sourceLink = $details->source ? '<a href="' . $details->source .'"><img src="images/code.png" alt="Source code" /></a>' : '<img src="images/codebw.png" alt="Source code" />';
+			$sourceLink = $details->source ? '<a href="' . $details->source .'" target="_blank"><img src="images/code.png" alt="Source code" /></a>' : '<img src="images/codebw.png" alt="Source code" />';
 			$content .=  "<li><strong>Source Code:</strong><br />" . $sourceLink . '</li>';
 			
 			// Check website link exists
-			$websiteLink = $details->website ? '<a href="' . $details->website .'"><img src="images/website.png" alt="Website" /></a>' : '<img src="images/websitebw.png" alt="Source code" />';
+			$websiteLink = $details->website ? '<a href="' . $details->website .'" target="_blank"><img src="images/website.png" alt="Website" /></a>' : '<img src="images/websitebw.png" alt="Source code" />';
 			$content .=  "<li><strong>Website Link:</strong><br />" . $websiteLink . '</li>';
 
 			$content .= '</ul></div>';
