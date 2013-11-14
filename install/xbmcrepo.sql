@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.2.2
+-- version 4.0.3
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 16, 2012 at 05:27 PM
--- Server version: 5.5.27
--- PHP Version: 5.4.7
+-- Host: localhost
+-- Generation Time: Nov 14, 2013 at 02:02 PM
+-- Server version: 5.6.12
+-- PHP Version: 5.3.24
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `xbmcrepo`
 --
+CREATE DATABASE IF NOT EXISTS `xbmcrepo` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `xbmcrepo`;
 
 -- --------------------------------------------------------
 
@@ -35,9 +37,11 @@ CREATE TABLE IF NOT EXISTS `addon` (
   `created` date DEFAULT NULL,
   `updated` date DEFAULT NULL,
   `forum` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `website` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `source` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `license` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `donate` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `rating_total` float DEFAULT NULL,
-  `sourcecode` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `downloads` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -57,23 +61,6 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `donation`
---
-
-CREATE TABLE IF NOT EXISTS `donation` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `datemade` datetime DEFAULT NULL,
-  `donor` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `amount` int(11) DEFAULT NULL,
-  `country` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `message` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
 
