@@ -40,7 +40,8 @@ $configuration = array(
 	'cache' => array(
 		'pathWrite' => 'cache' . DIRECTORY_SEPARATOR,
 		'pathRead' => 'cache/'
-	)
+	),
+	'baseUrl' => $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/'
 );
 
 
