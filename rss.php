@@ -45,11 +45,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 ?>
 
 <rss version="2.0">
-        <channel>
-                <title><?php echo $feedTitle; ?></title>
-                <link><?php echo $configuration['baseUrl']; ?></link>
-                <description><?php echo $feedTitle; ?></description>
-                <language>en-us</language>
+	<channel>
+		<title><?php echo $feedTitle; ?></title>
+		<link><?php echo $configuration['baseUrl']; ?></link>
+		<description><?php echo $feedTitle; ?></description>
+		<language>en-us</language>
 <?php echo $itemList; ?>
-        </channel>
+	</channel>
 </rss>

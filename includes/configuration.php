@@ -41,7 +41,7 @@ $configuration = array(
 		'pathWrite' => 'cache' . DIRECTORY_SEPARATOR,
 		'pathRead' => 'cache/'
 	),
-	'baseUrl' => $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/'
+	'baseUrl' => (isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/'
 );
 
 
