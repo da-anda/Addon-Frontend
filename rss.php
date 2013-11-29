@@ -1,8 +1,8 @@
 <?php
 //  ##############   Include Files  ################ //
-	require_once("includes/configuration.php");
-	require_once("includes/db_connection.php");
-	require_once("includes/functions.php");
+require_once('includes/configuration.php');
+require_once('includes/db_connection.php');
+require_once('includes/functions.php');
 //  ##############  Finish Includes  ############### //
 
 // ###############  Prepare requested mode ######### //

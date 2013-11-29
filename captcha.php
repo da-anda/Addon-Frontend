@@ -1,4 +1,6 @@
-<?php session_start(); header("(anti-spam-content-type:) image/png");
+<?php
+session_start();
+header("(anti-spam-content-type:) image/png");
 
 $enc_num = rand(0, 9999);
 $key_num = rand(0, 24);
@@ -9,7 +11,7 @@ $_SESSION['verify'] = $hash_md5;
 
 // Verification Image Background Selection
 
-$bgs = array("images/verify/1.png","images/verify/2.png","images/verify/3.png");
+$bgs = array('images/verify/1.png', 'images/verify/2.png', 'images/verify/3.png');
 $background = array_rand($bgs, 1);
 
 // Verification Image Variables
@@ -22,8 +24,8 @@ $size_array = getimagesize($bgs[$background]);
 $img_w = $size_array[0];
 $img_h = $size_array[1];
 
-$horiz = round(($img_w/2)-((strlen($hash_string)*imagefontwidth(5))/2), 1);
-$vert = round(($img_h/2)-(imagefontheight($font_size)/2));
+$horiz = round(($img_w/2) - ((strlen($hash_string)*imagefontwidth(5))/2), 1);
+$vert = round(($img_h/2) - (imagefontheight($font_size)/2));
 
 // Make the Verification Image
 

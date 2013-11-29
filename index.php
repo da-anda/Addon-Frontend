@@ -1,18 +1,18 @@
 <?php
 //  ##############   Include Files  ################ //
-	require_once("includes/configuration.php");
-	require_once("includes/db_connection.php");
-	require_once("includes/functions.php");
-	require_once("includes/pageRenderer.php");
+require_once('includes/configuration.php');
+require_once('includes/db_connection.php');
+require_once('includes/functions.php');
+require_once('includes/pageRenderer.php');
 //  ##############  Finish Includes  ############### //
 
 // ###############  Setup Queries    ############### //
-$totalcount = $db->get_var("SELECT count(*) FROM addon");
+$totalcount = $db->get_var('SELECT count(*) FROM addon');
 //  ##############  Finish Queries  ############### //
 
 $page = new PageRenderer();
 
-$content = <<<EOF
+$content = '
 				<h2>Categories</h2>
 				<p>Browse the the Add-on categories below</p>
 				
@@ -26,8 +26,7 @@ $content = <<<EOF
 					<li><a href="browse.php?t=script"><span class="thumbnail"><img src="images/mainicon-script.png" class="pic" alt="XBMC Script Add-Ons" /></span><strong>Scripts</strong></a></li>
 					<li><a href="browse.php?t=skin"><span class="thumbnail"><img src="images/mainicon-skin.png" class="pic" alt="XBMC Skins" /></span><strong>Skins</strong></a></li>
 				</ul>
-				<div class="resultCount">$totalcount Add-ons found</div>
-EOF;
+				<div class="resultCount">' . $totalcount . ' Add-ons found</div>';
 
 $content .= getDisclaimer();
 $page->setContent($content);
