@@ -1,6 +1,9 @@
 <?php
-//  ##############   Include Files  ################ //
+// protect script from unauthorized calls
 require_once('../includes/configuration.php');
+if (!isset($_GET['token']) || $_GET['token'] !== $configuration['security']['token']) exit;
+
+//  ##############   Include Files  ################ //
 require_once('../includes/db_connection.php');
 //  ##############  Finish Includes  ############### //
 
