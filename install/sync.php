@@ -55,15 +55,12 @@ if ($xml && isset($xml->addon['id']))	{
 					}
 					// convert rarely used extensions points to common ones
 					if ($extensionPoint == 'xbmc.addon.video') {
-						$extensionPoint = 'xbmc.python.pluginsource';
 						$contentTypes[] = 'video';
 					}
 					if ($extensionPoint == 'xbmc.addon.audio') {
-						$extensionPoint = 'xbmc.python.pluginsource';
 						$contentTypes[] = 'audio';
 					}
 					if ($extensionPoint == 'xbmc.addon.image') {
-						$extensionPoint = 'xbmc.python.pluginsource';
 						$contentTypes[] = 'image';
 					}
 

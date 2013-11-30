@@ -25,7 +25,10 @@ if ($categoryKey !== NULL) {
 	$category = getCategoryFromArguments(explode('/', $categoryKey));
 
 	if ($category) {
-		$whereClause = ' extension_point = "' . $db->escape($category['extensionPoint']) . '"';
+		$whereClause = '1=1';
+		if (isset($category['extensionPoint'])) {
+			$whereClause = ' AND extension_point = "' . $db->escape($category['extensionPoint']) . '"';
+		}
 		if (isset($category['contentType']) && $category['contentType']) {
 			$whereClause .= ' AND FIND_IN_SET("' . $category['contentType'] . '", content_types)';
 		}

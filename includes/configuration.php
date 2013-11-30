@@ -39,17 +39,17 @@ $configuration = array(
 	'addonExcludeClause' => ' AND id NOT LIKE "Common%" AND id NOT LIKE "script.module%" ',
 	'categories' => array(
 		'audio' => array(
-			'extensionPoint' => 'xbmc.python.pluginsource',
+			#'extensionPoint' => 'xbmc.python.pluginsource',
 			'contentType' => 'audio',
 			'label' => 'Audio'
 		),
 		'video' => array(
-			'extensionPoint' => 'xbmc.python.pluginsource',
+			#'extensionPoint' => 'xbmc.python.pluginsource',
 			'contentType' => 'video',
 			'label' => 'Video'
 		),
 		'pictures' => array(
-			'extensionPoint' => 'xbmc.python.pluginsource',
+			#'extensionPoint' => 'xbmc.python.pluginsource',
 			'contentType' => 'image',
 			'label' => 'Pictures'
 		),
@@ -66,7 +66,7 @@ $configuration = array(
 			'label' => 'Weather'
 		),
 		'programs' => array(
-			'extensionPoint' => 'xbmc.python.pluginsource',
+			#'extensionPoint' => 'xbmc.python.pluginsource',
 			'contentType' => 'executable',
 			'label' => 'Programs'
 		),
@@ -112,6 +112,7 @@ $configuration = array(
 			'extensionPoint' => 'xbmc.service',
 			'label' => 'Services'
 		),
+/*
 		'scripts' => array(
 			'extensionPoint' => 'xbmc.python.script',
 			'contentType' => 'none',
@@ -139,6 +140,7 @@ $configuration = array(
 				)
 			)
 		),
+*/
 	),
 	
 	// cache settings
