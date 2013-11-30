@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<base href="###BASEURL###" />
 
 	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="stylesheets/dark.css" type="text/css" media="screen" />
@@ -33,10 +34,10 @@
 		<!-- Site Logo -->
 		<a href="http://www.xbmc.org" class="logo"><img src="images/logo.png"  alt="" /></a>
 		<!-- SearchBox -->
-		<form action="search.php" id="searchform">
+		<form action="search/" id="searchform">
 			<div>
 				<label for="s" class="screen-reader-text">Search for:</label>
-				<input type="text" id="t" name="t" placeholder="Search" value=""/>
+				<input type="text" id="t" name="keyword" placeholder="Search" value=""/>
 				<input type="submit" value="Search" id="searchsubmit"/>
 			</div>
 		</form>

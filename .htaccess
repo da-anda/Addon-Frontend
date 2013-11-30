@@ -1,0 +1,45 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+
+	# Rule for versioned static files
+	#RewriteCond %{REQUEST_FILENAME} !-f
+	#RewriteCond %{REQUEST_FILENAME} !-d
+	#RewriteRule ^(.+)\.(\d+)\.(php|js|css|png|jpg|gif|gzip)$ $1.$3 [L]
+	
+	# exclude specific folders from redirection
+	RewriteRule ^(favicon\.ico|images|js|stylesheets|cache)/ - [L]
+
+	# rewrite old urls to new ones
+		#old authors
+	RewriteCond %{QUERY_STRING} ^(.*&|\A)a=(.+)?
+	RewriteRule ^browse.php$ http://%{HTTP_HOST}/author/%2/? [L,R=301]
+		# old details view
+	RewriteCond %{QUERY_STRING} ^(.*&|\A)t=(.+)?
+	RewriteRule ^details.php$ http://%{HTTP_HOST}/show/%2/? [L,R=301]
+		# old categories
+	RewriteCond %{QUERY_STRING} ^(.*&|\A)t=plugin\.image?
+	RewriteRule ^browse.php$ http://%{HTTP_HOST}/category/pictures/? [L,R=301]
+	RewriteCond %{QUERY_STRING} ^(.*&|\A)t=plugin\.video?
+	RewriteRule ^browse.php$ http://%{HTTP_HOST}/category/video/? [L,R=301]
+	RewriteCond %{QUERY_STRING} ^(.*&|\A)t=plugin\.audio?
+	RewriteRule ^browse.php$ http://%{HTTP_HOST}/category/audio/? [L,R=301]
+	RewriteCond %{QUERY_STRING} ^(.*&|\A)t=plugin\.games?
+	RewriteRule ^browse.php$ http://%{HTTP_HOST}/category/programs/? [L,R=301]
+	RewriteCond %{QUERY_STRING} ^(.*&|\A)t=plugin\.program?
+	RewriteRule ^browse.php$ http://%{HTTP_HOST}/category/programs/? [L,R=301]
+	RewriteCond %{QUERY_STRING} ^(.*&|\A)t=script?
+	RewriteRule ^browse.php$ http://%{HTTP_HOST}/category/scripts/? [L,R=301]
+	RewriteCond %{QUERY_STRING} ^(.*&|\A)t=skin?
+	RewriteRule ^browse.php$ http://%{HTTP_HOST}/category/skins/? [L,R=301]
+
+	RewriteCond %{QUERY_STRING} ^(.*&|\A)(c|t)=(.+)?
+	RewriteRule ^browse.php$ http://%{HTTP_HOST}/category/%3/? [L,R=301]
+
+
+	# If file/symlink/directory doesn't exist, redirect to dispatcher.php
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-l
+	RewriteRule ^/$ dispatcher.php [L]
+	RewriteRule ^.*/?$ dispatcher.php [L]
+</IfModule>
