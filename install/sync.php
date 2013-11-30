@@ -1,7 +1,8 @@
 <?php
 // protect script from unauthorized calls
 require_once('../includes/configuration.php');
-if (!isset($_GET['token']) || $_GET['token'] !== $configuration['security']['token']) exit;
+require_once('../includes/functions.php');
+checkAdminAccess();
 
 //  ##############   Include Files  ################ //
 require_once('../includes/db_connection.php');
@@ -35,45 +36,74 @@ if ($xml && isset($xml->addon['id']))	{
 		$website = '';
 		$license = '';
 		$id = (string) $addon['id'];
+		$extensionPoint = '';
+		$contentTypes = array();
 		$downloadCount = isset($downloadStats[$id]) ? $downloadStats[$id] : 0;
 
 		foreach ($addon->children() as $nodeName => $node) {
-			if ($nodeName == 'extension' && $node['point'] == 'xbmc.addon.metadata' && $node->children()) {
-				foreach ($node->children() as $subNodeName => $subNode) {
-					// Check for the Forum XML Subnode
-					if ($subNodeName == 'forum') {
-						$forum = $subNode;
+			if ($nodeName == 'extension') {
+				// grab extension point and content types
+				if ($node['point'] != 'xbmc.addon.metadata') {
+					$extensionPoint = $node['point'];
+					$type = $node['point'];
+					if ($node->children()) {
+						foreach($node->children() as $childName => $childNode) {
+							if ($childName == 'provides') {
+								$contentTypes = explode(' ', trim((string) $childNode));
+							}
+						}
 					}
-					// Check for the Website XML Subnode
-					if ($subNodeName == 'website') {
-						$website = $subNode;
+					// convert rarely used extensions points to common ones
+					if ($extensionPoint == 'xbmc.addon.video') {
+						$extensionPoint = 'xbmc.python.pluginsource';
+						$contentTypes[] = 'video';
 					}
-					// Check for the Source XML Subnode
-					if ($subNodeName == 'source') {
-						$source = $subNode;
+					if ($extensionPoint == 'xbmc.addon.audio') {
+						$extensionPoint = 'xbmc.python.pluginsource';
+						$contentTypes[] = 'audio';
 					}
-					// Check for the License XML Subnode
-					if ($subNodeName == 'license') {
-						$license = $subNode;
+					if ($extensionPoint == 'xbmc.addon.image') {
+						$extensionPoint = 'xbmc.python.pluginsource';
+						$contentTypes[] = 'image';
 					}
-					// Check for the Description XML Subnode
-					if ($subNodeName == 'description' 
-						&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
-					{
-						$description = $subNode;
+
+				// grab metadata
+				} else if ($node['point'] == 'xbmc.addon.metadata' && $node->children()) {
+					foreach ($node->children() as $subNodeName => $subNode) {
+						// Check for the Forum XML Subnode
+						if ($subNodeName == 'forum') {
+							$forum = $subNode;
+						}
+						// Check for the Website XML Subnode
+						if ($subNodeName == 'website') {
+							$website = $subNode;
+						}
+						// Check for the Source XML Subnode
+						if ($subNodeName == 'source') {
+							$source = $subNode;
+						}
+						// Check for the License XML Subnode
+						if ($subNodeName == 'license') {
+							$license = $subNode;
+						}
+						// Check for the Description XML Subnode
+						if ($subNodeName == 'description' 
+							&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
+						{
+							$description = $subNode;
+						}
+						// Check for the Summary XML Subnode
+						if ($subNodeName == 'summary' 
+							&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
+						{
+							$summary = $subNode;
+						}
 					}
-					// Check for the Summary XML Subnode
-					if ($subNodeName == 'summary' 
-						&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
-					{
-						$summary = $subNode;
+					// Merge the description and summary variables
+					if ($description == '' && $summary) {
+						$description = $summary;
 					}
 				}
-				// Merge the description and summary variables
-				if ($description == '' && $summary) {
-					$description = $summary;
-				}
-				break;
 			}
 		}
 
@@ -85,14 +115,14 @@ if ($xml && isset($xml->addon['id']))	{
 			//Check here to see if the addon needs to be updated
 			if ($check->version != $addon['version']) {
 				$counterUpdated++;
-				$db->query('UPDATE addon SET version = "' . $db->escape($addon['version']) . '", updated = NOW(), provider_name = "' . $db->escape($addon['provider-name']) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", downloads = ' . $downloadCount . ' WHERE id = "' . $db->escape($id) . '"');
+				$db->query('UPDATE addon SET version = "' . $db->escape($addon['version']) . '", updated = NOW(), provider_name = "' . $db->escape($addon['provider-name']) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", downloads = ' . $downloadCount . ', extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '" WHERE id = "' . $db->escape($id) . '"');
 			} else {
 				$db->query('UPDATE addon SET downloads = ' . $downloadCount . ' WHERE id = "' . $db->escape($id) . '"');
 			}
 		// Add a new add-on if it doesn't exist
 		} else if ($description != '') {
 			$counterNewlyAdded++;
-			$db->query('INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, downloads) VALUES ("' . $db->escape($id) . '", "' . $db->escape($addon['name']) . '", "' . $db->escape($addon['provider-name']) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", ' . $downloadCount . ')');
+			$db->query('INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, downloads, extension_point, content_types) VALUES ("' . $db->escape($id) . '", "' . $db->escape($addon['name']) . '", "' . $db->escape($addon['provider-name']) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", ' . $downloadCount . ', "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '")');
 		} else {
 			$db->query('UPDATE addon SET downloads = ' . $downloadCount . ' WHERE id = "' . $db->escape($id) . '"');
 		}

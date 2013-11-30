@@ -43,7 +43,11 @@ CREATE TABLE IF NOT EXISTS `addon` (
   `donate` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `rating_total` float DEFAULT NULL,
   `downloads` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `extension_point` tinytext DEFAULT NULL,
+  `content_types` tinytext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY keyaddontype ( `extension_point` ( 60 ) , `content_type` ( 100 ) ),
+  KEY keyauthor ( `provider_name` ( 100 ) ),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------

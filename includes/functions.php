@@ -1,6 +1,6 @@
 <?php
 // PHP Functions //
-require_once('includes/SimpleImage.php');
+require_once('SimpleImage.php');
 
 
 //php function to check whether the url exists or not and validate it  
@@ -206,7 +206,7 @@ function createLinkUrl($type, $identifier, $encode = TRUE) {
 			$link .= 'details.php?t=' . $queryString;
 			break;
 		case 'category':
-			$link .= 'browse.php?t=' . $queryString;
+			$link .= 'browse.php?c=' . $queryString;
 			break;
 		case 'author':
 			$link .= 'browse.php?a=' . $queryString;
@@ -216,5 +216,68 @@ function createLinkUrl($type, $identifier, $encode = TRUE) {
 			break;
 	}
 	return $link;
+}
+
+/**
+ * Checks if admin access is granted and if not exists script execution
+ * 
+ * @return void
+ **/
+function checkAdminAccess() {
+	global $configuration;
+	if (!isset($_GET['token']) || $_GET['token'] !== $configuration['security']['token']) {
+		shutdown();
+		exit;
+	}
+}
+
+/**
+ * Resolves the current category from available arguments
+ * 
+ * @param array $arguments
+ * @return array The category configuration
+ */
+function getCategoryFromArguments(array $arguments) {
+	global $configuration;
+	$configuration['categories'] = buildCategoryTree($configuration['categories']);
+	$categories = $configuration['categories'];
+	$arguments;
+	$category = NULL;
+
+	while ($categories !== NULL && is_array($categories) && count($categories)) {
+		$key = array_shift($arguments);
+
+		if (isset($categories[$key])) {
+			$category = $categories[$key];
+			$categories = NULL;
+			if (isset($category['subCategories'])) {
+				$categories = $category['subCategories'];
+			}
+		} else {
+			$categories = NULL;
+		}
+	}
+
+	return $category;
+}
+
+/**
+ * Builds a category tree with rootlines
+ * 
+ * @param array $categories	The recursive category array to process
+ * @param array $baseRootline The rootline of the currently processed level
+ * @return array The processed categories
+ */
+function buildCategoryTree($categories, $baseRootline = array()) {
+	foreach (array_keys($categories) as $k) {
+		$rootline = $baseRootline;
+		$category = &$categories[$k];
+		$rootline[$k] = &$category;
+		$category['rootline'] = $rootline;
+		if (isset($category['subCategories'])) {
+			$category['subCategories'] = buildCategoryTree($category['subCategories'], $rootline);
+		}
+	}
+	return $categories;
 }
 ?>

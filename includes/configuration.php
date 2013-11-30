@@ -39,48 +39,105 @@ $configuration = array(
 	'addonExcludeClause' => ' AND id NOT LIKE "Common%" AND id NOT LIKE "script.module%" ',
 	'categories' => array(
 		'audio' => array(
-			'extensionPoint' => 'plugin.audio',
+			'extensionPoint' => 'xbmc.python.pluginsource',
+			'contentType' => 'audio',
 			'label' => 'Audio'
 		),
 		'video' => array(
-			'extensionPoint' => 'plugin.video',
+			'extensionPoint' => 'xbmc.python.pluginsource',
+			'contentType' => 'video',
 			'label' => 'Video'
 		),
 		'pictures' => array(
-			'extensionPoint' => 'plugin.image',
+			'extensionPoint' => 'xbmc.python.pluginsource',
+			'contentType' => 'image',
 			'label' => 'Pictures'
 		),
 		'screensaver' => array(
-			'extensionPoint' => 'screensaver',
+			'extensionPoint' => 'xbmc.ui.screensaver',
 			'label' => 'Screensaver'
 		),
 		'skins' => array(
-			'extensionPoint' => 'skin',
+			'extensionPoint' => 'xbmc.gui.skin',
 			'label' => 'Skins'
 		),
 		'weather' => array(
-			'extensionPoint' => 'weather',
+			'extensionPoint' => 'xbmc.python.weather',
 			'label' => 'Weather'
 		),
 		'programs' => array(
-			'extensionPoint' => 'plugin.program',
+			'extensionPoint' => 'xbmc.python.pluginsource',
+			'contentType' => 'executable',
 			'label' => 'Programs'
 		),
+		'lyrics' => array(
+			'extensionPoint' => 'xbmc.python.lyrics',
+			'label' => 'Lyrics'
+		),
+		'webinterface' => array(
+			'extensionPoint' => 'xbmc.gui.webinterface',
+			'label' => 'Webinterface'
+		),
 		'metadata' => array(
-			'extensionPoint' => 'metadata',
+			'extensionPoint' => 'xbmc.metadata',
 			'label' => 'Metadata',
+			'subCategories' => array(
+				'artists' => array(
+					'extensionPoint' => 'xbmc.metadata.scraper.artists',
+					'label' => 'Artists'
+				),
+				'albums' => array(
+					'extensionPoint' => 'xbmc.metadata.scraper.albums',
+					'label' => 'Albums'
+				),
+				'movies' => array(
+					'extensionPoint' => 'xbmc.metadata.scraper.movies',
+					'label' => 'Movies'
+				),
+				'musicvideos' => array(
+					'extensionPoint' => 'xbmc.metadata.scraper.musicvideos',
+					'label' => 'Musicvideos'
+				),
+				'tvshows' => array(
+					'extensionPoint' => 'xbmc.metadata.scraper.tvshows',
+					'label' => 'TV-Shows'
+				),
+			)
 		),
 		'subtitles' => array(
-			'extensionPoint' => 'script.xbmc.subtitles',
+			'extensionPoint' => 'xbmc.python.subtitles',
 			'label' => 'Subtitles'
 		),
 		'services' => array(
-			'extensionPoint' => 'service',
+			'extensionPoint' => 'xbmc.service',
 			'label' => 'Services'
 		),
 		'scripts' => array(
-			'extensionPoint' => 'script',
-			'label' => 'Scripts'
+			'extensionPoint' => 'xbmc.python.script',
+			'contentType' => 'none',
+			'label' => 'Scripts',
+			'subCategories' => array(
+				'audio' => array(
+					'extensionPoint' => 'xbmc.python.script',
+					'contentType' => 'audio',
+					'label' => 'Audio'
+				),
+				'video' => array(
+					'extensionPoint' => 'xbmc.python.script',
+					'contentType' => 'video',
+					'label' => 'Videos'
+				),
+				'pictures' => array(
+					'extensionPoint' => 'xbmc.python.script',
+					'contentType' => 'image',
+					'label' => 'Pictures'
+				),
+				'programs' => array(
+					'extensionPoint' => 'xbmc.python.script',
+					'contentType' => 'executable',
+					'label' => 'Tools'
+				)
+			)
 		),
 	),
 	
