@@ -14,7 +14,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'updated') {
 }
 
 // ###############  Setup Queries    ############### //
-$queryResult = $db->get_results('SELECT * FROM addon ORDER BY ' . $orderByProperty . ' DESC LIMIT 5');
+$queryResult = $db->get_results('SELECT * FROM addon ORDER BY ' . $orderByProperty . ' DESC LIMIT 10');
 //  ##############  Finish Queries  ############### //
 
 
