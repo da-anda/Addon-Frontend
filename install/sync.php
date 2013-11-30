@@ -113,12 +113,14 @@ if ($xml && isset($xml->addon['id']))	{
 		if (isset($check->id)) {
 			//Item exists
 			//Check here to see if the addon needs to be updated
+			$updateQuery = ' provider_name = "' . $db->escape($addon['provider-name']) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", downloads = ' . $downloadCount . ', extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '" ';
+				// only update timestamp on new version
 			if ($check->version != $addon['version']) {
 				$counterUpdated++;
-				$db->query('UPDATE addon SET version = "' . $db->escape($addon['version']) . '", updated = NOW(), provider_name = "' . $db->escape($addon['provider-name']) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", downloads = ' . $downloadCount . ', extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '" WHERE id = "' . $db->escape($id) . '"');
-			} else {
-				$db->query('UPDATE addon SET downloads = ' . $downloadCount . ' WHERE id = "' . $db->escape($id) . '"');
+				$updateQuery .= ', version = "' . $db->escape($addon['version']) . '", updated = NOW() ';
 			}
+			$db->query('UPDATE addon SET ' . $updateQuery . ' WHERE id = "' . $db->escape($id) . '"');
+
 		// Add a new add-on if it doesn't exist
 		} else if ($description != '') {
 			$counterNewlyAdded++;
