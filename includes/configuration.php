@@ -36,6 +36,49 @@ $configuration = array(
 			'large' => array(256,256)
 		)
 	),
+	'categories' => array(
+		'audio' => array(
+			'extensionPoint' => 'plugin.audio',
+			'label' => 'Audio'
+		),
+		'video' => array(
+			'extensionPoint' => 'plugin.video',
+			'label' => 'Video'
+		),
+		'pictures' => array(
+			'extensionPoint' => 'plugin.image',
+			'label' => 'Pictures'
+		),
+		'screensaver' => array(
+			'extensionPoint' => 'screensaver',
+			'label' => 'Screensaver'
+		),
+		'skins' => array(
+			'extensionPoint' => 'skin',
+			'label' => 'Skins'
+		),
+		'weather' => array(
+			'extensionPoint' => 'weather',
+			'label' => 'Weather'
+		),
+		'metadata' => array(
+			'extensionPoint' => 'metadata',
+			'label' => 'Metadata',
+		),
+		'subtitles' => array(
+			'extensionPoint' => 'script.xbmc.subtitles',
+			'label' => 'Subtitles'
+		),
+		'services' => array(
+			'extensionPoint' => 'service',
+			'label' => 'Services'
+		),
+		'scripts' => array(
+			'extensionPoint' => 'script',
+			'label' => 'Scripts'
+		),
+	),
+	
 	// cache settings
 	'cache' => array(
 		'pathWrite' => 'cache' . DIRECTORY_SEPARATOR,
