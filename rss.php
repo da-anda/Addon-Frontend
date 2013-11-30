@@ -29,8 +29,8 @@ foreach ($queryResult as $addon) {
 	}
 	$itemList .= '		<item>
 			<guid>' . $addon->id . '</guid>
-			<title>' . $addon->name . '</title>
-			<description>' . $addon->description . '</description>
+			<title>' . htmlspecialchars($addon->name) . '</title>
+			<description>' . htmlspecialchars($addon->description) . '</description>
 			<date>' . $addon->updated . '</date>
 			<link>' . createLinkUrl('addon', $addon->id) . '</link>
 			<enclosure url="' . $configuration['baseUrl'] . $thumbnailExternalUrl . '" length="' . $thumbnailSize . '" type="image/png" />
