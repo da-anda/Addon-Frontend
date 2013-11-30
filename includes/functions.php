@@ -225,7 +225,8 @@ function createLinkUrl($type, $identifier, $encode = TRUE) {
  **/
 function checkAdminAccess() {
 	global $configuration;
-	if (!isset($_GET['token']) || $_GET['token'] !== $configuration['security']['token']) {
+	$token = isset($_GET['token']) ? urldecode($_GET['token']) : '';
+	if ($token !== $configuration['security']['token']) {
 		shutdown();
 		exit;
 	}
