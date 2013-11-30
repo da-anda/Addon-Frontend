@@ -36,6 +36,7 @@ $configuration = array(
 			'large' => array(256,256)
 		)
 	),
+	'addonExcludeClause' => ' AND id NOT LIKE "Common%" AND id NOT LIKE "script.module%" ',
 	'categories' => array(
 		'audio' => array(
 			'extensionPoint' => 'plugin.audio',

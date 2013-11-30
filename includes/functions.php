@@ -131,4 +131,48 @@ function getThumbnailUrl($source, $size) {
 	}
 	return $filePath;
 }
+
+/**
+ * Renders a pagination
+ * 
+ * @param string $url
+ * @param integer $itemsTotal
+ * @param integer $offset
+ * @param integer $itemsPerPage
+ * @param string $varName
+ */
+function renderPagination($url, $itemsTotal, $itemsPerPage = 40, $varName='page') {
+
+	$page = isset($_GET[$varName]) ? max(1, intval($_GET[$varName])) : 1;
+	$maxPages = ceil($itemsTotal / $itemsPerPage);
+	$offset = ($page-1) * $itemsPerPage;
+	$output = '<div class="resultCount">Showing ' . ($offset +1) . ' to '. min($itemsTotal, $offset + $itemsPerPage) .' (Total:'. $itemsTotal .')';
+	if ($itemsTotal > $itemsPerPage) {
+		$querySign = strpos($url, '?') ? '&amp;' : '?';
+	
+		// Create variables to store back and forward button offsets
+		$nextPage = $itemsTotal >= $offset + $itemsPerPage ? $page+1 : FALSE;
+		$prevPage = $offset - $itemsPerPage >= 0 ? $page-1 : FALSE;
+	
+		// Print out the left and right browse buttons
+		$output .= '</br>';
+		
+		// Print the left arrow if not the first results
+		if ($page > 1) {
+			$linkUrl = $url . ($page == 2 ? '' : $querySign . $varName . '=' . $page-1);
+			$output .= '<a href="' . $linkUrl . '"/><img src="images/arrow-left.png" width="40" height="40" /></a><img src="images/transparent.png" width="40" height="40" />';
+		} else {
+			$output .= '<img src="images/transparent.png" width="80" height="40" />';
+		}
+
+		// Print the right arrow if not the end results
+		if ($page < $maxPages) {
+			$output .= '<a href="' . $url . $querySign . $varName . '=' . ($page+1) . '"/><img src="images/arrow-right.png" width="40" height="40" /></a>';
+		} else {
+			$output .= '<img src="images/transparent.png" width="40" height="40" />';
+		}
+	}
+	$output .= '</div>';
+	return $output;
+}
 ?>

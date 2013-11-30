@@ -1,5 +1,5 @@
 <?php
-global $db;
+global $db, $configuration;
 
 function renderAddonList(array $addons) {
 	$output = '';
@@ -34,14 +34,14 @@ function renderAddonList(array $addons) {
 					<div class="tabs-inner" id="tabs-1">
 						<?php
 						// Build the Recent Add-ons right hand slider slider
-						$recent = $db->get_results("SELECT * FROM addon WHERE id NOT LIKE '%script.module%' ORDER BY updated DESC LIMIT 5");
+						$recent = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . "  ORDER BY updated DESC LIMIT 5");
 						echo renderAddonList($recent);
 						?>
 					</div>
 					<!-- Tab Container for menu with ID tabs-2 -->
 					<div class="tabs-inner" id="tabs-2">
 						<?php
-						$newest = $db->get_results("SELECT * FROM addon WHERE id NOT LIKE '%script.module%' ORDER BY created DESC LIMIT 5");
+						$newest = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " ORDER BY created DESC LIMIT 5");
 						echo renderAddonList($newest);
 						?>
 					</div>
@@ -61,7 +61,7 @@ function renderAddonList(array $addons) {
 					*/
 					
 						// Build the Popular Add-ons right hand slider slider
-						$popular = $db->get_results("SELECT * FROM addon WHERE id NOT LIKE '%Common%' AND id NOT LIKE '%script.module%' ORDER BY downloads DESC LIMIT 5");
+						$popular = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " ORDER BY downloads DESC LIMIT 5");
 						echo renderAddonList($popular);
 						?>
 					</div>
@@ -76,7 +76,7 @@ function renderAddonList(array $addons) {
 					<div class="viewport">
 						<?php
 						// Show some random Add-ons
-						$random = $db->get_results("SELECT * FROM addon WHERE id NOT LIKE '%script.module%' AND id NOT LIKE '%metadata.common%' ORDER BY RAND() DESC LIMIT 3");
+						$random = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " ORDER BY RAND() DESC LIMIT 3");
 						if (is_array($popular) && count($popular))
 						{
 							echo '<ul class="overview">';
@@ -96,7 +96,7 @@ function renderAddonList(array $addons) {
 			</div>
 
 			<?php
-			$top5 = $db->get_results("SELECT *, COUNT( provider_name ) AS counttotal FROM addon GROUP BY provider_name ORDER BY counttotal DESC LIMIT 9");
+			$top5 = $db->get_results("SELECT *, COUNT( provider_name ) AS counttotal FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " GROUP BY provider_name ORDER BY counttotal DESC LIMIT 9");
 			$counter = 0;
 			$iconMap = array(
 				1 => 'gold.png',
