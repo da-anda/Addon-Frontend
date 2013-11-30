@@ -14,8 +14,19 @@ if ($xml && isset($xml->addon['id']))	{
 	$counter = 0;
 	$counterUpdated = 0;
 	$counterNewlyAdded = 0;
+
+	//prepare the download stats so that we can update each addon with one single query
+	$downloadCount = array();
+	$xmlsimple = simplexml_load_file($configuration['repository']['statsUrl']);
+	if ($xmlsimple && isset($xmlsimple->addon['id']))	{
+		foreach ($xmlsimple->addon as $addon) {
+			$id = (string) $addon['id'];
+			$downloadStats[$id] = intval($addon->downloads);
+		}
+	}
+
 	// Loop through each addon
-	foreach ($xml->addon as $addons)	{
+	foreach ($xml->addon as $addon)	{
 		$counter++;
 		$description = '';
 		$summary = '';
@@ -23,8 +34,10 @@ if ($xml && isset($xml->addon['id']))	{
 		$source = '';
 		$website = '';
 		$license = '';
+		$id = (string) $addon['id'];
+		$downloadCount = isset($downloadStats[$id]) ? $downloadStats[$id] : 0;
 
-		foreach ($addons->children() as $nodeName => $node) {
+		foreach ($addon->children() as $nodeName => $node) {
 			if ($nodeName == 'extension' && $node['point'] == 'xbmc.addon.metadata' && $node->children()) {
 				foreach ($node->children() as $subNodeName => $subNode) {
 					// Check for the Forum XML Subnode
@@ -65,36 +78,26 @@ if ($xml && isset($xml->addon['id']))	{
 		}
 
 		//Check here to see if the Item already exists
-		$check = $db->get_row('SELECT * FROM addon WHERE id = "' . $db->escape($addons['id']) . '"');
+		$check = $db->get_row('SELECT * FROM addon WHERE id = "' . $db->escape($id) . '"');
 
 		if (isset($check->id)) {
 			//Item exists
 			//Check here to see if the addon needs to be updated
-			if ($check->version != $addons['version']) {
+			if ($check->version != $addon['version']) {
 				$counterUpdated++;
-				$db->query('UPDATE addon SET version = "' . $db->escape($addons['version']) . '", updated = NOW(), provider_name = "' . $db->escape($addons['provider-name']) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '" WHERE id = "' . $db->escape($addons['id']) . '"');
+				$db->query('UPDATE addon SET version = "' . $db->escape($addon['version']) . '", updated = NOW(), provider_name = "' . $db->escape($addon['provider-name']) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", downloads = ' . $downloadCount . ' WHERE id = "' . $db->escape($id) . '"');
+			} else {
+				$db->query('UPDATE addon SET downloads = ' . $downloadCount . ' WHERE id = "' . $db->escape($id) . '"');
 			}
 		// Add a new add-on if it doesn't exist
 		} else if ($description != '') {
 			$counterNewlyAdded++;
-			$db->query('INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license) VALUES ("' . $db->escape($addons['id']) . '", "' . $db->escape($addons['name']) . '", "' . $db->escape($addons['provider-name']) . '", "' . $db->escape($addons['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '")');
+			$db->query('INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, downloads) VALUES ("' . $db->escape($id) . '", "' . $db->escape($addon['name']) . '", "' . $db->escape($addon['provider-name']) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", ' . $downloadCount . ')');
+		} else {
+			$db->query('UPDATE addon SET downloads = ' . $downloadCount . ' WHERE id = "' . $db->escape($id) . '"');
 		}
 	}
 	echo date('l jS \of F Y h:i:s A') . ' - Total ' . $counter . ', ' . $counterUpdated . ' Updated, ' . $counterNewlyAdded . ' New';
-}
-
-// Now update the download stats
-$xmlsimple = simplexml_load_file($configuration['repository']['statsUrl']);
-if ($xmlsimple && isset($xmlsimple->addon['id']))	{
-	foreach ($xmlsimple->addon as $addons) {	
-		$downloads = intval($addons->downloads);
-		$addonId = $addons['id'];
-
-		if ($addonId && $downloads)	{
-			// To speed things up, don't check if the addon exists in the DB and then do the UPDATE query. If addon is not in DB, it won't update anything, but if it is, we saved 1 query per update
-			$db->query('UPDATE addon SET downloads = "' . $downloads . '" WHERE id = "' . $db->escape($addonId) . '"');
-		}
-	}
 }
 
 ?>
