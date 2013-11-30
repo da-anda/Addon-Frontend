@@ -62,6 +62,10 @@ $configuration = array(
 			'extensionPoint' => 'weather',
 			'label' => 'Weather'
 		),
+		'programs' => array(
+			'extensionPoint' => 'plugin.program',
+			'label' => 'Programs'
+		),
 		'metadata' => array(
 			'extensionPoint' => 'metadata',
 			'label' => 'Metadata',
