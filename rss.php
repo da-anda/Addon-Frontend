@@ -32,7 +32,7 @@ foreach ($queryResult as $addon) {
 			<title>' . $addon->name . '</title>
 			<description>' . $addon->description . '</description>
 			<date>' . $addon->updated . '</date>
-			<link>' . $configuration['baseUrl'] . 'details.php?t=' . $addon->id . '</link>
+			<link>' . createLinkUrl('addon', $addon->id) . '</link>
 			<enclosure url="' . $configuration['baseUrl'] . $thumbnailExternalUrl . '" length="' . $thumbnailSize . '" type="image/png" />
 		</item>
 ';

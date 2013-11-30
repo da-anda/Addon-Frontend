@@ -8,7 +8,7 @@ function renderAddonList(array $addons) {
 		$output .= '<ul>';
 		foreach ($addons as $addon)
 		{
-			$output .= "<li><a href='details.php?t=".$addon->id."'>";
+			$output .= "<li><a href='" . createLinkUrl('addon', $addon->id) . "'>";
 			$output .= "<img src='" . getAddonThumbnail($addon->id, 'addonThumbnailSmall') . "' width='60' height='60' alt='$addon->name' class='pic alignleft' />";
 			$output .= "<b>$addon->name</b></a>";
 			$output .= "<span class='date'>".$addon->updated."</span>";
@@ -82,7 +82,7 @@ function renderAddonList(array $addons) {
 							echo '<ul class="overview">';
 							foreach ($random as $randoms)
 							{
-								echo "<li><div class='thumb'><a href='details.php?t=".$randoms->id."'><img src='" . getAddonThumbnail($randoms->id, 'addonThumbnail') . "' height='125' alt='$randoms->name' class='pic' /></a></div>";
+								echo "<li><div class='thumb'><a href='" . createLinkUrl('addon', $randoms->id) ."'><img src='" . getAddonThumbnail($randoms->id, 'addonThumbnail') . "' height='125' alt='$randoms->name' class='pic' /></a></div>";
 								echo "<h5>".substr($randoms->name,0,22)." by ".substr($randoms->provider_name,0,15)."</h5>";
 								echo "<p>".str_replace("[CR]","",substr($randoms->description,0,100))."...</p></li>";
 							}
@@ -114,7 +114,7 @@ function renderAddonList(array $addons) {
 				{
 					$counter++;
 					$icon = 'images/' . (isset($iconMap[$counter]) ? $iconMap[$counter] : $counter . '.png');
-					echo "<li><img src='$icon' height='20' width='20' alt='Rank $counter' /><a href='browse.php?a=$top5s->provider_name' title='Show all addons from this author'> ".substr($top5s->provider_name,0,15)." ($top5s->counttotal uploads)</a></li>";
+					echo "<li><img src='$icon' height='20' width='20' alt='Rank $counter' /><a href='" . createLinkUrl('author', $top5s->provider_name) . "' title='Show all addons from this author'> ".substr($top5s->provider_name,0,15)." ($top5s->counttotal uploads)</a></li>";
 				}
 			?>
 				</ul>

@@ -16,18 +16,19 @@ if (isset($_GET['t'])) { $type = $_GET['t']; }
 if (isset($_GET['a'])) { $author = $_GET['a']; }
 //  ##############  Finish Varibles  ############### //
 
+$page = new PageRenderer();
+
 // ###############  Setup Queries    ############### //
 if ($type !== NULL) {
 	$category = $db->get_results('SELECT * FROM addon WHERE id LIKE "' . $db->escape($type) . '%" ' . $configuration['addonExcludeClause'] . ' ORDER BY name ASC LIMIT ' . $offset . ', ' . $itemsperpage);
 	$count = $db->get_var('SELECT count(*) FROM addon WHERE id LIKE "' . $db->escape($type) . '%"' . $configuration['addonExcludeClause']);
+	$page->addRootlineItem(array( 'url' => createLinkUrl('addon', $type), 'name' => 'Browse'));
 } else if ($author !== NULL) {
 	$category = $db->get_results('SELECT * FROM addon WHERE provider_name LIKE "%' . $db->escape($author) . '" ' . $configuration['addonExcludeClause'] . ' ORDER BY name ASC LIMIT ' . $offset . ', ' . $itemsperpage);
 	$count = $db->get_var('SELECT count(*) FROM addon WHERE provider_name LIKE "%' . $db->escape($author) . '" ' . $configuration['addonExcludeClause']);
+	$page->addRootlineItem(array( 'url' => createLinkUrl('author', $author), 'name' => 'Browse'));
 }
 //  ##############  Finish Queries  ############### //
-
-$page = new PageRenderer();
-$page->addRootlineItem(array( 'url' => 'search.php?t=' . $type . '&amp;a=' . $author, 'name' => 'Browse'));
 
 $content ='<h2>Browsing</h2>';
 
@@ -38,7 +39,7 @@ if (is_array($category) && count($category)) {
 	$content .= '<ul id="addonList">';
 	foreach ($category as $categories) {
 		$content .= '<li>';
-		$content .= '<a href="details.php?t=' . $categories->id . '"><span class="thumbnail"><img src="' . getAddonThumbnail($categories->id, 'addonThumbnail') . '" width="100%" alt="' . $categories->name . '" class="pic" /></span>';
+		$content .= '<a href="' . createLinkUrl('addon', $categories->id) . '"><span class="thumbnail"><img src="' . getAddonThumbnail($categories->id, 'addonThumbnail') . '" width="100%" alt="' . $categories->name . '" class="pic" /></span>';
 		$content .= '<strong>' . $categories->name . '</strong></a>';
 		$content .= '</li>';
 		$addonscount++;
@@ -46,7 +47,7 @@ if (is_array($category) && count($category)) {
 	$content .= '</ul>';
 }
 
-$content .= renderPagination('browse.php?t=' . htmlspecialchars($type), $count, $itemsperpage);
+$content .= renderPagination(createLinkUrl('category', $type), $count, $itemsperpage);
 
 $content .= getDisclaimer();
 $page->setContent($content);

@@ -175,4 +175,46 @@ function renderPagination($url, $itemsTotal, $itemsPerPage = 40, $varName='page'
 	$output .= '</div>';
 	return $output;
 }
+
+/**
+ * Creates link URLs
+ * 
+ * @param string $type
+ * @param mixed $identifier	string or array
+ * @param boolean $encode
+ * @return string
+ */
+function createLinkUrl($type, $identifier, $encode = TRUE) {
+	global $configuration;
+	$link = $configuration['baseUrl'];
+
+	if (is_array($identifier)) {
+		$queryParts = array();
+		foreach($identifier as $key => $value) {
+			$queryParts[] = $key . '=' . $value;
+		}
+		$queryString = implode('&', $queryParts);
+	} else {
+		$queryString = $identifier;
+	}
+
+	if ($encode) {
+		$queryString = htmlspecialchars($queryString);
+	}
+	switch ($type) {
+		case 'addon':
+			$link .= 'details.php?t=' . $queryString;
+			break;
+		case 'category':
+			$link .= 'browse.php?t=' . $queryString;
+			break;
+		case 'author':
+			$link .= 'browse.php?a=' . $queryString;
+			break;
+		case 'search':
+			$link .= 'search.php?t=' . $queryString;
+			break;
+	}
+	return $link;
+}
 ?>

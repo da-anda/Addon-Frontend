@@ -12,7 +12,7 @@ $totalcount = $db->get_var('SELECT count(*) FROM addon');
 
 $categories = array();
 foreach ($configuration['categories'] as $categoryName => $categoryData) {
-	$categories[] = '<li><a href="browse.php?t=' . $categoryData['extensionPoint'] . '"><span class="thumbnail"><img src="images/categories/' . $categoryName . '.png" class="pic" alt="' . $categoryData['label'] . '" /></span><strong>' . $categoryData['label'] . '</strong></a></li>';
+	$categories[] = '<li><a href="' . createLinkUrl('category', $categoryData['extensionPoint']) . '"><span class="thumbnail"><img src="images/categories/' . $categoryName . '.png" class="pic" alt="' . $categoryData['label'] . '" /></span><strong>' . $categoryData['label'] . '</strong></a></li>';
 }
 
 $content = '<h2>Categories</h2><p>Browse the the Add-on categories below</p>

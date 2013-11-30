@@ -23,7 +23,7 @@ if (isset($result) && count($result)) {
 	$addon = current($result);
 	$content .= '<div id="addonDetail"><h2>' . $addon->name .' '. $addon->version .'</h2>
 		<span class="thumbnail"><img src="' . getAddonThumbnail($addon->id, 'large') . '" alt="' . $addon->name . '" class="pic" /></span>
-		<strong>Author:</strong> <a href="browse.php?a=' . htmlspecialchars($addon->provider_name) . '">' . htmlspecialchars($addon->provider_name) . '</a>';
+		<strong>Author:</strong> <a href="' . createLinkUrl('author', $addon->provider_name) . '">' . htmlspecialchars($addon->provider_name) . '</a>';
 	$content .= '<br /><br /><strong>Downloads:</strong> ' . number_format($addon->downloads);
 	$content .= '<br /><br /><strong>Description:</strong> ' . str_replace('[CR]', '<br />', $addon->description);
 	$content .= '<br /><br /><strong>License:</strong> ' . str_replace('[CR]', '<br />', $addon->license) . '<br /><br />';
