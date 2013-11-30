@@ -122,9 +122,9 @@ class PageRenderer {
 		$current = array_pop($rootline);
 		$items = array();
 		foreach($rootline as $item) {
-			$items[] = '<a href="' . $item['url'] . '">' . $item['name'] . '</a>'; 
+			$items[] = '<a href="' . $item['url'] . '">' . htmlspecialchars($item['name']) . '</a>'; 
 		}
-		$output = implode(' » ', $items) . ' » ' . $current['name'];
+		$output = implode(' » ', $items) . ' » ' . htmlspecialchars($current['name']);
 
 		$marker = array(
 			'###ROOTLINE###' => $output,
