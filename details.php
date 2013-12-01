@@ -62,7 +62,7 @@ if (isset($result) && count($result)) {
 
 	// Show the Download link
 	$content .= '<li><strong>Direct Download:</Strong><br />';
-	$content .= '<a href="http://mirrors.xbmc.org/addons/' . strtolower($configuration['repository']['version']) . '/' . $addon->id . '/' . $addon->id . '-' . $addon->version . '.zip"><img src="images/download_link.png" alt="Download" /></a></li>';
+	$content .= '<a href="http://mirrors.xbmc.org/addons/' . strtolower($configuration['repository']['version']) . '/' . $addon->id . '/' . $addon->id . '-' . $addon->version . '.zip" rel="nofollow"><img src="images/download_link.png" alt="Download" /></a></li>';
 
 
 	$content .= '</ul></div>';
