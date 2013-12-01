@@ -281,4 +281,24 @@ function buildCategoryTree($categories, $baseRootline = array()) {
 	}
 	return $categories;
 }
+
+/**
+ * Cleans an author name from unwanted things like directly showing their email address
+ * 
+ * @param string $authorName
+ * @return string
+ */
+function cleanupAuthorName($authorName) {
+	return str_replace('@', '[AT]', $authorName);
+}
+
+/**
+ * Reverts the changes done by the cleanjupAuthorName function so that we have a valid DB key again
+ * 
+ * @param string $authorName
+ * @return string
+ */
+function revertAuthorNameCleanup($authorName) {
+	return str_replace('[AT]', '@', $authorName);
+}
 ?>

@@ -26,6 +26,7 @@ if (isset($result) && count($result)) {
 
 	foreach ($authors as $author) {
 		if ($author) {
+			$author = cleanupAuthorName($author);
 			$authorLinks[] = '<a href="' . createLinkUrl('author', $author) . '">' . htmlspecialchars($author) . '</a>';
 		}
 	}

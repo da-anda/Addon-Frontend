@@ -110,11 +110,11 @@ function renderAddonList(array $addons) {
 				<h2>Top Developers</h2>
 				<ul>
 			<?php
-				foreach ($top5 as $top5s)
-				{
+				foreach ($top5 as $top5s) {
+					$author = cleanupAuthorName($top5s->provider_name);
 					$counter++;
 					$icon = 'images/' . (isset($iconMap[$counter]) ? $iconMap[$counter] : $counter . '.png');
-					echo "<li><img src='$icon' height='20' width='20' alt='Rank $counter' /><a href='" . createLinkUrl('author', $top5s->provider_name) . "' title='Show all addons from this author'> ".substr($top5s->provider_name,0,15)." ($top5s->counttotal uploads)</a></li>";
+					echo "<li><img src='$icon' height='20' width='20' alt='Rank $counter' /><a href='" . createLinkUrl('author', $author) . "' title='Show all addons from this author'> " . substr($author, 0, 15) . " ($top5s->counttotal uploads)</a></li>";
 				}
 			?>
 				</ul>

@@ -15,7 +15,7 @@ $pagination = '';
 $browseLabel = '';
 $offset = max(0, isset($_GET['page']) ? (intval($_GET['page']) -1) : 0) * $itemsperpage;
 if (isset($_GET['c'])) { $categoryKey = $_GET['c']; }
-if (isset($_GET['a'])) { $author = $_GET['a']; }
+if (isset($_GET['a'])) { $author = revertAuthorNameCleanup($_GET['a']); }
 //  ##############  Finish Varibles  ############### //
 
 $page = new PageRenderer();
@@ -67,9 +67,10 @@ if (isset($category)) {
 	}
 // render related info by author
 } else if ($author) {
-	$content .= '<p>Author ' . htmlspecialchars($author) . '</p>';
-	$page->addRootlineItem(array( 'url' => createLinkUrl('author', $author), 'name' => 'Browse'));
-	$pagination = renderPagination(createLinkUrl('author', $author), $count, $itemsperpage);
+	$cleanAuthor = cleanupAuthorName($author);
+	$content .= '<p>Author ' . htmlspecialchars($cleanAuthor) . '</p>';
+	$page->addRootlineItem(array( 'url' => createLinkUrl('author', $cleanAuthor), 'name' => 'Browse'));
+	$pagination = renderPagination(createLinkUrl('author', $cleanAuthor), $count, $itemsperpage);
 }
 
 // render addons
