@@ -18,15 +18,30 @@ $page = new PageRenderer();
 $page->addRootlineItem(array( 'url' => 'details.php?t=' . $type, 'name' => 'Details'));
 
 $content = '';
-// Loop through the add-on details array
+
 if (isset($result) && count($result)) {
 	$addon = current($result);
-	$content .= '<div id="addonDetail"><h2>' . $addon->name .' '. $addon->version .'</h2>
+	$authors = explode('|', strtr($addon->provider_name, array(',' => '|', ';' => '|')));
+	$authorLinks = array();
+
+	foreach ($authors as $author) {
+		if ($author) {
+			$authorLinks[] = '<a href="' . createLinkUrl('author', $author) . '">' . htmlspecialchars($author) . '</a>';
+		}
+	}
+	$content .= '<div id="addonDetail">
 		<span class="thumbnail"><img src="' . getAddonThumbnail($addon->id, 'large') . '" alt="' . $addon->name . '" class="pic" /></span>
-		<strong>Author:</strong> <a href="' . createLinkUrl('author', $addon->provider_name) . '">' . htmlspecialchars($addon->provider_name) . '</a>';
-	$content .= '<br /><br /><strong>Downloads:</strong> ' . number_format($addon->downloads);
-	$content .= '<br /><br /><strong>Description:</strong> ' . str_replace('[CR]', '<br />', $addon->description);
-	$content .= '<br /><br /><strong>License:</strong> ' . str_replace('[CR]', '<br />', $addon->license) . '<br /><br />';
+		<h2>' . htmlspecialchars($addon->name) .'</h2>
+		<strong>Author:</strong> ' . implode(', ', $authorLinks);
+
+	// Show the extra details of the Add-on
+	$content .= '<br /><strong>Version:</strong> ' . $addon->version;
+	$content .= '<br /><strong>Released:</strong> ' . $addon->updated;
+	$content .= '<br /><strong>Downloads:</strong> ' . number_format($addon->downloads);
+	if ($addon->license) {
+		$content .= '<br /><strong>License:</strong> ' . str_replace('[CR]', '<br />', $addon->license);
+	}
+	$content .= '<div class="description"><h4>Description:</h4><p>' . str_replace('[CR]', '<br />', $addon->description) . '</p></div>';
 
 	$content .=  '<ul class="addonLinks">';
 	// Check forum link exists
@@ -34,7 +49,7 @@ if (isset($result) && count($result)) {
 	$content .=  '<li><strong>Forum Discussion:</strong><br />' . $forumLink . '</li>';
 
 	// Auto Generate Wiki Link
-	$content .=  '<li><strong>Wiki Documentation:</strong><br /><a href="http://wiki.xbmc.org/index.php?title=Add-on:' . $addon->name . '" target="_blank"><img src="images/wiki.png" alt="Wiki page of this addon" /></a></li>';
+	$content .=  '<li><strong>Wiki Docs:</strong><br /><a href="http://wiki.xbmc.org/index.php?title=Add-on:' . $addon->name . '" target="_blank"><img src="images/wiki.png" alt="Wiki page of this addon" /></a></li>';
 	
 	// Check sourcecode link exists
 	$sourceLink = $addon->source ? '<a href="' . $addon->source .'" target="_blank"><img src="images/code.png" alt="Source code" /></a>' : '<img src="images/codebw.png" alt="Source code" />';
@@ -42,9 +57,16 @@ if (isset($result) && count($result)) {
 	
 	// Check website link exists
 	$websiteLink = $addon->website ? '<a href="' . $addon->website .'" target="_blank"><img src="images/website.png" alt="Website" /></a>' : '<img src="images/websitebw.png" alt="Website" />';
-	$content .=  "<li><strong>Website Link:</strong><br />" . $websiteLink . '</li>';
+	$content .=  "<li><strong>Website:</strong><br />" . $websiteLink . '</li>';
+
+	// Show the Download link
+	$content .= '<li><strong>Direct Download:</Strong><br />';
+	$content .= '<a href="http://mirrors.xbmc.org/addons/' . strtolower($configuration['repository']['version']) . '/' . $addon->id . '/' . $addon->id . '-' . $addon->version . '.zip"><img src="images/download_link.png" alt="Download" /></a></li>';
+
 
 	$content .= '</ul></div>';
+} else {
+	header('HTTP/1.0 404 Not Found');
 }
 
 
