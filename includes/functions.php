@@ -133,6 +133,21 @@ function getThumbnailUrl($source, $size) {
 }
 
 /**
+ * Render a flash message
+ * 
+ * @param string $headline
+ * @param string $message
+ * @param string $type (info|success|error)
+ * @return string
+ */
+function renderFlashMessage($headline, $message, $type = 'info') {
+	return '<div class="flashmessage flashmessage-' . $type . '">
+		<h3>' . $headline . '</h3>
+		<p>' . $message . '</p>
+	</div>';
+}
+
+/**
  * Renders a pagination
  * 
  * @param string $url
@@ -189,13 +204,24 @@ function createLinkUrl($type, $identifier, $encode = TRUE) {
 	$link = $configuration['baseUrl'];
 
 	if (is_array($identifier)) {
-		$queryParts = array();
+		$queryString = '';
+		$queryArguments = array();
+		$pathSegments = array();
 		foreach($identifier as $key => $value) {
-			$queryParts[] = $key . '=' . $value;
+			if (is_numeric($key)) {
+				$pathSegments[] = $value;
+			} else {
+				$queryArguments[] = $key . '=' . $value;
+			}
 		}
-		$queryString = implode('&', $queryParts);
+		if (count($pathSegments)) {
+			$queryString .= implode('/', $pathSegments) . '/';
+		}
+		if (count($queryArguments)) {
+			$queryString = '?' . implode('&', $queryParts);
+		}
 	} else {
-		$queryString = $identifier;
+		$queryString = $identifier . '/';
 	}
 
 	if ($encode) {
@@ -203,16 +229,16 @@ function createLinkUrl($type, $identifier, $encode = TRUE) {
 	}
 	switch ($type) {
 		case 'addon':
-			$link .= 'details.php?t=' . $queryString;
+			$link .= 'show/' . $queryString;
 			break;
 		case 'category':
-			$link .= 'browse.php?c=' . $queryString;
+			$link .= 'category/' . $queryString;
 			break;
 		case 'author':
-			$link .= 'browse.php?a=' . $queryString;
+			$link .= 'author/' . $queryString;
 			break;
 		case 'search':
-			$link .= 'search.php?t=' . $queryString;
+			$link .= 'search/?keyword=' . substr($queryString, 0, -1);
 			break;
 	}
 	return $link;

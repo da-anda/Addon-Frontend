@@ -142,10 +142,12 @@ class PageRenderer {
 	 * @return string The rendered page;
 	 */
 	public function render() {
+		global $configuration;
 		$marker = array(
 			'###PAGETITLE###' => $this->pageTitle,
 			'###BREADCRUMB###' => $this->renderBreadCrumb(),
 			'###CONTENT###' => $this->content,
+			'###BASEURL###' => $configuration['baseUrl']
 		);
 
 		$view = new TemplateView();
