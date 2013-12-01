@@ -10,8 +10,9 @@ $tables = array(
 	'addon' => array(
 		'columns' => array(
 			'add' => array(
-				'extension_point' => 'tinytext NOT NULL',
-				'content_types' => 'tinytext DEFAULT NULL'
+				'extension_point' => 'tinytext DEFAULT NULL',
+				'content_types' => 'tinytext DEFAULT NULL',
+				'broken' => 'tinytext DEFAULT NULL'
 			)
 		),
 		'keys' => array(

@@ -1815,7 +1815,7 @@ ol.ordered li p	{
 .addonLinks {clear:both; overflow:hidden; margin:2em 0; list-style:none; padding:0}
 .addonLinks li {width:18%; margin:0 1%; display:inline-block}
 
-.flashmessage { display:block; padding:1em; border:2px solid #8CC3DB; margin:2em 0 4em;}
+.flashmessage { display:block; padding:1em; border:2px solid #8CC3DB; margin:2em 0 4em; clear:both; overflow:hidden; }
 .flashmessage h3 {margin:0 0 0.2em;}
 .flashmessage p {margin:0;}
 .flashmessage-error {border-color:#c00;}
