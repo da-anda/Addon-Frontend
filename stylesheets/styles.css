@@ -41,6 +41,7 @@ Author URI: http://themeforest.net/user/ThemeMakers
 		Breadcrumbs
 		Pagination
 		Styles for Buttons
+		Info Boxes
 		Ordered/Unordered Lists
 		Recent Projects
 		Three Featured Boxes
@@ -1632,9 +1633,42 @@ ol.ordered li p	{
 				color:#B2B1B1;
 				font-style:italic;
 				}
-				
+
+/* ---- Info Boxes ---- */
+
+.flashmessage	{
+				min-height:30px;
+				color:#434343;
+				margin-bottom:10px;
+				padding:20px 20px 20px 115px;
+				border-radius:3px;
+				-moz-border-radius:3px;
+				-webkit-border-radius:3px;
+				-khtml-border-radius:3px;
+				}
+
+.flashmessage-success	{
+				border:1px solid #A2C487;
+				background:url(../images/checkmark.png) 35px 50% no-repeat #CDECB4;
+				}
+
+.flashmessage-warning	{
+				border:1px solid #D1C289;
+				background:url(../images/warning.png) 35px 50% no-repeat #F7E9B4;
+				}
+
+.flashmessage-error	{
+				border:1px solid #D6AC96;
+				background:url(../images/x.png) 35px 50% no-repeat #F8D1BC;
+				}
+                                
+.flashmessage-info	{
+				border:1px solid #93C3E1;
+				background:url(../images/info.png) 35px 50% no-repeat #B8E0F9;
+				}
+
 /* ---- Table Layout ---- */
-				
+
 .table			{
 				margin-bottom:20px;
 				border-bottom:1px solid #d9d9d9;
@@ -1815,10 +1849,8 @@ ol.ordered li p	{
 .addonLinks {clear:both; overflow:hidden; margin:2em 0; list-style:none; padding:0}
 .addonLinks li {width:18%; margin:0 1%; display:inline-block}
 
-.flashmessage { display:block; padding:1em; border:2px solid #8CC3DB; margin:2em 0 4em; clear:both; overflow:hidden; }
+.flashmessage { display:block; clear:both; overflow:hidden; }
 .flashmessage h3 {margin:0 0 0.2em;}
 .flashmessage p {margin:0;}
-.flashmessage-error {border-color:#c00;}
-.flashmessage-success {border-color:#A4C43C;}
 
 h1, h2, h3, h4, h5, h6, .big_btn, a.big_btn, #f_sidebar h3, .error404, .s3sliderImage .title { font-family: 'MgOpen Modata', 'Source Sans Pro', 'Arial Narrow', Arial, Helvetica, sans-serif;}
