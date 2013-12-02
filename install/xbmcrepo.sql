@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS `addon` (
   `downloads` int(11) DEFAULT NULL,
   `extension_point` tinytext DEFAULT NULL,
   `content_types` tinytext DEFAULT NULL,
+  `broken` tinytext DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY keyaddontype ( `extension_point` ( 60 ) , `content_type` ( 100 ) ),
   KEY keyauthor ( `provider_name` ( 100 ) ),

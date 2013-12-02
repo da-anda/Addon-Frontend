@@ -150,7 +150,11 @@ class AddonController extends AbstractController {
 				$output .= '<br /><strong>License:</strong> ' . str_replace('[CR]', '<br />', $addon->license);
 			}
 			$output .= '<div class="description"><h4>Description:</h4><p>' . str_replace('[CR]', '<br />', $addon->description) . '</p></div>';
-		
+
+			if ($addon->broken) {
+				$output .= renderFlashMessage('Warning', 'This addon is currently reported as broken! <br /><strong>Suggestion / Reason:</strong> ' . htmlspecialchars($addon->broken) . '.', 'error');
+			}
+
 			$output .=  '<ul class="addonLinks">';
 			// Check forum link exists
 			$forumLink = $addon->forum ? '<a href="' . $addon->forum .'" target="_blank"><img src="images/forum.png" alt="Forum discussion" /></a>' : '<img src="images/forumbw.png" alt="Forum discussion" />';
