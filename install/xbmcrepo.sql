@@ -47,8 +47,8 @@ CREATE TABLE IF NOT EXISTS `addon` (
   `content_types` tinytext DEFAULT NULL,
   `broken` tinytext DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY keyaddontype ( `extension_point` ( 60 ) , `content_type` ( 100 ) ),
-  KEY keyauthor ( `provider_name` ( 100 ) ),
+  KEY keyaddontype ( `extension_point` ( 60 ) , `content_types` ( 100 ) ),
+  KEY keyauthor ( `provider_name` ( 100 ) )
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------

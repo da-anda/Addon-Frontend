@@ -17,7 +17,7 @@ $tables = array(
 		),
 		'keys' => array(
 			'add' => array(
-				'keyaddontype' => '( `extension_point` ( 60 ) , `content_type` ( 100 ) )',
+				'keyaddontype' => '( `extension_point` ( 60 ) , `content_types` ( 100 ) )',
 				'keyauthor' => '( `provider_name` ( 100 ) )'
 			)
 		)
