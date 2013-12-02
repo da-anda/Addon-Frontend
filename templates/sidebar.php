@@ -61,7 +61,7 @@ function renderAddonList(array $addons) {
 					*/
 					
 						// Build the Popular Add-ons right hand slider slider
-						$popular = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " ORDER BY downloads DESC LIMIT 5");
+						$popular = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " AND NOT broken ORDER BY downloads DESC LIMIT 5");
 						echo renderAddonList($popular);
 						?>
 					</div>
@@ -76,7 +76,7 @@ function renderAddonList(array $addons) {
 					<div class="viewport">
 						<?php
 						// Show some random Add-ons
-						$random = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " ORDER BY RAND() DESC LIMIT 3");
+						$random = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " AND NOT broken ORDER BY RAND() DESC LIMIT 3");
 						if (is_array($popular) && count($popular))
 						{
 							echo '<ul class="overview">';
