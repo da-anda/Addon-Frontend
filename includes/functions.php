@@ -250,6 +250,10 @@ function createLinkUrl($type, $identifier, $encode = TRUE) {
  * @return void
  **/
 function checkAdminAccess() {
+	// always allow access via console
+	if (php_sapi_name() == 'cli') return;
+
+	// in any other case use token authentication
 	global $configuration;
 	$token = isset($_GET['token']) ? urldecode($_GET['token']) : '';
 	if ($token !== $configuration['security']['token']) {
