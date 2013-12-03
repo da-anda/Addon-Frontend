@@ -148,7 +148,7 @@ $configuration = array(
 		'pathWrite' => 'cache' . DIRECTORY_SEPARATOR,
 		'pathRead' => 'cache/'
 	),
-	'baseUrl' => (php_sapi_name() == 'cli' ? '/' : (isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/'),
+	'baseUrl' => NULL,
 	'security' => array(
 		'token' => ''
 	)

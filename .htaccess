@@ -36,7 +36,7 @@
 	RewriteRule ^browse.php$ http://%{HTTP_HOST}/category/%3/? [L,R=301]
 
 
-	# If file/symlink/directory doesn't exist, redirect to dispatcher.php
+	# If file/symlink/directory doesn't exist, redirect to index.php
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-l
