@@ -76,7 +76,7 @@ function renderAddonList(array $addons) {
 					<div class="viewport">
 						<?php
 						// Show some random Add-ons
-						$random = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " AND NOT broken ORDER BY RAND() DESC LIMIT 3");
+						$random = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " AND NOT broken ORDER BY RAND() DESC LIMIT 5");
 						if (is_array($popular) && count($popular))
 						{
 							echo '<ul class="overview">';
