@@ -319,7 +319,7 @@ function buildCategoryTree($categories, $baseRootline = array()) {
  * @return string
  */
 function cleanupAuthorName($authorName) {
-	return str_replace('@', '[AT]', $authorName);
+	return trim(str_replace('@', '[AT]', $authorName));
 }
 
 /**
