@@ -12,7 +12,8 @@ $tables = array(
 			'add' => array(
 				'extension_point' => 'tinytext DEFAULT NULL',
 				'content_types' => 'tinytext DEFAULT NULL',
-				'broken' => 'tinytext DEFAULT NULL'
+				'broken' => 'tinytext DEFAULT NULL',
+				'deleted' => 'tinyint(3) unsigned DEFAULT \'0\' NOT NULL'
 			)
 		),
 		'keys' => array(

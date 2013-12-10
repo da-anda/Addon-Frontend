@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `addon` (
   `extension_point` tinytext DEFAULT NULL,
   `content_types` tinytext DEFAULT NULL,
   `broken` tinytext DEFAULT NULL,
+  `deleted` tinyint(3) unsigned DEFAULT '0' NOT NULL,
   PRIMARY KEY (`id`),
   KEY keyaddontype ( `extension_point` ( 60 ) , `content_types` ( 100 ) ),
   KEY keyauthor ( `provider_name` ( 100 ) )

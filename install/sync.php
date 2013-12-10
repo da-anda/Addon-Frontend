@@ -26,6 +26,16 @@ if ($xml && isset($xml->addon['id']))	{
 		}
 	}
 
+	// cache existing addon-IDs
+	$result = $db->get_results('SELECT id, version, deleted FROM addon');
+	$addonCache = array(
+		'processed' => array(),
+		'existing' => array()
+	);
+	foreach ($result as $addon) {
+		$addonCache['existing'][$addon->id] = $addon;
+	}
+
 	// Loop through each addon
 	foreach ($xml->addon as $addon)	{
 		$counter++;
@@ -40,6 +50,11 @@ if ($xml && isset($xml->addon['id']))	{
 		$extensionPoint = '';
 		$contentTypes = array();
 		$downloadCount = isset($downloadStats[$id]) ? $downloadStats[$id] : 0;
+
+		// check for duplicates in XML and skip those
+		if (isset($addonCache['processed'][$id])) {
+			continue;
+		}
 
 		foreach ($addon->children() as $nodeName => $node) {
 			if ($nodeName == 'extension') {
@@ -110,28 +125,39 @@ if ($xml && isset($xml->addon['id']))	{
 		}
 
 		//Check here to see if the Item already exists
-		$check = $db->get_row('SELECT * FROM addon WHERE id = "' . $db->escape($id) . '"');
-
-		if (isset($check->id)) {
+		if (isset($addonCache['existing'][$id])) {
 			//Item exists
 			//Check here to see if the addon needs to be updated
-			$updateQuery = ' provider_name = "' . $db->escape($addon['provider-name']) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", downloads = ' . $downloadCount . ', extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '", broken="' . $db->escape($broken) . '"';
+			$updateQuery = ' deleted = 0, provider_name = "' . $db->escape($addon['provider-name']) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", downloads = ' . $downloadCount . ', extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '", broken="' . $db->escape($broken) . '"';
 				// only update timestamp on new version
-			if ($check->version != $addon['version']) {
+			if ($addonCache['existing'][$id]->version != $addon['version']) {
 				$counterUpdated++;
 				$updateQuery .= ', version = "' . $db->escape($addon['version']) . '", updated = NOW() ';
 			}
 			$db->query('UPDATE addon SET ' . $updateQuery . ' WHERE id = "' . $db->escape($id) . '"');
 
 		// Add a new add-on if it doesn't exist
-		} else if ($description != '') {
-			$counterNewlyAdded++;
-			$db->query('INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, downloads, extension_point, content_types, broken) VALUES ("' . $db->escape($id) . '", "' . $db->escape($addon['name']) . '", "' . $db->escape($addon['provider-name']) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", ' . $downloadCount . ', "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '", "' . $db->escape($broken) . '")');
 		} else {
-			$db->query('UPDATE addon SET downloads = ' . $downloadCount . ' WHERE id = "' . $db->escape($id) . '"');
+			$counterNewlyAdded++;
+			$db->query('INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, downloads, extension_point, content_types, broken, deleted) VALUES ("' . $db->escape($id) . '", "' . $db->escape($addon['name']) . '", "' . $db->escape($addon['provider-name']) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", ' . $downloadCount . ', "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '", "' . $db->escape($broken) . '", 0)');
+		}
+
+		$addonCache['processed'][$id] = $id;
+	}
+
+	// mark addons no longer part of repo xml as deleted
+	$orphaned = array_diff(array_keys($addonCache['existing']), array_keys($addonCache['processed']));
+	$removedAddons = array();
+	foreach ($orphaned as $addonId) {
+		if (isset($addonCache['existing'][$addonId]) && (bool) $addonCache['existing'][$addonId]->deleted == FALSE) {
+			$removedAddons[] = $db->escape($addonId);
 		}
 	}
-	echo date('l jS \of F Y h:i:s A') . ' - Total ' . $counter . ', ' . $counterUpdated . ' Updated, ' . $counterNewlyAdded . ' New';
+	if (count($removedAddons)) {
+		$db->query('UPDATE addon SET deleted = 1 WHERE id IN ("' . implode('","', $removedAddons) . '")');
+	}
+
+	echo date('l jS \of F Y h:i:s A') . ' - Total ' . $counter . ', ' . $counterUpdated . ' Updated, ' . $counterNewlyAdded . ' New, ' . count($removedAddons) . ' Removed';
 }
 
 ?>
