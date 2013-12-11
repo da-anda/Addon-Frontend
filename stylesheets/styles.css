@@ -1845,6 +1845,7 @@ ol.ordered li p	{
 
 #addonDetail .thumbnail {float:left; margin:0 2em 2em 0}
 #addonDetail .description {margin-top:1.5em;}
+#addonDetail h2 {text-transform: none;}
 
 .addonLinks {clear:both; overflow:hidden; margin:2em 0; list-style:none; padding:0}
 .addonLinks li {width:18%; margin:0 1%; display:inline-block}
