@@ -65,7 +65,7 @@ if ($xml && isset($xml->addon['id']))	{
 					if ($node->children()) {
 						foreach($node->children() as $childName => $childNode) {
 							if ($childName == 'provides') {
-								$contentTypes = explode(' ', trim((string) $childNode));
+								$contentTypes = array_merge($contentTypes, explode(' ', trim((string) $childNode)));
 							}
 						}
 					}
@@ -123,6 +123,8 @@ if ($xml && isset($xml->addon['id']))	{
 				}
 			}
 		}
+
+		$contentTypes = array_unique($contentTypes);
 
 		//Check here to see if the Item already exists
 		if (isset($addonCache['existing'][$id])) {
