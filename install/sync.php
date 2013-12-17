@@ -60,7 +60,10 @@ if ($xml && isset($xml->addon['id']))	{
 			if ($nodeName == 'extension') {
 				// grab extension point and content types
 				if ($node['point'] != 'xbmc.addon.metadata') {
-					$extensionPoint = $node['point'];
+					// don't overwrite primary/first extension point
+					if ($extensionPoint == '') {
+						$extensionPoint = $node['point'];
+					}
 					$type = $node['point'];
 					if ($node->children()) {
 						foreach($node->children() as $childName => $childNode) {
