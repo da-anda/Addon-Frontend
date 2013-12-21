@@ -20,6 +20,32 @@ function renderAddonList(array $addons) {
 }
 ?>		<!-- Sidebar -->
 		<div id="sidebar">
+			<!-- Random add-ons widget-->
+			<div class="widget-container widget_recent_projects">
+				<h2>Random Add-ons</h2>
+				<div class="carousel_container">
+					<a class="buttons prev" href="#">left</a>
+					<div class="viewport">
+						<?php
+						// Show some random Add-ons
+						$random = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " AND NOT broken ORDER BY RAND() DESC LIMIT 5");
+						if (is_array($popular) && count($popular))
+						{
+							echo '<ul class="overview">';
+							foreach ($random as $randoms)
+							{
+								echo "<li><div class='thumb'><a href='" . createLinkUrl('addon', $randoms->id) ."'><img src='" . getAddonThumbnail($randoms->id, 'addonThumbnail') . "' height='125' alt='$randoms->name' class='pic' /></a></div>";
+								echo "<h5>".substr($randoms->name,0,22)." by ".substr($randoms->provider_name,0,15)."</h5>";
+								echo "<p>".str_replace("[CR]","",substr($randoms->description,0,100))."...</p></li>";
+							}
+							echo '</ul>';
+						}
+						?>
+					</div>
+					<a class="buttons next" href="#">right</a>
+				</div>
+				<div class="clear"></div>
+			</div>
 			<!-- Tabbed Box -->
 			<div class="widget-container">
 				<!-- Start Tabbed Box Container -->
@@ -67,32 +93,6 @@ function renderAddonList(array $addons) {
 					</div>
 				</div>
 				<!-- End Tabbed Box Container -->
-			</div>
-			<!-- Recent Projects Slider -->
-			<div class="widget-container widget_recent_projects">
-				<h2>Random Add-ons</h2>
-				<div class="carousel_container">
-					<a class="buttons prev" href="#">left</a>
-					<div class="viewport">
-						<?php
-						// Show some random Add-ons
-						$random = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " AND NOT broken ORDER BY RAND() DESC LIMIT 5");
-						if (is_array($popular) && count($popular))
-						{
-							echo '<ul class="overview">';
-							foreach ($random as $randoms)
-							{
-								echo "<li><div class='thumb'><a href='" . createLinkUrl('addon', $randoms->id) ."'><img src='" . getAddonThumbnail($randoms->id, 'addonThumbnail') . "' height='125' alt='$randoms->name' class='pic' /></a></div>";
-								echo "<h5>".substr($randoms->name,0,22)." by ".substr($randoms->provider_name,0,15)."</h5>";
-								echo "<p>".str_replace("[CR]","",substr($randoms->description,0,100))."...</p></li>";
-							}
-							echo '</ul>';
-						}
-						?>
-					</div>
-					<a class="buttons next" href="#">right</a>
-				</div>
-				<div class="clear"></div>
 			</div>
 
 			<?php
