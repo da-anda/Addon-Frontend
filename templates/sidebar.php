@@ -102,7 +102,7 @@ function renderAddonList(array $addons) {
 				2 => 'silver.png',
 				3 => 'bronze.png',
 			);
-			if (is_array($popular) && count($popular)):
+			if (is_array($top5) && count($top5)):
 			?>
 			<!-- Any Widget -->
 			<div class="widget-container">
