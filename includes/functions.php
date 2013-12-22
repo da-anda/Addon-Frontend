@@ -164,28 +164,28 @@ function renderPagination($url, $itemsTotal, $itemsPerPage = 40, $varName='page'
 	$output = '<div class="resultCount">Showing ' . ($offset +1) . ' to '. min($itemsTotal, $offset + $itemsPerPage) .' (Total:'. $itemsTotal .')';
 	if ($itemsTotal > $itemsPerPage) {
 		$querySign = strpos($url, '?') ? '&amp;' : '?';
-	
-		// Create variables to store back and forward button offsets
-		$nextPage = $itemsTotal >= $offset + $itemsPerPage ? $page+1 : FALSE;
-		$prevPage = $offset - $itemsPerPage >= 0 ? $page-1 : FALSE;
-	
-		// Print out the left and right browse buttons
-		$output .= '</br>';
-		
-		// Print the left arrow if not the first results
+		$pageLinks = array();
+
+		// add "previous page" link
 		if ($page > 1) {
 			$linkUrl = $url . ($page == 2 ? '' : $querySign . $varName . '=' . $page-1);
-			$output .= '<a href="' . $linkUrl . '"/><img src="images/arrow-left.png" width="40" height="40" /></a><img src="images/transparent.png" width="40" height="40" />';
-		} else {
-			$output .= '<img src="images/transparent.png" width="80" height="40" />';
+			$pageLinks[] = '<li class="previousPage"><a class="page" href="' . $linkUrl . '"><dfn title="previous Page">◄</dfn></a></li>';
 		}
 
-		// Print the right arrow if not the end results
-		if ($page < $maxPages) {
-			$output .= '<a href="' . $url . $querySign . $varName . '=' . ($page+1) . '"/><img src="images/arrow-right.png" width="40" height="40" /></a>';
-		} else {
-			$output .= '<img src="images/transparent.png" width="40" height="40" />';
+		// build pages
+		for ($i = 1; $i <= $maxPages; $i++) {
+			if ($i == $page) {
+				$pageLinks[] = '<li><span abbr="Page ' . $i . '">' . $i . '</span></li>';
+			} else {
+				$pageLinks[] = '<li><a class="page" href="' . $url . $querySign . $varName . '=' . $i . '" abbr="Page ' . $i . '">' . $i . '</a></li>';
+			} 
 		}
+
+		// add "next page" link
+		if ($page < $maxPages) {
+			$pageLinks[] = '<li class="nextPage"><a class="page last" href="' . $url . $querySign . $varName . '=' . ($page+1). '"><dfn title="next Page">►</dfn></a></li>';
+		}
+		$output .= '<ul class="wp-pagenavi">' . implode('', $pageLinks) . '</ul>';
 	}
 	$output .= '</div>';
 	return $output;

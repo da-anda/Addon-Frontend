@@ -1338,7 +1338,9 @@ div:hover.hover_box	{background:#EBEBEB;}
 .wp-pagenavi li	{
 				margin:0;
 				padding:0;
-				float:left;
+				float:none;
+				display:inline;
+				display:inline-block;
 				background:none;
 				}
 				
