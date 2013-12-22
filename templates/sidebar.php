@@ -51,41 +51,30 @@ function renderAddonList(array $addons) {
 				<div id="tabs">
 					<!-- Tabs Menu -->
 					<ul id="tab-items">
-						<li><a href="#tabs-1" title="Popular">Updated</a></li>
-						<li><a href="#tabs-2" title="Recent">Newest</a></li>
-						<li><a href="#tabs-3" title="Comments">Popular</a></li>
+						<li><a href="#tabs-1" title="Newest add-ons">Newest</a></li>
+						<li><a href="#tabs-2" title="Recently updated add-ons">Updated</a></li>
+						<li><a href="#tabs-3" title="Popular add-ons">Popular</a></li>
 					</ul>
 					<!-- Tab Container for menu with ID tabs-1 -->
 					<div class="tabs-inner" id="tabs-1">
 						<?php
-						// Build the Recent Add-ons right hand slider slider
-						$recent = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . "  ORDER BY updated DESC LIMIT 5");
-						echo renderAddonList($recent);
+						// Build the Newest Add-ons list
+						$newest = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " ORDER BY created DESC LIMIT 5");
+						echo renderAddonList($newest);
 						?>
 					</div>
 					<!-- Tab Container for menu with ID tabs-2 -->
 					<div class="tabs-inner" id="tabs-2">
 						<?php
-						$newest = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " ORDER BY created DESC LIMIT 5");
-						echo renderAddonList($newest);
+						// Build the Recent Add-ons list
+						$recent = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . "  ORDER BY updated DESC LIMIT 5");
+						echo renderAddonList($recent);
 						?>
 					</div>
 					<!-- Tab Container for menu with ID tabs-3 -->
 					<div class="tabs-inner" id="tabs-3">
 						<?php
-					
-					/* // This is a sidebar to show the latest comments. Disabled for now as we are not launching comments yet.
-						
-						$comment = $db->get_results("SELECT * FROM comment ORDER BY date DESC LIMIT 4"); 
-						foreach ($comment as $comments)
-						{
-							echo "<li><b><a href='details.php?t=".$comments->addonid."'>".$comments->name." says '".$comments->comment."'</a></b>";
-							echo "<span class='date'>".$comments->date."</span>";						
-							echo "</li>";
-						} 
-					*/
-					
-						// Build the Popular Add-ons right hand slider slider
+						// Build the Popular Add-ons list
 						$popular = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " AND NOT broken ORDER BY downloads DESC LIMIT 5");
 						echo renderAddonList($popular);
 						?>
