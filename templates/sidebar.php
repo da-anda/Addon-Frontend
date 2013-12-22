@@ -28,15 +28,13 @@ function renderAddonList(array $addons) {
 					<div class="viewport">
 						<?php
 						// Show some random Add-ons
-						$random = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " AND NOT broken ORDER BY RAND() DESC LIMIT 5");
-						if (is_array($popular) && count($popular))
-						{
+						$random = $db->get_results('SELECT * FROM addon WHERE 1=1 ' . $configuration['addonExcludeClause'] . ' AND NOT broken ORDER BY RAND() DESC LIMIT 5');
+						if (is_array($random) && count($random)) {
 							echo '<ul class="overview">';
-							foreach ($random as $randoms)
-							{
-								echo "<li><div class='thumb'><a href='" . createLinkUrl('addon', $randoms->id) ."'><img src='" . getAddonThumbnail($randoms->id, 'addonThumbnail') . "' height='125' alt='$randoms->name' class='pic' /></a></div>";
-								echo "<h5>".substr($randoms->name,0,22)." by ".substr($randoms->provider_name,0,15)."</h5>";
-								echo "<p>".str_replace("[CR]","",substr($randoms->description,0,100))."...</p></li>";
+							foreach ($random as $addon) {
+								echo '<li><div class="thumb"><a href="' . createLinkUrl('addon', $addon->id) . '"><img src="' . getAddonThumbnail($addon->id, 'addonThumbnail') . '" height="125" alt="' . $addon->name . '" class="pic" /></a></div>';
+								echo '<h5>' . htmlspecialchars($addon->name) . '</h5>';
+								echo '<p>' . str_replace('[CR]', '', substr($addon->description, 0, 100)) . '...</p></li>';
 							}
 							echo '</ul>';
 						}
