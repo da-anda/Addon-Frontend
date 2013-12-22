@@ -1453,11 +1453,11 @@ ol.ordered li p	{
 				position:relative;
 				}
 				
-.carousel_container { overflow:hidden; padding: 0 0 10px;   }
+.carousel_container { overflow:hidden; padding: 0; }
 .carousel_container .viewport {
 					float: left;
 					width: 270px;
-					height:210px;
+					height:170px;
 					overflow: hidden;
 					position: relative;
 					}
@@ -1475,9 +1475,7 @@ ol.ordered li p	{
 					width: 270px;
 					}
 					
-.carousel_container .thumb	{margin-bottom:14px;}
-				
-.carousel_container h5	{padding-left:2px;}
+.carousel_container .thumb	{ float:left; margin:0 1em 1em 0;}
 
 .carousel_container .buttons	{
 					width:14px;

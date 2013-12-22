@@ -32,9 +32,10 @@ function renderAddonList(array $addons) {
 						if (is_array($random) && count($random)) {
 							echo '<ul class="overview">';
 							foreach ($random as $addon) {
-								echo '<li><div class="thumb"><a href="' . createLinkUrl('addon', $addon->id) . '"><img src="' . getAddonThumbnail($addon->id, 'addonThumbnail') . '" height="125" alt="' . $addon->name . '" class="pic" /></a></div>';
+								$description = str_replace('[CR]', '', $addon->description);
+								echo '<li><a class="thumb" href="' . createLinkUrl('addon', $addon->id) . '"><img src="' . getAddonThumbnail($addon->id, 'addonThumbnail') . '" height="110" alt="' . $addon->name . '" class="pic" /></a>';
 								echo '<h5>' . htmlspecialchars($addon->name) . '</h5>';
-								echo '<p>' . str_replace('[CR]', '', substr($addon->description, 0, 100)) . '...</p></li>';
+								echo '<p>' . htmlspecialchars( substr($description, 0, 190) ) . (strlen($description) < 190 ? '' : '...') . '</p></li>';
 							}
 							echo '</ul>';
 						}
