@@ -331,4 +331,34 @@ function cleanupAuthorName($authorName) {
 function revertAuthorNameCleanup($authorName) {
 	return str_replace('[AT]', '@', $authorName);
 }
+
+/**
+ * Deletes a directory recursively
+ * 
+ * @param string $directoryPath
+ * @return boolean
+ */
+function deleteDirectory($directoryPath) {
+	if (file_exists($directoryPath) && is_dir($directoryPath)) {
+		foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directoryPath, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+			$path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
+		}
+		return rmdir($directoryPath);
+	}
+	return FALSE;
+}
+
+/**
+ * Deletes the cache for an addon
+ * 
+ * @param string $addonId
+ * @return void
+ */
+function deleteAddonCache($addonId) {
+	global $configuration;
+	try {
+		$cachDirectory = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addonId . DIRECTORY_SEPARATOR;
+		deleteDirectory($cachDirectory);
+	} catch (Exception $e) {}
+}
 ?>

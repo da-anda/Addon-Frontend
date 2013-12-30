@@ -142,6 +142,7 @@ if ($xml && isset($xml->addon['id']))	{
 			if ($addonCache['existing'][$id]->version != $addon['version']) {
 				$counterUpdated++;
 				$updateQuery .= ', version = "' . $db->escape($addon['version']) . '", updated = NOW() ';
+				deleteAddonCache($id);
 			}
 			$db->query('UPDATE addon SET ' . $updateQuery . ' WHERE id = "' . $db->escape($id) . '"');
 
