@@ -45,6 +45,7 @@ if ($xml && isset($xml->addon['id']))	{
 		$source = '';
 		$website = '';
 		$license = '';
+		$author = '';
 		$id = (string) $addon['id'];
 		$broken = '';
 		$extensionPoint = '';
@@ -127,13 +128,16 @@ if ($xml && isset($xml->addon['id']))	{
 			}
 		}
 
+		// unify format of multiple authors
+		$author = strtr($addon['provider-name'], array('|' => ',', ';' => ','));
+
 		$contentTypes = array_unique($contentTypes);
 
 		//Check here to see if the Item already exists
 		if (isset($addonCache['existing'][$id])) {
 			//Item exists
 			//Check here to see if the addon needs to be updated
-			$updateQuery = ' deleted = 0, provider_name = "' . $db->escape($addon['provider-name']) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", downloads = ' . $downloadCount . ', extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '", broken="' . $db->escape($broken) . '"';
+			$updateQuery = ' deleted = 0, provider_name = "' . $db->escape($author) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", downloads = ' . $downloadCount . ', extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '", broken="' . $db->escape($broken) . '"';
 				// only update timestamp on new version
 			if ($addonCache['existing'][$id]->version != $addon['version']) {
 				$counterUpdated++;
@@ -144,7 +148,7 @@ if ($xml && isset($xml->addon['id']))	{
 		// Add a new add-on if it doesn't exist
 		} else {
 			$counterNewlyAdded++;
-			$db->query('INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, downloads, extension_point, content_types, broken, deleted) VALUES ("' . $db->escape($id) . '", "' . $db->escape($addon['name']) . '", "' . $db->escape($addon['provider-name']) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", ' . $downloadCount . ', "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '", "' . $db->escape($broken) . '", 0)');
+			$db->query('INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, downloads, extension_point, content_types, broken, deleted) VALUES ("' . $db->escape($id) . '", "' . $db->escape($addon['name']) . '", "' . $db->escape($author) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", ' . $downloadCount . ', "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '", "' . $db->escape($broken) . '", 0)');
 		}
 
 		$addonCache['processed'][$id] = $id;

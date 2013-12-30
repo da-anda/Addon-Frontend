@@ -75,8 +75,8 @@ class AddonController extends AbstractController {
 			// execute queries
 			$limit = 40;
 			$offset = max(0, isset($_GET['page']) ? (intval($_GET['page']) -1) : 0) * $limit;
-			$addons = $this->db->get_results('SELECT * FROM addon WHERE provider_name ="' . $this->db->escape($author) . '" ' . $this->configuration['addonExcludeClause'] . ' ORDER BY name ASC LIMIT ' . $offset . ', ' . $limit);
-			$count = $this->db->get_var('SELECT count(*) FROM addon WHERE provider_name ="' . $this->db->escape($author) . '" ' . $this->configuration['addonExcludeClause']);
+			$addons = $this->db->get_results('SELECT * FROM addon WHERE FIND_IN_SET("' . $this->db->escape($author) . '", provider_name) ' . $this->configuration['addonExcludeClause'] . ' ORDER BY name ASC LIMIT ' . $offset . ', ' . $limit);
+			$count = $this->db->get_var('SELECT count(*) FROM addon WHERE FIND_IN_SET("' . $this->db->escape($author) . '", provider_name) ' . $this->configuration['addonExcludeClause']);
 
 			if ($addons && is_array($addons) && count($addons)) {
 				$output .= $this->renderAddonList($addons, createLinkUrl('author', $cleanAuthor), $count, $limit);
@@ -127,7 +127,7 @@ class AddonController extends AbstractController {
 			$this->pageRenderer->addRootlineItem(array( 'url' => createLinkUrl('addon', $addon->id), 'name' => 'Details'));
 
 			// prepare authors and create individual links if more are listed by the addon
-			$authors = explode('|', strtr($addon->provider_name, array(',' => '|', ';' => '|')));
+			$authors = explode(',', $addon->provider_name);
 			$authorLinks = array();
 			foreach ($authors as $author) {
 				if ($author) {
