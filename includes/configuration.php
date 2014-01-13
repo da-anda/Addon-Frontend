@@ -23,8 +23,8 @@ $configuration = array(
 	),
 	// defines some settings needed to interact with the repositories
 	'repository' => array(
-		'version' => 'frodo',
-		'importUrl' => 'http://mirrors.xbmc.org/addons/frodo/addons.xml',
+		'dataUrl' => 'http://mirrors.xbmc.org/addons/frodo/',
+		'xmlUrl' => 'http://mirrors.xbmc.org/addons/frodo/addons.xml',
 		'statsUrl' => 'http://mirrors.xbmc.org/addons/addons_simplestats.xml',
 	),
 	// template and rendering related settings

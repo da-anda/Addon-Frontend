@@ -9,9 +9,14 @@ checkAdminAccess();
 require_once($basePath . 'includes/db_connection.php');
 //  ##############  Finish Includes  ############### //
 
+
 # Check the XML exists
-$repositoryVersion = strtolower($configuration['repository']['version']);
-$xml = simplexml_load_file($configuration['repository']['importUrl']);
+if (isset($configuration['repository']['xmlUrl']) && $configuration['repository']['xmlUrl']) {
+	$repositoryXmlUrl = $configuration['repository']['xmlUrl'];
+} else {
+	$repositoryXmlUrl = $configuration['repository']['dataUrl'] . 'addons.xml';
+}
+$xml = simplexml_load_file($repositoryXmlUrl);
 if ($xml && isset($xml->addon['id']))	{
 	$counter = 0;
 	$counterUpdated = 0;
@@ -153,6 +158,7 @@ if ($xml && isset($xml->addon['id']))	{
 			$db->query('INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, downloads, extension_point, content_types, broken, deleted) VALUES ("' . $db->escape($id) . '", "' . $db->escape($addon['name']) . '", "' . $db->escape($author) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", ' . $downloadCount . ', "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '", "' . $db->escape($broken) . '", 0)');
 		}
 
+		cacheAddonData($id);
 		$addonCache['processed'][$id] = $id;
 	}
 

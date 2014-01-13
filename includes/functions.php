@@ -53,34 +53,6 @@ function getAddonThumbnail($addonId, $size) {
 	$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addonId . DIRECTORY_SEPARATOR;
 	$addonThumbnailPath = $addonWritePath . 'icon.png';
 
-	// if addon folder doesn't exist, create it and download thumb.
-	// this is a temporary workaround until we have a local repo copy.
-	// this could also be done in sync script to update old cached icons
-	if (!file_exists($addonWritePath)) {
-		mkdir($addonWritePath, 0777, TRUE);
-		$downloadUrl = 'http://mirrors.xbmc.org/addons/' . $configuration['repository']['version'] . '/' . $addonId . '/icon.png';
-
-		$fp = fopen($addonThumbnailPath, 'w');
-		if ($fp) {
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $downloadUrl);
-			curl_setopt($ch, CURLOPT_HEADER, 0);
-			curl_setopt($ch, CURLOPT_HTTPGET, 'GET');
-			#curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-			$followLocation = @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-
-			curl_setopt($ch, CURLOPT_FILE, $fp);
-			$data = curl_exec($ch);
-			#file_put_contents($filePath, curl_exec($ch));
-			curl_close($ch);
-			fclose($fp);
-			if (!$data) {
-				unlink($addonThumbnailPath);
-			}
-		}
-	}
-
 	if (!file_exists($addonThumbnailPath)) {
 		$addonThumbnailPath = $configuration['images']['dummy'];
 	}
@@ -331,6 +303,51 @@ function cleanupAuthorName($authorName) {
 function revertAuthorNameCleanup($authorName) {
 	return str_replace('[AT]', '@', $authorName);
 }
+
+/**
+ * Downloads the addons images like the icon
+ * 
+ * @param string $addonId
+ * @return void
+ */
+function cacheAddonData($addonId) {
+	global $configuration;
+
+	$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addonId . DIRECTORY_SEPARATOR;
+	$addonThumbnailPath = $addonWritePath . 'icon.png';
+
+	if (!file_exists($addonWritePath)) {
+		mkdir($addonWritePath, 0777, TRUE);
+	}
+	if (!file_exists($addonThumbnailPath)) {
+		$tempDownloadName = $addonWritePath . 'temp-icon.png';
+		$downloadUrl = $configuration['repository']['dataUrl'] . $addonId . '/icon.png';
+
+		$fp = fopen($tempDownloadName, 'w');
+		if ($fp) {
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $downloadUrl);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_HTTPGET, 'GET');
+			#curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+			$followLocation = @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+
+			curl_setopt($ch, CURLOPT_FILE, $fp);
+			$data = curl_exec($ch);
+			curl_close($ch);
+			fclose($fp);
+			if ($data) {
+				if (file_exists($addonThumbnailPath)) {
+					unlink($addonThumbnailPath);
+				}
+				rename($tempDownloadName, $addonThumbnailPath);
+			} else {
+				unlink($tempDownloadName);
+			}
+		}
+	}
+} 
 
 /**
  * Deletes a directory recursively

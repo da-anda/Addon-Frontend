@@ -173,7 +173,7 @@ class AddonController extends AbstractController {
 		
 			// Show the Download link
 			$output .= '<li><strong>Direct Download:</Strong><br />';
-			$output .= '<a href="http://mirrors.xbmc.org/addons/' . strtolower($this->configuration['repository']['version']) . '/' . $addon->id . '/' . $addon->id . '-' . $addon->version . '.zip" rel="nofollow"><img src="images/download_link.png" alt="Download" /></a></li>';
+			$output .= '<a href="' . $this->configuration['repository']['dataUrl'] . $addon->id . '/' . $addon->id . '-' . $addon->version . '.zip" rel="nofollow"><img src="images/download_link.png" alt="Download" /></a></li>';
 		
 			$output .= '</ul></div>';
 		} else {
