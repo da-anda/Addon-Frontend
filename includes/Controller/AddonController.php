@@ -141,11 +141,24 @@ class AddonController extends AbstractController {
 				<span class="thumbnail"><img src="' . getAddonThumbnail($addon->id, 'large') . '" alt="' . $addon->name . '" class="pic" /></span>
 				<h2>' . htmlspecialchars($addon->name) .'</h2>
 				<strong>Author:</strong> ' . implode(', ', $authorLinks);
-		
+
 			// Show the extra details of the Add-on
 			$output .= '<br /><strong>Version:</strong> ' . $addon->version;
 			$output .= '<br /><strong>Released:</strong> ' . $addon->updated;
-			$output .= '<br /><strong>Downloads:</strong> ' . number_format($addon->downloads);
+
+			// Show repository details
+			$repoConfig = getRepositoryConfiguration($addon->repository_id);
+			if ($repoConfig) {
+				if (count($this->configuration['repositories']) > 1) {
+					$output .= '<br /><strong>Repository:</strong> ';
+					$output .= $repoConfig['downloadUrl'] ? ('<a href="' . $repoConfig['downloadUrl'] . '" rel="nofollow">' . $repoConfig['name'] . '</a>') : $repoConfig['name'];
+				}
+
+				if ($repoConfig['statsUrl'] && $addon->downloads > 0) {
+					$output .= '<br /><strong>Downloads:</strong> ' . number_format($addon->downloads);
+				}
+			}
+
 			if ($addon->license) {
 				$output .= '<br /><strong>License:</strong> ' . str_replace('[CR]', '<br />', $addon->license);
 			}
@@ -159,22 +172,25 @@ class AddonController extends AbstractController {
 			// Check forum link exists
 			$forumLink = $addon->forum ? '<a href="' . $addon->forum .'" target="_blank"><img src="images/forum.png" alt="Forum discussion" /></a>' : '<img src="images/forumbw.png" alt="Forum discussion" />';
 			$output .=  '<li><strong>Forum Discussion:</strong><br />' . $forumLink . '</li>';
-		
+
 			// Auto Generate Wiki Link
 			$output .=  '<li><strong>Wiki Docs:</strong><br /><a href="http://wiki.xbmc.org/index.php?title=Add-on:' . $addon->name . '" target="_blank"><img src="images/wiki.png" alt="Wiki page of this addon" /></a></li>';
-			
+
 			// Check sourcecode link exists
 			$sourceLink = $addon->source ? '<a href="' . $addon->source .'" target="_blank"><img src="images/code.png" alt="Source code" /></a>' : '<img src="images/codebw.png" alt="Source code" />';
 			$output .=  "<li><strong>Source Code:</strong><br />" . $sourceLink . '</li>';
-			
+
 			// Check website link exists
 			$websiteLink = $addon->website ? '<a href="' . $addon->website .'" target="_blank"><img src="images/website.png" alt="Website" /></a>' : '<img src="images/websitebw.png" alt="Website" />';
 			$output .=  "<li><strong>Website:</strong><br />" . $websiteLink . '</li>';
-		
+
 			// Show the Download link
-			$output .= '<li><strong>Direct Download:</Strong><br />';
-			$output .= '<a href="' . $this->configuration['repository']['dataUrl'] . $addon->id . '/' . $addon->id . '-' . $addon->version . '.zip" rel="nofollow"><img src="images/download_link.png" alt="Download" /></a></li>';
-		
+			$downloadLink = getAddonDownloadLink($addon);
+			if ($downloadLink) {
+				$output .= '<li><strong>Direct Download:</strong><br />';
+				$output .= '<a href="' . $downloadLink . '" rel="nofollow"><img src="images/download_link.png" alt="Download" /></a></li>';
+			}
+
 			$output .= '</ul></div>';
 		} else {
 			$this->pageNotFound();

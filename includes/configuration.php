@@ -22,10 +22,14 @@ $configuration = array(
 		'server'	=> '',
 	),
 	// defines some settings needed to interact with the repositories
-	'repository' => array(
-		'dataUrl' => 'http://mirrors.xbmc.org/addons/frodo/',
-		'xmlUrl' => 'http://mirrors.xbmc.org/addons/frodo/addons.xml',
-		'statsUrl' => 'http://mirrors.xbmc.org/addons/addons_simplestats.xml',
+	'repositories' => array(
+		'frodo' => array(
+			'name' => 'XBMC Main Add-On Repository',
+			'dataUrl' => 'http://mirrors.xbmc.org/addons/frodo/',
+			'xmlUrl' => 'http://mirrors.xbmc.org/addons/frodo/addons.xml',
+			'statsUrl' => 'http://mirrors.xbmc.org/addons/addons_simplestats.xml',
+			'downloadUrl' => ''
+		)
 	),
 	// template and rendering related settings
 	'templatePath' => 'templates',

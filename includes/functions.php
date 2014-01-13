@@ -105,6 +105,37 @@ function getThumbnailUrl($source, $size) {
 }
 
 /**
+ * Builds the download link for the given addon
+ * 
+ * @param object $addon
+ * @return string
+ */
+function getAddonDownloadLink($addon) {
+	if ($repo = getRepositoryConfiguration($addon->repository_id)) {
+		return $repo['dataUrl'] . $addon->id . '/' . $addon->id . '-' . $addon->version . '.zip';
+	}
+	return FALSE;
+}
+
+/**
+ * Resolves the repository configuration for given repository ID
+ * 
+ * @param string $repositoryId
+ * @return array with configuration or FALSE if not found
+ */
+function getRepositoryConfiguration($repositoryId) {
+	global $configuration;
+
+	if (isset($configuration['repositories']) && is_array($configuration['repositories'])) {
+		if (isset($configuration['repositories'][$repositoryId])) {
+			return $configuration['repositories'][$repositoryId];
+		}
+	}
+	return FALSE;
+}
+
+
+/**
  * Render a flash message
  * 
  * @param string $headline
@@ -308,42 +339,47 @@ function revertAuthorNameCleanup($authorName) {
  * Downloads the addons images like the icon
  * 
  * @param string $addonId
+ * @param string $repositoryId
+ * @param boolean $forceUpdate
  * @return void
  */
-function cacheAddonData($addonId) {
+function cacheAddonData($addonId, $repositoryId, $forceUpdate = FALSE) {
 	global $configuration;
 
-	$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addonId . DIRECTORY_SEPARATOR;
-	$addonThumbnailPath = $addonWritePath . 'icon.png';
+	$repoConfig = getRepositoryConfiguration($repositoryId);
+	if ($repoConfig) {
+		$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addonId . DIRECTORY_SEPARATOR;
+		$addonThumbnailPath = $addonWritePath . 'icon.png';
 
-	if (!file_exists($addonWritePath)) {
-		mkdir($addonWritePath, 0777, TRUE);
-	}
-	if (!file_exists($addonThumbnailPath)) {
-		$tempDownloadName = $addonWritePath . 'temp-icon.png';
-		$downloadUrl = $configuration['repository']['dataUrl'] . $addonId . '/icon.png';
+		if (!file_exists($addonWritePath)) {
+			mkdir($addonWritePath, 0777, TRUE);
+		}
+		if (!file_exists($addonThumbnailPath) || $forceUpdate) {
+			$tempDownloadName = $addonWritePath . 'temp-icon.png';
+			$downloadUrl = $repoConfig['dataUrl'] . $addonId . '/icon.png';
 
-		$fp = fopen($tempDownloadName, 'w');
-		if ($fp) {
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $downloadUrl);
-			curl_setopt($ch, CURLOPT_HEADER, 0);
-			curl_setopt($ch, CURLOPT_HTTPGET, 'GET');
-			#curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-			$followLocation = @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+			$fp = fopen($tempDownloadName, 'w');
+			if ($fp) {
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $downloadUrl);
+				curl_setopt($ch, CURLOPT_HEADER, 0);
+				curl_setopt($ch, CURLOPT_HTTPGET, 'GET');
+				#curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+				$followLocation = @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 
-			curl_setopt($ch, CURLOPT_FILE, $fp);
-			$data = curl_exec($ch);
-			curl_close($ch);
-			fclose($fp);
-			if ($data) {
-				if (file_exists($addonThumbnailPath)) {
-					unlink($addonThumbnailPath);
+				curl_setopt($ch, CURLOPT_FILE, $fp);
+				$data = curl_exec($ch);
+				curl_close($ch);
+				fclose($fp);
+				if ($data) {
+					if (file_exists($addonThumbnailPath)) {
+						unlink($addonThumbnailPath);
+					}
+					rename($tempDownloadName, $addonThumbnailPath);
+				} else {
+					unlink($tempDownloadName);
 				}
-				rename($tempDownloadName, $addonThumbnailPath);
-			} else {
-				unlink($tempDownloadName);
 			}
 		}
 	}
