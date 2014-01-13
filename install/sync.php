@@ -1,11 +1,12 @@
 <?php
 // protect script from unauthorized calls
-require_once('../includes/configuration.php');
-require_once('../includes/functions.php');
+$basePath = realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+require_once($basePath . 'includes/configuration.php');
+require_once($basePath . 'includes/functions.php');
 checkAdminAccess();
 
 //  ##############   Include Files  ################ //
-require_once('../includes/db_connection.php');
+require_once($basePath . 'includes/db_connection.php');
 //  ##############  Finish Includes  ############### //
 
 # Check the XML exists

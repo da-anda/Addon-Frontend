@@ -10,6 +10,7 @@
 // production		Used on the live website
 $context = @is_file(dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'developmentConfiguration.php') ? 'development' : 'production';
 define('CONTEXT', $context);
+define('SITE_ROOT', realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR);
 
 // The base configuration of the application
 $configuration = array(
@@ -18,7 +19,7 @@ $configuration = array(
 		'username'	=> '',
 		'password'	=> '',
 		'name'		=> '',
-		'server'	=> '',	
+		'server'	=> '',
 	),
 	// defines some settings needed to interact with the repositories
 	'repository' => array(
@@ -145,7 +146,7 @@ $configuration = array(
 	
 	// cache settings
 	'cache' => array(
-		'pathWrite' => 'cache' . DIRECTORY_SEPARATOR,
+		'pathWrite' => SITE_ROOT . 'cache' . DIRECTORY_SEPARATOR,
 		'pathRead' => 'cache/'
 	),
 	'baseUrl' => NULL,
