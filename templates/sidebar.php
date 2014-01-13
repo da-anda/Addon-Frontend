@@ -48,37 +48,42 @@ function renderAddonList(array $addons) {
 			<!-- Tabbed Box -->
 			<div class="widget-container">
 				<!-- Start Tabbed Box Container -->
+				<?php
+					$tabData = array(
+						'newest' => array(
+							'label' => 'Newest',
+							'title' => 'Newest add-ons',
+							'results' => $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " ORDER BY created DESC LIMIT 5")
+						),
+						'updated' => array(
+							'label' => 'Update',
+							'title' => 'Recently updated add-ons',
+							'results' => $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . "  ORDER BY updated DESC LIMIT 5")
+						),
+						'popular' => array(
+							'label' => 'Popular',
+							'title' => 'Popular add-ons',
+							'results' => $db->get_results("SELECT * FROM addon WHERE downloads > 0 " . $configuration['addonExcludeClause'] . " AND NOT broken ORDER BY downloads DESC LIMIT 5")
+						)
+					);
+					$tabs = array(
+						'tab' => array(),
+						'content' => array()
+					);
+					foreach ($tabData as $id => $tabConfig) {
+						if ($tabConfig['results'] && count($tabConfig['results'])) {
+							$tabs['tab'][] = '<li><a href="#' . $id . '" title="' . $tabConfig['title'] . '">' . $tabConfig['label'] . '</a></li>';
+							$tabs['content'][] = '<div class="tabs-inner" id="' . $id . '">' . renderAddonList($tabConfig['results']) . '</div>';
+						}
+					}
+				?>
 				<div id="tabs">
 					<!-- Tabs Menu -->
 					<ul id="tab-items">
-						<li><a href="#tabs-1" title="Newest add-ons">Newest</a></li>
-						<li><a href="#tabs-2" title="Recently updated add-ons">Updated</a></li>
-						<li><a href="#tabs-3" title="Popular add-ons">Popular</a></li>
+						<?php echo implode('', $tabs['tab']); ?>
 					</ul>
-					<!-- Tab Container for menu with ID tabs-1 -->
-					<div class="tabs-inner" id="tabs-1">
-						<?php
-						// Build the Newest Add-ons list
-						$newest = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " ORDER BY created DESC LIMIT 5");
-						echo renderAddonList($newest);
-						?>
-					</div>
-					<!-- Tab Container for menu with ID tabs-2 -->
-					<div class="tabs-inner" id="tabs-2">
-						<?php
-						// Build the Recent Add-ons list
-						$recent = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . "  ORDER BY updated DESC LIMIT 5");
-						echo renderAddonList($recent);
-						?>
-					</div>
-					<!-- Tab Container for menu with ID tabs-3 -->
-					<div class="tabs-inner" id="tabs-3">
-						<?php
-						// Build the Popular Add-ons list
-						$popular = $db->get_results("SELECT * FROM addon WHERE 1=1 " . $configuration['addonExcludeClause'] . " AND NOT broken ORDER BY downloads DESC LIMIT 5");
-						echo renderAddonList($popular);
-						?>
-					</div>
+					<!-- Tab Container -->
+					<?php echo implode('', $tabs['content']); ?>
 				</div>
 				<!-- End Tabbed Box Container -->
 			</div>
