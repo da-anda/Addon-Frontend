@@ -55,6 +55,7 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			foreach ($xml->addon as $addon)	{
 				$counter++;
 				$description = '';
+				$name = removeXBMCformatting($addon['name']);
 				$summary = '';
 				$forum = '';
 				$source = '';
@@ -126,13 +127,13 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 								if ($subNodeName == 'description' 
 									&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
 								{
-									$description = $subNode;
+									$description = removeXBMCformatting($subNode);
 								}
 								// Check for the Summary XML Subnode
 								if ($subNodeName == 'summary' 
 									&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
 								{
-									$summary = $subNode;
+									$summary = removeXBMCformatting($subNode);
 								}
 							}
 							// Merge the description and summary variables
@@ -144,7 +145,7 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 				}
 		
 				// unify format of multiple authors
-				$author = strtr($addon['provider-name'], array('|' => ',', ';' => ','));
+				$author = strtr(removeXBMCformatting($addon['provider-name']), array('|' => ',', ';' => ',', '&amp;' => ','));
 		
 				$contentTypes = array_unique($contentTypes);
 		
@@ -152,7 +153,7 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 				if (isset($addonCache['existing'][$id])) {
 					//Item exists
 					//Check here to see if the addon needs to be updated
-					$updateQuery = ' deleted = 0, provider_name = "' . $db->escape($author) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", downloads = ' . $downloadCount . ', extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '", broken="' . $db->escape($broken) . '", repository_id="' . $db->escape($repositoryId) . '"';
+					$updateQuery = ' deleted = 0, name = "' . $db->escape($name) . '", provider_name = "' . $db->escape($author) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", downloads = ' . $downloadCount . ', extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '", broken="' . $db->escape($broken) . '", repository_id="' . $db->escape($repositoryId) . '"';
 						// only update timestamp on new version
 					if ($addonCache['existing'][$id]->version != $addon['version']) {
 						$counterUpdated++;
@@ -164,7 +165,7 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 				// Add a new add-on if it doesn't exist
 				} else {
 					$counterNewlyAdded++;
-					$db->query('INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, downloads, extension_point, content_types, broken, deleted, repository_id) VALUES ("' . $db->escape($id) . '", "' . $db->escape($addon['name']) . '", "' . $db->escape($author) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", ' . $downloadCount . ', "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '", "' . $db->escape($broken) . '", 0, "' . $db->escape($repositoryId) . '")');
+					$db->query('INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, downloads, extension_point, content_types, broken, deleted, repository_id) VALUES ("' . $db->escape($id) . '", "' . $db->escape($name) . '", "' . $db->escape($author) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", ' . $downloadCount . ', "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '", "' . $db->escape($broken) . '", 0, "' . $db->escape($repositoryId) . '")');
 				}
 
 				cacheAddonData($id, $repositoryId);

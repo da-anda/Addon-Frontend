@@ -336,6 +336,20 @@ function revertAuthorNameCleanup($authorName) {
 }
 
 /**
+ * Removes basic formatting options of XBMC skinning engine from the passed string.
+ * So things like [COLOR foo] and [B] will be removed.
+ * 
+ * @param string
+ * @return string
+ */
+function removeXBMCformatting($stringToClean) {
+	if (strpos($stringToClean, '[') !== FALSE) {
+		return preg_replace('!\[/?(COLOR|B|I)[^]]*\]!is','', $stringToClean);
+	}
+	return $stringToClean;
+}
+
+/**
  * Downloads the addons images like the icon
  * 
  * @param string $addonId
