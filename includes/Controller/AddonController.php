@@ -40,7 +40,12 @@ class AddonController extends AbstractController {
 					$whereClause .= ' AND extension_point = "' . $this->db->escape($category['extensionPoint']) . '"';
 				}
 				if (isset($category['contentType']) && $category['contentType']) {
-					$whereClause .= ' AND FIND_IN_SET("' . $category['contentType'] . '", content_types)';
+					$typeClauses = array();
+					$contentTypes = explode(',', $category['contentType']);
+					foreach ($contentTypes as $contentType) {
+						$typeClauses[] = 'FIND_IN_SET("' . $contentType . '", content_types)';
+					}
+					$whereClause .= ' AND (' . implode(' OR ', $typeClauses) . ')';
 				}
 
 				// execute queries
