@@ -99,6 +99,10 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 							if ($extensionPoint == 'xbmc.addon.image') {
 								$contentTypes[] = 'image';
 							}
+							// move scripts with no "provides" data to "executable"
+							if ($extensionPoint == 'xbmc.python.script' && !count($contentTypes)) {
+								$contentTypes[] = 'executable';
+							}
 
 						// grab metadata
 						} else if ($node['point'] == 'xbmc.addon.metadata' && $node->children()) {
