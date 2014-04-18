@@ -147,8 +147,12 @@ class PageRenderer {
 			'###PAGETITLE###' => $this->pageTitle,
 			'###BREADCRUMB###' => $this->renderBreadCrumb(),
 			'###CONTENT###' => $this->content,
-			'###BASEURL###' => $configuration['baseUrl']
+			'###BASEURL###' => $configuration['baseUrl'],
+			'###ANALYTICS###' => ''
 		);
+		if (isset($configuration['analytics']) && strlen($configuration['analytics'])) {
+			$marker['###ANALYTICS###'] = $configuration['analytics'];
+		}
 
 		$view = new TemplateView();
 		$view->setTemplate($this->template);
