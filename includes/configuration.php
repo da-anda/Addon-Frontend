@@ -27,7 +27,7 @@ $configuration = array(
 			'name' => 'XBMC Main Add-On Repository',
 			'dataUrl' => 'http://mirrors.xbmc.org/addons/frodo/',
 			'xmlUrl' => 'http://mirrors.xbmc.org/addons/frodo/addons.xml',
-			'statsUrl' => 'http://mirrors.xbmc.org/addons/addons_simplestats.xml',
+			'statsUrl' => '',
 			'downloadUrl' => ''
 		)
 	),
