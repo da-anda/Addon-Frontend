@@ -23,8 +23,15 @@ $configuration = array(
 	),
 	// defines some settings needed to interact with the repositories
 	'repositories' => array(
+		'gotham' => array(
+			'name' => 'XBMC v13 - Main Add-On Repository',
+			'dataUrl' => 'http://mirrors.xbmc.org/addons/gotham/',
+			'xmlUrl' => 'http://mirrors.xbmc.org/addons/gotham/addons.xml',
+			'statsUrl' => '',
+			'downloadUrl' => ''
+		),
 		'frodo' => array(
-			'name' => 'XBMC Main Add-On Repository',
+			'name' => 'XBMC v12 - Main Add-On Repository',
 			'dataUrl' => 'http://mirrors.xbmc.org/addons/frodo/',
 			'xmlUrl' => 'http://mirrors.xbmc.org/addons/frodo/addons.xml',
 			'statsUrl' => '',
@@ -119,7 +126,7 @@ $configuration = array(
 			)
 		),
 		'subtitles' => array(
-			'extensionPoint' => 'xbmc.python.subtitles',
+			'extensionPoint' => 'xbmc.python.subtitles,xbmc.subtitle.module',
 			'label' => 'Subtitles'
 		),
 		'services' => array(
