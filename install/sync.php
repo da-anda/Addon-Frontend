@@ -109,7 +109,11 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 						}
 						// move scripts with no "provides" data to "executable"
 						if ($extensionPoint == 'xbmc.python.script' && !count($contentTypes)) {
-							$contentTypes[] = 'executable';
+							if (strpos($id, 'script.game') !== FALSE) {
+								$contentTypes[] = 'game';
+							} else {
+								$contentTypes[] = 'executable';
+							}
 						}
 
 					// grab metadata

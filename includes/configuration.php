@@ -79,6 +79,10 @@ $configuration = array(
 			'extensionPoint' => 'xbmc.python.weather',
 			'label' => 'Weather'
 		),
+		'games' => array(
+			'contentType' => 'game',
+			'label' => 'Games'
+		),
 		'programs' => array(
 			#'extensionPoint' => 'xbmc.python.pluginsource',
 			'contentType' => 'executable',
