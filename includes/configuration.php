@@ -21,6 +21,11 @@ $configuration = array(
 		'name'		=> '',
 		'server'	=> '',
 	),
+	// addon dependencies to be met in order for them to be imported
+	'dependencies' => array(
+		'xbmc.python'	=> '2.1.0',
+		'xbmc.gui'		=> '5.0.0'
+	),
 	// defines some settings needed to interact with the repositories
 	'repositories' => array(
 		'gotham' => array(
@@ -126,7 +131,7 @@ $configuration = array(
 			)
 		),
 		'subtitles' => array(
-			'extensionPoint' => 'xbmc.python.subtitles,xbmc.subtitle.module',
+			'extensionPoint' => 'xbmc.subtitle.module',
 			'label' => 'Subtitles'
 		),
 		'services' => array(
