@@ -37,13 +37,17 @@ class AddonController extends AbstractController {
 			} else {
 				$whereClause = '1=1';
 				if (isset($category['extensionPoint'])) {
-					$whereClause .= ' AND extension_point = "' . $this->db->escape($category['extensionPoint']) . '"';
+					$extensionPoints = explode(',', $category['extensionPoint']);
+					foreach($extensionPoints as $key => $value) {
+						$extensionPoints[$key] = $this->db->escape($value);
+					}
+					$whereClause .= ' AND extension_point IN ("' . implode('","', $extensionPoints) . '")';
 				}
 				if (isset($category['contentType']) && $category['contentType']) {
 					$typeClauses = array();
 					$contentTypes = explode(',', $category['contentType']);
 					foreach ($contentTypes as $contentType) {
-						$typeClauses[] = 'FIND_IN_SET("' . $contentType . '", content_types)';
+						$typeClauses[] = 'FIND_IN_SET("' . $this->db->escape($contentType) . '", content_types)';
 					}
 					$whereClause .= ' AND (' . implode(' OR ', $typeClauses) . ')';
 				}

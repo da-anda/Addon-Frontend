@@ -13,6 +13,7 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 
 	$consoleLog = array('Begin of import: ' . date('l jS \of F Y h:i:s A'));
 	$error = FALSE;
+	$checkDependencies = isset($configuration['dependencies']) && count($configuration['dependencies']) ? TRUE : FALSE;
 
 	// cache existing addon-IDs
 	$result = $db->get_results('SELECT id, version, deleted FROM addon');
@@ -80,8 +81,27 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 				continue;
 			}
 
+			$meetsRequirements = TRUE;
 
 			foreach ($addon->children() as $nodeName => $node) {
+				// only import if requirements are met
+				if ($checkDependencies && $nodeName == 'requires' && $node->children()) {
+					foreach($node->children() as $childName => $childNode) {
+						if ($childName == 'import') {
+							$dependency = (string)$childNode['addon'];
+							$version = (string)$childNode['version'];
+							if (isset($configuration['dependencies'][$dependency])
+								&& version_compare($version, $configuration['dependencies'][$dependency], '>=') === FALSE)
+							{
+								$meetsRequirements = FALSE;
+								break;
+							}
+						}
+					}
+					if (!$meetsRequirements) {
+						break;
+					}
+				}
 				if ($nodeName == 'extension') {
 					// grab extension point and content types
 					if ($node['point'] != 'xbmc.addon.metadata') {
@@ -160,6 +180,9 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 				}
 			}
 
+			if (!$meetsRequirements) {
+				continue;
+			}
 
 			// unify format of multiple authors
 			$author = strtr(removeXBMCformatting($addon['provider-name']), array('|' => ',', ';' => ',', '&amp;' => ','));
