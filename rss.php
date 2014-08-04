@@ -5,6 +5,8 @@ require_once('includes/db_connection.php');
 require_once('includes/functions.php');
 //  ##############  Finish Includes  ############### //
 
+startup();
+
 // ###############  Prepare requested mode ######### //
 $orderByProperty = 'created';
 $feedTitle = 'Latest XBMC Add-Ons';

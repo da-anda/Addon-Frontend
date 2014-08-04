@@ -7,6 +7,8 @@ require_once('includes/pageRenderer.php');
 require_once('includes/Controller/AddonController.php');
 //  ##############  Finish Includes  ############### //
 
+startup();
+
 $page = new PageRenderer();
 
 // grab request URI and clean it up to only contain the static url/path segments
@@ -27,20 +29,6 @@ if($requestUri[0] == '/') {
 if (substr($requestUri,-1) == '/') {
 	$requestUri = substr($requestUri, 0, -1);
 }
-
-
-// detect and set baseUrl if not specified in configuration yet
-if ($configuration['baseUrl'] == NULL) {
-	if (php_sapi_name() == 'cli') {
-		$configuration['baseUrl'] = '/'; 
-	} else {
-		$configuration['baseUrl'] = (isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/';
-		if ($scriptInfo['dirname'] != DIRECTORY_SEPARATOR && !strpos($configuration['baseUrl'], $scriptInfo['dirname'])) {
-			$configuration['baseUrl'] .= str_replace('\\', '/', $scriptInfo['dirname']) . '/';
-		}
-	}
-}
-
 
 // define default action and controller
 $methodName = 'indexAction';

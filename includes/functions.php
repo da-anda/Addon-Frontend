@@ -33,6 +33,33 @@ function sanitizeFilePath($pathName) {
 	return preg_replace('!(\\\\|/)+!is', DIRECTORY_SEPARATOR, $pathName);
 }
 
+/**
+ * prepares basic stuff
+ *
+ * @return void
+ */
+function startup() {
+	global $configuration;
+
+	// detect and set baseUrl if not specified in configuration yet
+	if ($configuration['baseUrl'] == NULL) {
+		if (php_sapi_name() == 'cli') {
+			$configuration['baseUrl'] = '/'; 
+		} else {
+			$scriptInfo = pathinfo($_SERVER['SCRIPT_NAME']);
+			$configuration['baseUrl'] = (isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/';
+			if ($scriptInfo['dirname'] != DIRECTORY_SEPARATOR && !strpos($configuration['baseUrl'], $scriptInfo['dirname'])) {
+				$configuration['baseUrl'] .= str_replace('\\', '/', $scriptInfo['dirname']) . '/';
+			}
+		}
+	}
+}
+
+/**
+ * unititializes things gracefully
+ * 
+ * @return void
+ */
 function shutdown() {
 	global $db;
 	if (isset($db)) {
