@@ -28,6 +28,7 @@ $configuration = array(
 	),
 	// classes with custom marker resolvers
 	'markerHandler' => array(
+		'MarkerResolver' => 'includes/markerResolver.php'
 	),
 	// defines some settings needed to interact with the repositories
 	'repositories' => array(
