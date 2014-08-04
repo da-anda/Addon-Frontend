@@ -8,7 +8,7 @@ class PageRenderer {
 	 *
 	 * @var string
 	 */
-	protected $pageTitle = 'Add-Ons';
+	protected $pageTitle = '';
 
 	/**
 	 * The content of the page
@@ -39,6 +39,16 @@ class PageRenderer {
 	 */
 	protected $template = 'page';
 
+	/**
+	 * @var array
+	 */
+	protected $configuration = array();
+
+	public function __construct() {
+		global $configuration;
+		$this->configuration = &$configuration;
+		$this->setPageTitle($configuration['defaultPageTitle']);
+	}
 
 	/**
 	 * Setter for the pageTitle
@@ -118,7 +128,7 @@ class PageRenderer {
 	public function getBreadcrumbMarker() {
 		if (!count($this->rootline)) return '';
 
-		$rootline = array_merge(array(array('url' => './', 'name' => 'Add-Ons')), $this->rootline);
+		$rootline = array_merge(array(array('url' => './', 'name' => $this->configuration['defaultPageTitle'])), $this->rootline);
 		$current = array_pop($rootline);
 		$items = array();
 		foreach($rootline as $item) {
@@ -142,15 +152,14 @@ class PageRenderer {
 	 * @return string The rendered page;
 	 */
 	public function render() {
-		global $configuration;
 		$marker = array(
 			'###PAGETITLE###' => $this->pageTitle,
 			'###CONTENT###' => $this->content,
-			'###BASEURL###' => $configuration['baseUrl'],
+			'###BASEURL###' => $this->configuration['baseUrl'],
 			'###ANALYTICS###' => ''
 		);
-		if (isset($configuration['analytics']) && strlen($configuration['analytics'])) {
-			$marker['###ANALYTICS###'] = $configuration['analytics'];
+		if (isset($this->configuration['analytics']) && strlen($this->configuration['analytics'])) {
+			$marker['###ANALYTICS###'] = $this->configuration['analytics'];
 		}
 
 		$view = new TemplateView();

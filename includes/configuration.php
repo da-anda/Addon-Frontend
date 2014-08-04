@@ -49,6 +49,7 @@ $configuration = array(
 	),
 	// template and rendering related settings
 	'templatePath' => 'templates',
+	'defaultPageTitle' => 'Add-Ons',
 	'images' => array(
 		'dummy' => 'images/addon-dummy.png',
 		'sizes' => array(
