@@ -115,7 +115,7 @@ class PageRenderer {
 	 *
 	 * @return string The breadcrumb as html
 	 */
-	protected function renderBreadCrumb() {
+	public function getBreadcrumbMarker() {
 		if (!count($this->rootline)) return '';
 
 		$rootline = array_merge(array(array('url' => './', 'name' => 'Add-Ons')), $this->rootline);
@@ -145,7 +145,6 @@ class PageRenderer {
 		global $configuration;
 		$marker = array(
 			'###PAGETITLE###' => $this->pageTitle,
-			'###BREADCRUMB###' => $this->renderBreadCrumb(),
 			'###CONTENT###' => $this->content,
 			'###BASEURL###' => $configuration['baseUrl'],
 			'###ANALYTICS###' => ''
@@ -155,6 +154,7 @@ class PageRenderer {
 		}
 
 		$view = new TemplateView();
+		$view->addMarkerHandler($this);
 		$view->setTemplate($this->template);
 		$view->setMarker($marker);
 		return $view->render();

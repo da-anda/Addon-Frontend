@@ -10,7 +10,6 @@ class TemplateView {
 	 */
 	protected $template;
 
-
 	/**
 	 * RenderCache
 	 * 
@@ -56,6 +55,16 @@ class TemplateView {
 		foreach ($marker as $name => $value) {
 			$this->markerManager->setMarker($name, $value);
 		}
+	}
+
+	/**
+	 * Registers a additional marker handler to resolve missing markers
+	 *
+	 * @param mixed $className	Either Classname or Instance
+	 * @return void
+	 */
+	public function addMarkerHandler($className) {
+		$this->markerManager->registerHandler($className);
 	}
 
 	/**
