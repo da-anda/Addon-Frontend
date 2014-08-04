@@ -26,6 +26,9 @@ $configuration = array(
 		'xbmc.python'	=> '2.1.0',
 		'xbmc.gui'		=> '5.0.0'
 	),
+	// classes with custom marker resolvers
+	'markerHandler' => array(
+	),
 	// defines some settings needed to interact with the repositories
 	'repositories' => array(
 		'gotham' => array(
