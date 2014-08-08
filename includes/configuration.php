@@ -59,6 +59,7 @@ $configuration = array(
 	'defaultPageTitle' => 'Add-Ons',
 	'images' => array(
 		'dummy' => 'images/addon-dummy.png',
+		'dummyFanart' => '',
 		'sizes' => array(
 			'addonThumbnail' => array(120,120),
 			'addonThumbnailSmall' => array(60,60),
