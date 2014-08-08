@@ -36,11 +36,14 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			$repositoryXmlUrl = $repositoryConfiguration['dataUrl'] . 'addons.xml';
 		}
 
-		$xml = simplexml_load_file($repositoryXmlUrl);
+		try {
+			$xml = simplexml_load_file($repositoryXmlUrl);
+		} catch(Exception $e) {}
+
 		if (!$xml || !isset($xml->addon['id']))	{
 			$error = TRUE;
 			$consoleLog[] = 'Error while reading repository ' . $repositoryConfiguration['xmlUrl'];
-			break;
+			continue;
 		}
 
 		$counter = 0;
@@ -50,7 +53,10 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 		//prepare the download stats so that we can update each addon with one single query
 		$downloadStats = array();
 		if(isset($repositoryConfiguration['statsUrl']) && $repositoryConfiguration['statsUrl']) {
-			$xmlsimple = simplexml_load_file($repositoryConfiguration['statsUrl']);
+			try {
+				$xmlsimple = simplexml_load_file($repositoryConfiguration['statsUrl']);
+			} catch(Exception $e) {}
+
 			if ($xmlsimple && isset($xmlsimple->addon['id']))	{
 				foreach ($xmlsimple->addon as $addon) {
 					$id = (string) $addon['id'];
