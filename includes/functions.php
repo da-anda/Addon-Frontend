@@ -393,10 +393,12 @@ function cacheAddonData($addonId, $repositoryId, $forceUpdate = FALSE) {
 				curl_setopt($ch, CURLOPT_URL, $downloadUrl);
 				curl_setopt($ch, CURLOPT_HEADER, 0);
 				curl_setopt($ch, CURLOPT_HTTPGET, 'GET');
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+				curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 				#curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-				$followLocation = @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-
+				curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
+				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 				curl_setopt($ch, CURLOPT_FILE, $fp);
 				$data = curl_exec($ch);
 				curl_close($ch);
