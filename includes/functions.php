@@ -427,56 +427,68 @@ function cacheAddonData($addonId, $repositoryId, $forceUpdate = FALSE) {
 
 	$repoConfig = getRepositoryConfiguration($repositoryId);
 	if ($repoConfig) {
-		$tempDownloadPath = $configuration['cache']['pathWrite'] . 'Temp';
 		$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addonId . DIRECTORY_SEPARATOR;
 		$imageTypes = array('icon.png', 'fanart.jpg');
+
+		foreach ($imageTypes as $imageType) {
+			$addonThumbnailPath = $addonWritePath . $imageType;
+			$downloadUrl = $repoConfig['dataUrl'] . $addonId . '/' . $imageType;
+			cacheFile($downloadUrl, $addonThumbnailPath, $forceUpdate);
+		}
+	}
+}
+
+/**
+ * Caches a file locally
+ * 
+ * @param string $sourceUrl
+ * @param string $targetPath
+ * @param boolean $forceUpdate
+ */
+function cacheFile($sourceUrl, $targetPath, $forceUpdate = FALSE) {
+	global $configuration;
+	if (!file_exists($targetPath) || $forceUpdate) {
+		$tempDownloadPath = $configuration['cache']['pathWrite'] . 'Temp';
+		$fileInfo = pathinfo($targetPath);
+		$tempDownloadName = $tempDownloadPath . DIRECTORY_SEPARATOR . time() . '-' . $fileInfo['filename'];
 
 		if (!file_exists($tempDownloadPath)) {
 			mkdir($tempDownloadPath, 0777, TRUE);
 		}
 
-		foreach ($imageTypes as $imageType) {
-			$addonThumbnailPath = $addonWritePath . $imageType;
+		$fp = fopen($tempDownloadName, 'w');
+		if ($fp) {
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $sourceUrl);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_HTTPGET, 'GET');
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+			#curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 
-			if (!file_exists($addonThumbnailPath) || $forceUpdate) {
-				$tempDownloadName = $tempDownloadPath . DIRECTORY_SEPARATOR . $addonId . '-' . $imageType;
-				$downloadUrl = $repoConfig['dataUrl'] . $addonId . '/' . $imageType;
+			curl_setopt($ch, CURLOPT_FILE, $fp);
+			$data = curl_exec($ch);
+			curl_close($ch);
+			fclose($fp);
 
-				$fp = fopen($tempDownloadName, 'w');
-				if ($fp) {
-					$ch = curl_init();
-					curl_setopt($ch, CURLOPT_URL, $downloadUrl);
-					curl_setopt($ch, CURLOPT_HEADER, 0);
-					curl_setopt($ch, CURLOPT_HTTPGET, 'GET');
-					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-					curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-					curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-					#curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-					curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
-					curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-
-					curl_setopt($ch, CURLOPT_FILE, $fp);
-					$data = curl_exec($ch);
-					curl_close($ch);
-					fclose($fp);
-
-					if ($data) {
-						if (!file_exists($addonWritePath)) {
-							mkdir($addonWritePath, 0777, TRUE);
-						}
-						if (file_exists($addonThumbnailPath)) {
-							unlink($addonThumbnailPath);
-						}
-						rename($tempDownloadName, $addonThumbnailPath);
-					} else {
-						unlink($tempDownloadName);
-					}
+			if ($data) {
+				if (!file_exists($fileInfo['dirname'])) {
+					mkdir($fileInfo['dirname'], 0777, TRUE);
 				}
+				if (file_exists($targetPath)) {
+					unlink($targetPath);
+				}
+				rename($tempDownloadName, $targetPath);
+			} else {
+				unlink($tempDownloadName);
 			}
 		}
 	}
-} 
-
+}
+ 
 /**
  * Deletes a directory recursively
  * 
