@@ -4,7 +4,6 @@ require_once('includes/configuration.php');
 require_once('includes/db_connection.php');
 require_once('includes/functions.php');
 require_once('includes/pageRenderer.php');
-require_once('includes/Controller/AddonController.php');
 //  ##############  Finish Includes  ############### //
 
 startup();
@@ -31,22 +30,25 @@ if (substr($requestUri,-1) == '/') {
 }
 
 // define default action and controller
-$methodName = 'indexAction';
-$controller = new AddonController();
+$controllerAndAction = $configuration['routes']['_default'];
+$pathSegments = array();
 
 // check for action requested via URL
 if (strlen($requestUri) && $requestUri != 'index.php') {
 	$pathSegments = explode('/', $requestUri);
-	$controller->setArguments( array_slice($pathSegments, 1) );
-	$methodName = strtolower($pathSegments[0]) . 'Action';
-	#$page->addRootlineItem(array( 'url' => $pathSegments[0] . '/', 'name' => ucfirst($pathSegments[0])));
+	$controllerAndAction = resolvePathsegmentConfiguration($pathSegments);
 }
 
 // only proceed if action exists, else throw a 404
-if (method_exists($controller, $methodName)) {
+try {
+	require_once('includes/Controller/' . $controllerAndAction['controller'] . '.php');
+	$controller = new $controllerAndAction['controller'];
+	$controller->setArguments($pathSegments);
+	$methodName = $controllerAndAction['action'] . 'Action';
+
 	$content = $controller->$methodName();
 	$content .= getDisclaimer();
-} else {
+} catch (Exception $e) {
 	header('HTTP/1.0 404 Not Found');
 	$content = renderFlashMessage('Page not found', 'We\'re sorry, but the desired page could not be found.', 'error');
 }

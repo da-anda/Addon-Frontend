@@ -176,6 +176,9 @@ function renderFlashMessage($headline, $message, $type = 'info') {
  */
 function renderPagination($url, $itemsTotal, $itemsPerPage = 40, $varName='page') {
 
+	if ($url === NULL || !strlen($url)) {
+		$url = str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI']);
+	}
 	$page = isset($_GET[$varName]) ? max(1, intval($_GET[$varName])) : 1;
 	$maxPages = ceil($itemsTotal / $itemsPerPage);
 	$offset = ($page-1) * $itemsPerPage;
@@ -286,11 +289,10 @@ function checkAdminAccess() {
  * @param array $arguments
  * @return array The category configuration
  */
-function getCategoryFromArguments(array $arguments) {
+function getCategoryFromArguments(array &$arguments) {
 	global $configuration;
 	$configuration['categories'] = buildCategoryTree($configuration['categories']);
 	$categories = $configuration['categories'];
-	$arguments;
 	$category = NULL;
 
 	while ($categories !== NULL && is_array($categories) && count($categories)) {
@@ -308,6 +310,34 @@ function getCategoryFromArguments(array $arguments) {
 	}
 
 	return $category;
+}
+
+/**
+ * Resolves the current category from available arguments
+ * 
+ * @param array $pathSegments
+ * @return array The rout configuration of the pathSegment
+ */
+function resolvePathsegmentConfiguration(array &$pathSegments) {
+	global $configuration;
+	$routes = $configuration['routes'];
+	$routeConfig = NULL;
+
+	while ($routes !== NULL && is_array($routes) && count($routes)) {
+		$key = array_shift($pathSegments);
+
+		if (isset($routes[$key])) {
+			$routes = $routes[$key];
+		} else {
+			array_unshift($pathSegments, $key);
+			if (isset($routes['_default'])) {
+				$routeConfig = $routes['_default'];
+			}
+			$routes = NULL;
+		}
+	}
+
+	return $routeConfig;
 }
 
 /**
