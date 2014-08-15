@@ -34,6 +34,11 @@ class CategoryController extends AbstractController {
 			} else {
 				$controller = 'AddonController';
 				$action = 'list';
+				// allow categories to use their own controller and action for rendering
+				if (isset($category['controller']) && isset($category['action']) && $category['controller'] && $category['action']) {
+					$controller = $category['controller'];
+					$action = $category['action'];
+				}
 
 				require_once('includes/Controller/' . $controller . '.php');
 				$controller = new $controller;
