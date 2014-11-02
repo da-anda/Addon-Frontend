@@ -64,7 +64,7 @@ $configuration = array(
 	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 	
-	ga('create', 'UA-3066672-6', 'xbmc.org');
+	ga('create', 'UA-3066672-6', 'auto');
 	ga('send', 'pageview');
 </script>",
 	'addonExcludeClause' => ' AND NOT deleted AND id NOT LIKE "%.common.%" AND id NOT LIKE "script.module%" ',
