@@ -9,117 +9,50 @@ require_once('AbstractController.php');
 class AddonController extends AbstractController {
 
 	public function indexAction() {
-		$totalcount = $this->db->get_var('SELECT count(*) FROM addon');
-		return '<h2>Categories</h2><p>Browse the the Add-on categories below</p>'
-			. $this->renderCategoryList($this->configuration['categories']) 
-			. '<div class="resultCount">' . $totalcount . ' Add-ons found</div>';
+		return $this->listAction();
 	}
 
-	public function categoryAction() {
-		$arguments = $this->arguments;
-		$category = getCategoryFromArguments($arguments);
-		$output = '<h2>Browsing</h2>';
-
-		// only continue if we have a valid category
-		if ($category) {
-			// prepare labels and page rootline
-			$categoryLabels = array();
-			foreach ($category['rootline'] as $categoryData) {
-				$categoryLabels[] = $categoryData['label'];
-				$this->pageRenderer->addRootlineItem(array( 'url' => createLinkUrl('category', array_keys($categoryData['rootline'])), 'name' => $categoryData['label']));
-			}
-			$output .= '<p>Category <strong>' . htmlspecialchars(implode(' / ', $categoryLabels)) . '</strong></p>';
-
-			// render subcategories if available
-			if (isset($category['subCategories'])) {
-				$output .= $this->renderCategoryList($category['subCategories']);
-			// show addons if no subcategories
-			} else {
-				$whereClause = '1=1';
-				if (isset($category['extensionPoint'])) {
-					$extensionPoints = explode(',', $category['extensionPoint']);
-					foreach($extensionPoints as $key => $value) {
-						$extensionPoints[$key] = $this->db->escape($value);
-					}
-					$whereClause .= ' AND extension_point IN ("' . implode('","', $extensionPoints) . '")';
-				}
-				if (isset($category['contentType']) && $category['contentType']) {
-					$typeClauses = array();
-					$contentTypes = explode(',', $category['contentType']);
-					foreach ($contentTypes as $contentType) {
-						$typeClauses[] = 'FIND_IN_SET("' . $this->db->escape($contentType) . '", content_types)';
-					}
-					$whereClause .= ' AND (' . implode(' OR ', $typeClauses) . ')';
-				}
-
-				// execute queries
-				$limit = 40;
-				$offset = max(0, isset($_GET['page']) ? (intval($_GET['page']) -1) : 0) * $limit;
-				$addons = $this->db->get_results('SELECT * FROM addon WHERE ' . $whereClause . $this->configuration['addonExcludeClause'] . ' ORDER BY name ASC LIMIT ' . $offset . ', ' . $limit);
-				$count = $this->db->get_var('SELECT count(*) FROM addon WHERE ' . $whereClause . $this->configuration['addonExcludeClause']);
-
-				if ($addons && is_array($addons) && count($addons)) {
-					$output .= $this->renderAddonList($addons, createLinkUrl('category', array_keys($category['rootline'])), $count, $limit);
-				} else {
-					$output .= renderFlashMessage('No addons found', 'There are currently no addons available in this section');
-				}
-			}
-		} else {
-			$this->pageNotFound();
-			$this->forward('index');
-		}
-		return $output;
-	}
-
-	public function authorAction() {
-		$output = '<h2>Browsing</h2>';
-
-		if (count($this->arguments)) {
-			// prepare author name and page breadcrumb
-			$author = revertAuthorNameCleanup($this->arguments[0]);
-			$cleanAuthor = cleanupAuthorName($author);
-			$this->pageRenderer->addRootlineItem(array( 'url' => createLinkUrl('author', $cleanAuthor), 'name' => $cleanAuthor));
-			$output .= '<p>By author <strong>' . htmlspecialchars($cleanAuthor) . '</strong></p>';
-
-			// execute queries
-			$limit = 40;
-			$offset = max(0, isset($_GET['page']) ? (intval($_GET['page']) -1) : 0) * $limit;
-			$addons = $this->db->get_results('SELECT * FROM addon WHERE FIND_IN_SET("' . $this->db->escape($author) . '", provider_name) ' . $this->configuration['addonExcludeClause'] . ' ORDER BY name ASC LIMIT ' . $offset . ', ' . $limit);
-			$count = $this->db->get_var('SELECT count(*) FROM addon WHERE FIND_IN_SET("' . $this->db->escape($author) . '", provider_name) ' . $this->configuration['addonExcludeClause']);
-
-			if ($addons && is_array($addons) && count($addons)) {
-				$output .= $this->renderAddonList($addons, createLinkUrl('author', $cleanAuthor), $count, $limit);
-			} else {
-				$this->pageNotFound();
-				$output .= renderFlashMessage('No addons found', 'There are currently no addons available in this section');
-			}
-		} else {
-			$this->pageNotFound();
-			$this->forward('index');
-		}
-		return $output;
-	}
-
-	public function searchAction() {
+	public function listAction(array $constraints = array(), $url = NULL, array $orderings = array('name' => 'ASC')) {
+		$whereClause = '1=1';
 		$output = '';
-		if ($_GET['keyword']) {
-			// perform search query
-			$limit = 40;
-			$offset = max(0, isset($_GET['page']) ? (intval($_GET['page']) -1) : 0) * $limit;
-			$keyword = $this->db->escape($_GET['keyword']);
-			$whereClause = 'id LIKE "' . $keyword . '" OR name LIKE "%' . $keyword . '%" OR description LIKE "%' . $keyword . '" OR provider_name LIKE "%' . $keyword . '%"' . $this->configuration['addonExcludeClause'];
-			$addons = $this->db->get_results('SELECT * FROM addon WHERE ' . $whereClause . ' ORDER BY name ASC LIMIT ' . $offset . ', ' . $limit);
-			$count = $this->db->get_var('SELECT count(*) FROM addon WHERE ' . $whereClause);
-
-			// render result
-			$output .= '<h2>Search</h2><p>Search results for <strong>' . htmlspecialchars($_GET['keyword']) . '</strong></p>';
-			if ($addons && is_array($addons) && count($addons)) {
-				$output .= $this->renderAddonList($addons, createLinkUrl('search', $_GET['keyword']), $count, $limit);
-			} else {
-				$output .= renderFlashMessage('No addons found', 'There where no addons found for this keyword.');
+		if (isset($constraints['extensionPoint'])) {
+			$extensionPoints = explode(',', $constraints['extensionPoint']);
+			foreach($extensionPoints as $key => $value) {
+				$extensionPoints[$key] = $this->db->escape($value);
 			}
+			$whereClause .= ' AND extension_point IN ("' . implode('","', $extensionPoints) . '")';
+		}
+		if (isset($constraints['contentType']) && $constraints['contentType']) {
+			$typeClauses = array();
+			$contentTypes = explode(',', $constraints['contentType']);
+			foreach ($contentTypes as $contentType) {
+				$typeClauses[] = 'FIND_IN_SET("' . $this->db->escape($contentType) . '", content_types)';
+			}
+			$whereClause .= ' AND (' . implode(' OR ', $typeClauses) . ')';
+		}
+		if (isset($constraints['extensionIds']) && $constraints['extensionIds']) {
+			$whereClause .= ' AND id IN ("' . implode('","', $constraints['extensionIds']) . '")';
+		}
+
+		// execute queries
+		$limit = 40;
+		$offset = max(0, isset($_GET['page']) ? (intval($_GET['page']) -1) : 0) * $limit;
+		$orderByClause = '';
+		if (count($orderings)) {
+			$orderByParts = array();
+			foreach ($orderings as $column => $direction) {
+				$orderByParts[] = $column . ' ' . $direction;
+			}
+			$orderByClause = ' ORDER BY ' . implode(',', $orderByParts);
+		}
+
+		$addons = $this->db->get_results('SELECT * FROM addon WHERE ' . $whereClause . $this->configuration['addonExcludeClause'] . $orderByClause . ' LIMIT ' . $offset . ', ' . $limit);
+		$count = $this->db->get_var('SELECT count(*) FROM addon WHERE ' . $whereClause . $this->configuration['addonExcludeClause']);
+
+		if ($addons && is_array($addons) && count($addons)) {
+			$output .= $this->renderAddonList($addons, $url, $count, $limit);
 		} else {
-			$output .= renderFlashMessage('How to search', 'Please enter the keyword you\'re looking for in the search field on the top right corner of the website.', 'info');
+			$output .= renderFlashMessage('No addons found', 'There are currently no addons available in this section');
 		}
 		return $output;
 	}
@@ -149,6 +82,7 @@ class AddonController extends AbstractController {
 			$output .= '<div id="addonDetail">
 				<span class="thumbnail"><img src="' . getAddonThumbnail($addon->id, 'large') . '" alt="' . $addon->name . '" class="pic" /></span>
 				<h2>' . htmlspecialchars($addon->name) .'</h2>
+				<div id="addonMetaData">
 				<strong>Author:</strong> ' . implode(', ', $authorLinks);
 
 			// Show the extra details of the Add-on
@@ -171,6 +105,7 @@ class AddonController extends AbstractController {
 			if ($addon->license) {
 				$output .= '<br /><strong>License:</strong> ' . str_replace('[CR]', '<br />', $addon->license);
 			}
+			$output .= '</div>';
 			$output .= '<div class="description"><h4>Description:</h4><p>' . str_replace('[CR]', '<br />', $addon->description) . '</p></div>';
 
 			if ($addon->broken) {

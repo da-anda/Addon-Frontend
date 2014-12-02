@@ -177,7 +177,37 @@ $configuration = array(
 		),
 */
 	),
-	
+	// routing configuration
+	'routes' => array(
+		'_default' => array(
+			'controller' => 'CategoryController',
+			'action' => 'index'
+		),
+		'category' => array(
+			'_default' => array(
+				'controller' => 'CategoryController',
+				'action' => 'show'
+			),
+		),
+		'show' => array(
+			'_default' => array(
+				'controller' => 'AddonController',
+				'action' => 'show'
+			),
+		),
+		'search' => array(
+			'_default' => array(
+				'controller' => 'SearchController',
+				'action' => 'index'
+			),
+		),
+		'author' => array(
+			'_default' => array(
+				'controller' => 'AuthorController',
+				'action' => 'show'
+			),
+		),
+	),
 	// cache settings
 	'cache' => array(
 		'pathWrite' => SITE_ROOT . 'cache' . DIRECTORY_SEPARATOR,
