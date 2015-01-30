@@ -381,13 +381,13 @@ function revertAuthorNameCleanup($authorName) {
 }
 
 /**
- * Removes basic formatting options of XBMC skinning engine from the passed string.
+ * Removes basic formatting options of Kodi skinning engine from the passed string.
  * So things like [COLOR foo] and [B] will be removed.
  * 
  * @param string
  * @return string
  */
-function removeXBMCformatting($stringToClean) {
+function removeKodiFormatting($stringToClean) {
 	if (strpos($stringToClean, '[') !== FALSE) {
 		return preg_replace('!\[/?(COLOR|B|I)[^]]*\]!is','', $stringToClean);
 	}

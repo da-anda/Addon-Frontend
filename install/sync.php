@@ -69,7 +69,7 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 		foreach ($xml->addon as $addon)	{
 			$counter++;
 			$description = '';
-			$name = removeXBMCformatting($addon['name']);
+			$name = removeKodiFormatting($addon['name']);
 			$summary = '';
 			$forum = '';
 			$source = '';
@@ -169,13 +169,13 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 							if ($subNodeName == 'description' 
 								&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
 							{
-								$description = removeXBMCformatting($subNode);
+								$description = removeKodiFormatting($subNode);
 							}
 							// Check for the Summary XML Subnode
 							if ($subNodeName == 'summary' 
 								&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
 							{
-								$summary = removeXBMCformatting($subNode);
+								$summary = removeKodiFormatting($subNode);
 							}
 						}
 						// Merge the description and summary variables
@@ -191,7 +191,7 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			}
 
 			// unify format of multiple authors
-			$author = strtr(removeXBMCformatting($addon['provider-name']), array('|' => ',', ';' => ',', '&amp;' => ','));
+			$author = strtr(removeKodiFormatting($addon['provider-name']), array('|' => ',', ';' => ',', '&amp;' => ','));
 
 			$contentTypes = array_unique($contentTypes);
 

@@ -9,10 +9,10 @@ startup();
 
 // ###############  Prepare requested mode ######### //
 $orderByProperty = 'created';
-$feedTitle = 'Latest XBMC Add-Ons';
+$feedTitle = 'Latest Kodi Add-Ons';
 if (isset($_GET['mode']) && $_GET['mode'] == 'updated') {
 	$orderByProperty = 'updated';
-	$feedTitle = 'Recently updated XBMC Add-Ons';
+	$feedTitle = 'Recently updated Kodi Add-Ons';
 }
 
 // ###############  Setup Queries    ############### //

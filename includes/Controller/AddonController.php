@@ -118,7 +118,7 @@ class AddonController extends AbstractController {
 			$output .=  '<li><strong>Forum Discussion:</strong><br />' . $forumLink . '</li>';
 
 			// Auto Generate Wiki Link
-			$output .=  '<li><strong>Wiki Docs:</strong><br /><a href="http://wiki.xbmc.org/index.php?title=Add-on:' . $addon->name . '" target="_blank"><img src="images/wiki.png" alt="Wiki page of this addon" /></a></li>';
+			$output .=  '<li><strong>Wiki Docs:</strong><br /><a href="http://kodi.wiki/index.php?title=Add-on:' . $addon->name . '" target="_blank"><img src="images/wiki.png" alt="Wiki page of this addon" /></a></li>';
 
 			// Check sourcecode link exists
 			$sourceLink = $addon->source ? '<a href="' . $addon->source .'" target="_blank"><img src="images/code.png" alt="Source code" /></a>' : '<img src="images/codebw.png" alt="Source code" />';

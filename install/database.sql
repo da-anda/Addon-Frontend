@@ -17,10 +17,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `xbmcrepo`
+-- Database: `kodirepo`
 --
-CREATE DATABASE IF NOT EXISTS `xbmcrepo` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `xbmcrepo`;
+CREATE DATABASE IF NOT EXISTS `kodirepo` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `kodirepo`;
 
 -- --------------------------------------------------------
 

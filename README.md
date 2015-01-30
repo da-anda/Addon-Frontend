@@ -1,9 +1,9 @@
 Addon-Frontend
 ==============
 
-XBMC Addon Frontend
+Kodi Addon Frontend
 
-A PHP/MYSQL website Frontend repository for XBMC Addons
+A PHP/MYSQL website Frontend repository for Kodi Addons
 
 Requirements
 ============
@@ -18,13 +18,13 @@ Setup
 
 1) Clone the repository into your web server folder
 
-2) Create a new MYSQL Database called "xbmcrepo"
+2) Create a new MYSQL Database
 
 3) Import the .SQL file structure into this database
 
 4) Create a new file in the /includes folder called developmentConfiguration.php
 
-5) Edit this file in notepad and copy and paste any settings you want to override locally
+5) Edit this file in notepad and copy and paste any settings you want to override locally (like database connection)
 
 6) Test the site in a web browser
 
