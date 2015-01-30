@@ -24,7 +24,7 @@ $configuration = array(
 	// addon dependencies to be met in order for them to be imported
 	'dependencies' => array(
 		'xbmc.python'	=> '2.1.0',
-		'xbmc.gui'		=> '5.0.0'
+		'xbmc.gui'		=> '5.3.0'
 	),
 	// classes with custom marker resolvers
 	'markerHandler' => array(
@@ -32,6 +32,13 @@ $configuration = array(
 	),
 	// defines some settings needed to interact with the repositories
 	'repositories' => array(
+		'frodo' => array(
+			'name' => 'Kodi v12 - Main Add-On Repository',
+			'dataUrl' => 'http://mirrors.xbmc.org/addons/frodo/',
+			'xmlUrl' => 'http://mirrors.xbmc.org/addons/frodo/addons.xml',
+			'statsUrl' => '',
+			'downloadUrl' => ''
+		),
 		'gotham' => array(
 			'name' => 'Kodi v13 - Main Add-On Repository',
 			'dataUrl' => 'http://mirrors.xbmc.org/addons/gotham/',
@@ -39,10 +46,10 @@ $configuration = array(
 			'statsUrl' => '',
 			'downloadUrl' => ''
 		),
-		'frodo' => array(
-			'name' => 'Kodi v12 - Main Add-On Repository',
-			'dataUrl' => 'http://mirrors.xbmc.org/addons/frodo/',
-			'xmlUrl' => 'http://mirrors.xbmc.org/addons/frodo/addons.xml',
+		'helix' => array(
+			'name' => 'Kodi v14 - Main Add-On Repository',
+			'dataUrl' => 'http://mirrors.xbmc.org/addons/helix/',
+			'xmlUrl' => 'http://mirrors.xbmc.org/addons/helix/addons.xml',
 			'statsUrl' => '',
 			'downloadUrl' => ''
 		)
