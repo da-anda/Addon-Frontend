@@ -450,7 +450,7 @@ function cacheFile($sourceUrl, $targetPath, $forceUpdate = FALSE) {
 	if (!file_exists($targetPath) || $forceUpdate) {
 		$tempDownloadPath = $configuration['cache']['pathWrite'] . 'Temp';
 		$fileInfo = pathinfo($targetPath);
-		$tempDownloadName = $tempDownloadPath . DIRECTORY_SEPARATOR . time() . '-' . $fileInfo['filename'];
+		$tempDownloadName = $tempDownloadPath . DIRECTORY_SEPARATOR . time() . '-' . $fileInfo['filename'] . '.' . $fileInfo['extension'];
 
 		if (!file_exists($tempDownloadPath)) {
 			mkdir($tempDownloadPath, 0777, TRUE);
@@ -460,12 +460,12 @@ function cacheFile($sourceUrl, $targetPath, $forceUpdate = FALSE) {
 		if ($fp) {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $sourceUrl);
-			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_HEADER, FALSE);
 			curl_setopt($ch, CURLOPT_HTTPGET, 'GET');
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-			curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-			#curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+			#curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
 			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 
