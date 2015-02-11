@@ -80,7 +80,7 @@ class AddonController extends AbstractController {
 
 			// create details view
 			$output .= '<div id="addonDetail">
-				<span class="thumbnail"><img src="' . getAddonThumbnail($addon->id, 'large') . '" alt="' . $addon->name . '" class="pic" /></span>
+				<span class="thumbnail"><img src="' . getAddonThumbnail($addon->id, 'large') . '" alt="' . htmlspecialchars($addon->name) . '" class="pic" /></span>
 				<h2>' . htmlspecialchars($addon->name) .'</h2>
 				<div id="addonMetaData">
 				<strong>Author:</strong> ' . implode(', ', $authorLinks);
@@ -94,7 +94,7 @@ class AddonController extends AbstractController {
 			if ($repoConfig) {
 				if (count($this->configuration['repositories']) > 1) {
 					$output .= '<br /><strong>Repository:</strong> ';
-					$output .= $repoConfig['downloadUrl'] ? ('<a href="' . $repoConfig['downloadUrl'] . '" rel="nofollow">' . $repoConfig['name'] . '</a>') : $repoConfig['name'];
+					$output .= $repoConfig['downloadUrl'] ? ('<a href="' . $repoConfig['downloadUrl'] . '" rel="nofollow">' . htmlspecialchars($repoConfig['name']) . '</a>') : $repoConfig['name'];
 				}
 
 				if ($repoConfig['statsUrl'] && $addon->downloads > 0) {
