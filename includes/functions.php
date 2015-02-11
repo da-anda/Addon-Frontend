@@ -76,6 +76,26 @@ function getAddonThumbnail($addonId, $size) {
 }
 
 /**
+ * Will return the IMG url of the addons fanart in defined size
+ *
+ * @param string $addonId	The id of the addon
+ * @param string $size		Name of the image size to return. Sizes can be defined in the global configuration
+ * @return string
+ */
+function getAddonFanart($addonId, $size) {
+	global $configuration;
+
+	$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addonId . DIRECTORY_SEPARATOR;
+	$addonThumbnailPath = $addonWritePath . 'fanart.jpg';
+
+	if (!file_exists($addonThumbnailPath)) {
+		$addonThumbnailPath = $configuration['images']['dummyFanart'];
+	}
+
+	return getThumbnailUrl($addonThumbnailPath, $size);
+}
+
+/**
  * Will return the IMG url to the cached thumbnail of given source in desired size
  *
  * @param string $source	The path to the source image
@@ -408,44 +428,67 @@ function cacheAddonData($addonId, $repositoryId, $forceUpdate = FALSE) {
 	$repoConfig = getRepositoryConfiguration($repositoryId);
 	if ($repoConfig) {
 		$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addonId . DIRECTORY_SEPARATOR;
-		$addonThumbnailPath = $addonWritePath . 'icon.png';
+		$imageTypes = array('icon.png', 'fanart.jpg');
 
-		if (!file_exists($addonWritePath)) {
-			mkdir($addonWritePath, 0777, TRUE);
+		foreach ($imageTypes as $imageType) {
+			$addonThumbnailPath = $addonWritePath . $imageType;
+			$downloadUrl = $repoConfig['dataUrl'] . $addonId . '/' . $imageType;
+			cacheFile($downloadUrl, $addonThumbnailPath, $forceUpdate);
 		}
-		if (!file_exists($addonThumbnailPath) || $forceUpdate) {
-			$tempDownloadName = $addonWritePath . 'temp-icon.png';
-			$downloadUrl = $repoConfig['dataUrl'] . $addonId . '/icon.png';
+	}
+}
 
-			$fp = fopen($tempDownloadName, 'w');
-			if ($fp) {
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, $downloadUrl);
-				curl_setopt($ch, CURLOPT_HEADER, 0);
-				curl_setopt($ch, CURLOPT_HTTPGET, 'GET');
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-				#curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
-				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-				curl_setopt($ch, CURLOPT_FILE, $fp);
-				$data = curl_exec($ch);
-				curl_close($ch);
-				fclose($fp);
-				if ($data) {
-					if (file_exists($addonThumbnailPath)) {
-						unlink($addonThumbnailPath);
-					}
-					rename($tempDownloadName, $addonThumbnailPath);
-				} else {
-					unlink($tempDownloadName);
+/**
+ * Caches a file locally
+ * 
+ * @param string $sourceUrl
+ * @param string $targetPath
+ * @param boolean $forceUpdate
+ */
+function cacheFile($sourceUrl, $targetPath, $forceUpdate = FALSE) {
+	global $configuration;
+	if (!file_exists($targetPath) || $forceUpdate) {
+		$tempDownloadPath = $configuration['cache']['pathWrite'] . 'Temp';
+		$fileInfo = pathinfo($targetPath);
+		$tempDownloadName = $tempDownloadPath . DIRECTORY_SEPARATOR . time() . '-' . $fileInfo['filename'];
+
+		if (!file_exists($tempDownloadPath)) {
+			mkdir($tempDownloadPath, 0777, TRUE);
+		}
+
+		$fp = fopen($tempDownloadName, 'w');
+		if ($fp) {
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $sourceUrl);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_HTTPGET, 'GET');
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+			#curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+
+			curl_setopt($ch, CURLOPT_FILE, $fp);
+			$data = curl_exec($ch);
+			curl_close($ch);
+			fclose($fp);
+
+			if ($data) {
+				if (!file_exists($fileInfo['dirname'])) {
+					mkdir($fileInfo['dirname'], 0777, TRUE);
 				}
+				if (file_exists($targetPath)) {
+					unlink($targetPath);
+				}
+				rename($tempDownloadName, $targetPath);
+			} else {
+				unlink($tempDownloadName);
 			}
 		}
 	}
-} 
-
+}
+ 
 /**
  * Deletes a directory recursively
  * 
