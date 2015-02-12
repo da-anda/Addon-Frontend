@@ -16,13 +16,16 @@ $tables = array(
 				'content_types' => 'tinytext DEFAULT NULL',
 				'broken' => 'tinytext DEFAULT NULL',
 				'deleted' => 'tinyint(3) unsigned DEFAULT \'0\' NOT NULL',
-				'repository_id' => 'tinytext DEFAULT NULL'
+				'repository_id' => 'tinytext DEFAULT NULL',
+				'platforms' => 'tinytext DEFAULT \'\'',
+				'languages' => 'tinytext DEFAULT \'\'',
 			)
 		),
 		'keys' => array(
 			'add' => array(
 				'keyaddontype' => '( `extension_point` ( 60 ) , `content_types` ( 100 ) )',
-				'keyauthor' => '( `provider_name` ( 100 ) )'
+				'keyauthor' => '( `provider_name` ( 100 ) )',
+				'languages' => '( `languages` ( 60 ) )',
 			)
 		)
 	)

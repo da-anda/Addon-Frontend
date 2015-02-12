@@ -48,8 +48,11 @@ CREATE TABLE IF NOT EXISTS `addon` (
   `broken` tinytext DEFAULT NULL,
   `deleted` tinyint(3) unsigned DEFAULT '0' NOT NULL,
   `repository_id` tinytext DEFAULT NULL,
+  `platforms` tinytext DEFAULT '',
+  `languages` tinytext DEFAULT '',
   PRIMARY KEY (`id`),
   KEY keyaddontype ( `extension_point` ( 60 ) , `content_types` ( 100 ) ),
+  KEY languages ( `languages` ( 60 ) ),
   KEY keyauthor ( `provider_name` ( 100 ) )
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
