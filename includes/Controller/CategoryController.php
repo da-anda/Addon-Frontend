@@ -42,7 +42,7 @@ class CategoryController extends AbstractController {
 
 				require_once('includes/Controller/' . $controller . '.php');
 				$controller = new $controller;
-				$controller->setArguments($arguments);
+				$controller->setArguments($this->arguments);
 				$methodName = $action . 'Action';
 			
 				$output .= $controller->$methodName($category);
