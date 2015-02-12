@@ -72,8 +72,11 @@ abstract class AbstractController {
 		$items = array();
 		foreach ($categories as $categoryName => $categoryData) {
 			$attributes = isset($categoryData['rootline']) ? array_keys($categoryData['rootline']) : $categoryName;
-			$pathSegment = is_array($attributes) ? implode('/', $attributes) : $attributes;
-			$items[] = '<li><a href="' . createLinkUrl('category', $attributes) . '"><span class="thumbnail"><img src="images/categories/' . $pathSegment . '.png" class="pic" alt="' . $categoryData['label'] . '" /></span><strong>' . $categoryData['label'] . '</strong></a></li>';
+			$thumbnail = (is_array($attributes) ? implode('/', $attributes) : $attributes) . '.png';
+			if (isset($categoryData['thumbnail'])) {
+				$thumbnail = $categoryData['thumbnail'];
+			}
+			$items[] = '<li><a href="' . createLinkUrl('category', $attributes) . '"><span class="thumbnail"><img src="images/categories/' . $thumbnail . '" class="pic" alt="' . $categoryData['label'] . '" /></span><strong>' . $categoryData['label'] . '</strong></a></li>';
 		}
 
 		return '<ul id="addonCategories">
