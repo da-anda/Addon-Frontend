@@ -69,7 +69,7 @@ $configuration = array(
 	ga('create', 'UA-3066672-6', 'auto');
 	ga('send', 'pageview');
 </script>",
-	'addonExcludeClause' => ' AND NOT deleted AND id NOT LIKE "%.common.%" AND id NOT LIKE "script.module%" ',
+	'addonExcludeClause' => ' AND NOT deleted AND id NOT LIKE "%.common.%" AND id NOT LIKE "script.module%" AND id NOT LIKE "resource.language.%" ',
 	'categories' => array(
 		'audio' => array(
 			#'extensionPoint' => 'xbmc.python.pluginsource',
