@@ -32,13 +32,6 @@ $configuration = array(
 	),
 	// defines some settings needed to interact with the repositories
 	'repositories' => array(
-		'frodo' => array(
-			'name' => 'Kodi v12 - Main Add-On Repository',
-			'dataUrl' => 'http://mirrors.xbmc.org/addons/frodo/',
-			'xmlUrl' => 'http://mirrors.xbmc.org/addons/frodo/addons.xml',
-			'statsUrl' => '',
-			'downloadUrl' => ''
-		),
 		'gotham' => array(
 			'name' => 'Kodi v13 - Main Add-On Repository',
 			'dataUrl' => 'http://mirrors.xbmc.org/addons/gotham/',
