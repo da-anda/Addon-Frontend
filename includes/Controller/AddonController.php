@@ -67,6 +67,7 @@ class AddonController extends AbstractController {
 			// prepare variables and rootline
 			$addon = current($result);
 			$this->pageRenderer->addRootlineItem(array( 'url' => createLinkUrl('addon', $addon->id), 'name' => 'Details'));
+			$this->setPageTitle('"' . $addon->name . '" Add-On for Kodi');
 
 			// prepare authors and create individual links if more are listed by the addon
 			$authors = explode(',', $addon->provider_name);

@@ -15,6 +15,8 @@ class AuthorController extends AbstractController {
 			$this->pageRenderer->addRootlineItem(array( 'url' => createLinkUrl('author', $cleanAuthor), 'name' => $cleanAuthor));
 			$output .= '<h2>Browsing</h2><p>By author <strong>' . htmlspecialchars($cleanAuthor) . '</strong></p>';
 
+			$this->setPageTitle('Kodi Add-Ons by ' . htmlspecialchars($cleanAuthor));
+
 			// execute queries
 			$limit = 40;
 			$offset = max(0, isset($_GET['page']) ? (intval($_GET['page']) -1) : 0) * $limit;
