@@ -19,7 +19,7 @@ class SearchController extends AbstractController {
 		$output = '';
 		if ($_GET['keyword']) {
 			// perform search query
-			$limit = 4;
+			$limit = 40;
 			$offset = max(0, isset($_GET['page']) ? (intval($_GET['page']) -1) : 0) * $limit;
 			$keyword = $this->db->escape($_GET['keyword']);
 			$whereClause = 'id LIKE "' . $keyword . '" OR name LIKE "%' . $keyword . '%" OR description LIKE "%' . $keyword . '" OR provider_name LIKE "%' . $keyword . '%"' . $this->configuration['addonExcludeClause'];
