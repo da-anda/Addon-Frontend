@@ -128,7 +128,7 @@ class PageRenderer {
 	public function getBreadcrumbMarker() {
 		if (!count($this->rootline)) return '';
 
-		$rootline = array_merge(array(array('url' => './', 'name' => $this->configuration['defaultPageTitle'])), $this->rootline);
+		$rootline = array_merge(array(array('url' => './', 'name' => $this->configuration['rootlineHomeLabel'])), $this->rootline);
 		$current = array_pop($rootline);
 		$items = array();
 		foreach($rootline as $item) {

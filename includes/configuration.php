@@ -57,6 +57,7 @@ $configuration = array(
 	// template and rendering related settings
 	'templatePath' => 'templates',
 	'defaultPageTitle' => 'Add-Ons',
+	'rootlineHomeLabel' => 'Add-Ons',
 	'images' => array(
 		'dummy' => 'images/addon-dummy.png',
 		'dummyFanart' => '',
