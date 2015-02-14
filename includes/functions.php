@@ -209,7 +209,10 @@ function renderPagination($url, $itemsTotal, $itemsPerPage = 40, $varName='page'
 
 		// add "previous page" link
 		if ($page > 1) {
-			$linkUrl = $url . ($page == 2 ? '' : $querySign . $varName . '=' . $page-1);
+			$linkUrl = $url;
+			if ($page > 2) {
+				$linkUrl .= $querySign . $varName . '=' . ($page -1);
+			}
 			$pageLinks[] = '<li class="previousPage"><a class="page" href="' . $linkUrl . '"><dfn title="previous Page">◄</dfn></a></li>';
 		}
 
@@ -218,7 +221,11 @@ function renderPagination($url, $itemsTotal, $itemsPerPage = 40, $varName='page'
 			if ($i == $page) {
 				$pageLinks[] = '<li><span abbr="Page ' . $i . '">' . $i . '</span></li>';
 			} else {
-				$pageLinks[] = '<li><a class="page" href="' . $url . $querySign . $varName . '=' . $i . '" abbr="Page ' . $i . '">' . $i . '</a></li>';
+				$linkUrl = $url;
+				if ($i > 1) {
+					$linkUrl .= $querySign . $varName . '='. $i;
+				}
+				$pageLinks[] = '<li><a class="page" href="' . $linkUrl . '" abbr="Page ' . $i . '">' . $i . '</a></li>';
 			} 
 		}
 
