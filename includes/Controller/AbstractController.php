@@ -104,5 +104,15 @@ abstract class AbstractController {
 	protected function pageNotFound() {
 		header('HTTP/1.0 404 Not Found');
 	}
+
+	/**
+	 * Sets the page title using the configured pageTitleFormat
+	 * 
+	 * @param string $title
+	 * @return void
+	 */
+	protected function setPageTitle($title) {
+		$this->pageRenderer->setPageTitle(str_replace('###TITLE###', $title, $this->configuration['pageTitleFormat']));
+	}
 }
 ?>

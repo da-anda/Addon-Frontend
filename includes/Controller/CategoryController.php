@@ -27,6 +27,10 @@ class CategoryController extends AbstractController {
 			}
 			$output .= '<h2>Browsing</h2><p>Category <strong>' . htmlspecialchars(implode(' / ', $categoryLabels)) . '</strong></p>';
 
+			if (isset($category['pageTitle']) && $category['pageTitle']) {
+				$this->setPageTitle($category['pageTitle']);
+			}
+
 			// render subcategories if available
 			if (isset($category['subCategories'])) {
 				$output .= $this->renderCategoryList($category['subCategories']);

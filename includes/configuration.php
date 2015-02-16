@@ -49,7 +49,8 @@ $configuration = array(
 	),
 	// template and rendering related settings
 	'templatePath' => 'templates',
-	'defaultPageTitle' => 'Add-Ons',
+	'defaultPageTitle' => 'Kodi Add-On Repository',
+	'pageTitleFormat' => '###TITLE### | Kodi Add-On Repository',
 	'rootlineHomeLabel' => 'Add-Ons',
 	'images' => array(
 		'dummy' => 'images/addon-dummy.png',
@@ -74,80 +75,98 @@ $configuration = array(
 		'audio' => array(
 			#'extensionPoint' => 'xbmc.python.pluginsource',
 			'contentType' => 'audio',
-			'label' => 'Audio'
+			'label' => 'Audio',
+			'pageTitle' => 'Audio Add-ons'
 		),
 		'video' => array(
 			#'extensionPoint' => 'xbmc.python.pluginsource',
 			'contentType' => 'video',
-			'label' => 'Video'
+			'label' => 'Video',
+			'pageTitle' => 'Video Add-ons'
 		),
 		'pictures' => array(
 			#'extensionPoint' => 'xbmc.python.pluginsource',
 			'contentType' => 'image',
-			'label' => 'Pictures'
+			'label' => 'Pictures',
+			'pageTitle' => 'Picture Add-ons'
 		),
 		'screensaver' => array(
 			'extensionPoint' => 'xbmc.ui.screensaver',
-			'label' => 'Screensaver'
+			'label' => 'Screensaver',
+			'pageTitle' => 'Screensavers'
 		),
 		'skins' => array(
 			'extensionPoint' => 'xbmc.gui.skin',
-			'label' => 'Skins'
+			'label' => 'Skins',
+			'pageTitle' => 'Skins'
 		),
 		'weather' => array(
 			'extensionPoint' => 'xbmc.python.weather',
-			'label' => 'Weather'
+			'label' => 'Weather',
+			'pageTitle' => 'Weather provider'
 		),
 		'games' => array(
 			'contentType' => 'game',
-			'label' => 'Games'
+			'label' => 'Games',
+			'pageTitle' => 'Games'
 		),
 		'programs' => array(
 			#'extensionPoint' => 'xbmc.python.pluginsource',
 			'contentType' => 'executable',
-			'label' => 'Programs'
+			'label' => 'Programs',
+			'pageTitle' => 'Programs &amp; tools'
 		),
 		'lyrics' => array(
 			'extensionPoint' => 'xbmc.python.lyrics',
-			'label' => 'Lyrics'
+			'label' => 'Lyrics',
+			'pageTitle' => 'Lyrics providers'
 		),
 		'webinterface' => array(
 			'extensionPoint' => 'xbmc.gui.webinterface',
-			'label' => 'Webinterface'
+			'label' => 'Webinterface',
+			'pageTitle' => 'Webinterfaces'
 		),
 		'metadata' => array(
 			'extensionPoint' => 'xbmc.metadata',
 			'label' => 'Metadata',
+			'pageTitle' => 'Metadata provider',
 			'subCategories' => array(
 				'artists' => array(
 					'extensionPoint' => 'xbmc.metadata.scraper.artists',
-					'label' => 'Artists'
+					'label' => 'Artists',
+					'pageTitle' => 'Provider for artists metadata'
 				),
 				'albums' => array(
 					'extensionPoint' => 'xbmc.metadata.scraper.albums',
-					'label' => 'Albums'
+					'label' => 'Albums',
+					'pageTitle' => 'Provider for music album metadata'
 				),
 				'movies' => array(
 					'extensionPoint' => 'xbmc.metadata.scraper.movies',
-					'label' => 'Movies'
+					'label' => 'Movies',
+					'pageTitle' => 'Provider for movie metadata'
 				),
 				'musicvideos' => array(
 					'extensionPoint' => 'xbmc.metadata.scraper.musicvideos',
-					'label' => 'Musicvideos'
+					'label' => 'Musicvideos',
+					'pageTitle' => 'Provider for music video metadata'
 				),
 				'tvshows' => array(
 					'extensionPoint' => 'xbmc.metadata.scraper.tvshows',
-					'label' => 'TV-Shows'
+					'label' => 'TV-Shows',
+					'pageTitle' => 'Provider for TV-Shows metadata'
 				),
 			)
 		),
 		'subtitles' => array(
 			'extensionPoint' => 'xbmc.subtitle.module',
-			'label' => 'Subtitles'
+			'label' => 'Subtitles',
+			'pageTitle' => 'Subtitle Provider'
 		),
 		'services' => array(
 			'extensionPoint' => 'xbmc.service',
-			'label' => 'Services'
+			'label' => 'Services',
+			'pageTitle' => 'Service Add-ons'
 		),
 /*
 		'scripts' => array(
