@@ -33,6 +33,23 @@ class AddonController extends AbstractController {
 		if (isset($constraints['extensionIds']) && $constraints['extensionIds']) {
 			$whereClause .= ' AND id IN ("' . implode('","', $constraints['extensionIds']) . '")';
 		}
+		if (isset($constraints['repositories']) && $constraints['repositories']) {
+			$whereClause .= ' AND repository_id IN ("' . implode('","', $constraints['repositories']) . '")';
+		}
+		if (isset($constraints['platforms']) && $constraints['platforms']) {
+			$platformClauses = array();
+			foreach ($constraints['platforms'] as $platform) {
+				$platformClauses[] = 'FIND_IN_SET ("' . $platform . '", platforms)';
+			}
+			$whereClause .= ' AND (' . implode(' OR ', $platformClauses) . ')';
+		}
+		if (isset($constraints['languages']) && $constraints['languages']) {
+			$langClauses = array();
+			foreach ($constraints['languages'] as $language) {
+				$langClauses[] = 'FIND_IN_SET ("' . $language . '", languages)';
+			}
+			$whereClause .= ' AND (' . implode(' OR ', $langClauses) . ')';
+		}
 
 		// execute queries
 		$limit = 40;
