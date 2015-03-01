@@ -16,7 +16,7 @@ if (isset($_GET['mode']) && $_GET['mode'] == 'updated') {
 }
 
 // ###############  Setup Queries    ############### //
-$queryResult = $db->get_results('SELECT * FROM addon ORDER BY ' . $orderByProperty . ' DESC LIMIT 10');
+$queryResult = $db->get_results('SELECT * FROM addon WHERE 1=1 ' . $configuration['addonExcludeClause'] . ' ORDER BY ' . $orderByProperty . ' DESC LIMIT 10');
 //  ##############  Finish Queries  ############### //
 
 
