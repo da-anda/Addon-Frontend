@@ -25,7 +25,8 @@ $tables = array(
 			'add' => array(
 				'keyaddontype' => '( `extension_point` ( 60 ) , `content_types` ( 100 ) )',
 				'keyauthor' => '( `provider_name` ( 100 ) )',
-				'languages' => '( `languages` ( 60 ) )',
+				'keylanguages' => '( `languages` ( 60 ) )',
+				'keyplatforms' => '( `platforms` ( 60 ) )'
 			)
 		)
 	)

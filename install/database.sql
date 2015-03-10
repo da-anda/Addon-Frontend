@@ -52,7 +52,8 @@ CREATE TABLE IF NOT EXISTS `addon` (
   `languages` tinytext DEFAULT '',
   PRIMARY KEY (`id`),
   KEY keyaddontype ( `extension_point` ( 60 ) , `content_types` ( 100 ) ),
-  KEY languages ( `languages` ( 60 ) ),
+  KEY keylanguages ( `languages` ( 60 ) ),
+  KEY keyplatforms ( `platforms` ( 60 ) ),
   KEY keyauthor ( `provider_name` ( 100 ) )
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
