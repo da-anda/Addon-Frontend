@@ -45,6 +45,13 @@ $configuration = array(
 			'xmlUrl' => 'http://mirrors.xbmc.org/addons/helix/addons.xml',
 			'statsUrl' => '',
 			'downloadUrl' => ''
+		),
+		'isengard' => array(
+			'name' => 'Kodi v15 - Main Add-On Repository',
+			'dataUrl' => 'http://mirrors.xbmc.org/addons/isengard/',
+			'xmlUrl' => 'http://mirrors.xbmc.org/addons/isengard/addons.xml',
+			'statsUrl' => '',
+			'downloadUrl' => ''
 		)
 	),
 	// template and rendering related settings
