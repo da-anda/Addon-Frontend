@@ -36,19 +36,22 @@ $configuration = array(
 			'name' => 'Kodi v13 - Main Add-On Repository',
 			'dataUrl' => 'http://mirrors.kodi.tv/addons/gotham/',
 			'xmlUrl' => 'http://mirrors.kodi.tv/addons/gotham/addons.xml',
-			'downloadUrl' => ''
+			'downloadUrl' => '',
+			'enableStats' => TRUE
 		),
 		'helix' => array(
 			'name' => 'Kodi v14 - Main Add-On Repository',
 			'dataUrl' => 'http://mirrors.kodi.tv/addons/helix/',
 			'xmlUrl' => 'http://mirrors.kodi.tv/addons/helix/addons.xml',
-			'downloadUrl' => ''
+			'downloadUrl' => '',
+			'enableStats' => TRUE
 		),
 		'isengard' => array(
 			'name' => 'Kodi v15 - Main Add-On Repository',
 			'dataUrl' => 'http://mirrors.kodi.tv/addons/isengard/',
 			'xmlUrl' => 'http://mirrors.kodi.tv/addons/isengard/addons.xml',
-			'downloadUrl' => ''
+			'downloadUrl' => '',
+			'enableStats' => TRUE
 		)
 	),
 	// template and rendering related settings

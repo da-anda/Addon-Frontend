@@ -169,6 +169,40 @@ function getRepositoryConfiguration($repositoryId) {
 	return FALSE;
 }
 
+/**
+ * Returns the download stats for the given add-on
+ *
+ * @param object $addon
+ * @return array
+ */
+function getAddonStats($addon) {
+	global $configuration;
+	$repoConfig = getRepositoryConfiguration($addon->repository_id);
+	if (!$repoConfig || !$repoConfig['enableStats']) {
+		return NULL;
+	}
+
+	$statUrl = getAddonDownloadLink($addon) . '?stats';
+	$cacheFile = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addon->id . DIRECTORY_SEPARATOR . 'stats.json';
+	$cacheLifeTime = 3600;
+
+	$hasCacheFile = file_exists($cacheFile) && is_file($cacheFile);
+	if ($hasCacheFile && filemtime($cacheFile) + $cacheLifeTime > time()) {
+		$data = file_get_contents($cacheFile);
+	} else {
+		try {
+			cacheFile($statUrl, $cacheFile, TRUE);
+			$data = file_get_contents($cacheFile);
+		} catch(Exception $e) {
+			return NULL;
+		}
+	}
+	try {
+		return json_decode($data, TRUE);
+	} catch (Exception $e) {
+		return NULL;
+	}
+}
 
 /**
  * Render a flash message

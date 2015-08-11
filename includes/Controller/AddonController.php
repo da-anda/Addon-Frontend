@@ -85,6 +85,7 @@ class AddonController extends AbstractController {
 			$addon = current($result);
 			$this->pageRenderer->addRootlineItem(array( 'url' => createLinkUrl('addon', $addon->id), 'name' => 'Details'));
 			$this->setPageTitle('"' . $addon->name . '" Add-On for Kodi');
+			$stats = getAddonStats($addon);
 
 			// prepare authors and create individual links if more are listed by the addon
 			$authors = explode(',', $addon->provider_name);
@@ -105,6 +106,9 @@ class AddonController extends AbstractController {
 
 			// Show the extra details of the Add-on
 			$output .= '<br /><strong>Version:</strong> ' . $addon->version;
+			if (is_array($stats) && $stats['Total']) {
+				$output .= '<br /><strong>Downloads:</strong> ' . number_format($stats['Total']);
+			}
 			$output .= '<br /><strong>Released:</strong> ' . $addon->updated;
 
 			// Show repository details
@@ -113,10 +117,6 @@ class AddonController extends AbstractController {
 				if (count($this->configuration['repositories']) > 1) {
 					$output .= '<br /><strong>Repository:</strong> ';
 					$output .= $repoConfig['downloadUrl'] ? ('<a href="' . $repoConfig['downloadUrl'] . '" rel="nofollow">' . htmlspecialchars($repoConfig['name']) . '</a>') : $repoConfig['name'];
-				}
-
-				if ($repoConfig['statsUrl'] && $addon->downloads > 0) {
-					$output .= '<br /><strong>Downloads:</strong> ' . number_format($addon->downloads);
 				}
 			}
 
