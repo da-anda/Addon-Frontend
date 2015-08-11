@@ -50,21 +50,6 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 		$counterUpdated = 0;
 		$counterNewlyAdded = 0;
 
-		//prepare the download stats so that we can update each addon with one single query
-		$downloadStats = array();
-		if(isset($repositoryConfiguration['statsUrl']) && $repositoryConfiguration['statsUrl']) {
-			try {
-				$xmlsimple = simplexml_load_file($repositoryConfiguration['statsUrl']);
-			} catch(Exception $e) {}
-
-			if ($xmlsimple && isset($xmlsimple->addon['id']))	{
-				foreach ($xmlsimple->addon as $addon) {
-					$id = (string) $addon['id'];
-					$downloadStats[$id] = intval($addon->downloads);
-				}
-			}
-		}
-
 		// Loop through each addon
 		foreach ($xml->addon as $addon)	{
 			$counter++;
@@ -80,7 +65,6 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			$broken = '';
 			$extensionPoint = '';
 			$contentTypes = array();
-			$downloadCount = isset($downloadStats[$id]) ? $downloadStats[$id] : 0;
 			$platforms = array();
 			$languages = array();
 
@@ -210,7 +194,7 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			if (isset($addonCache['existing'][$id])) {
 				//Item exists
 				//Check here to see if the addon needs to be updated
-				$updateQuery = ' deleted = 0, name = "' . $db->escape($name) . '", provider_name = "' . $db->escape($author) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", downloads = ' . $downloadCount . ', extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '", broken="' . $db->escape($broken) . '", repository_id="' . $db->escape($repositoryId) . '", platforms="' . implode(',', $platforms) . '", languages="' . implode(',', $languages) . '"';
+				$updateQuery = ' deleted = 0, name = "' . $db->escape($name) . '", provider_name = "' . $db->escape($author) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '", broken="' . $db->escape($broken) . '", repository_id="' . $db->escape($repositoryId) . '", platforms="' . implode(',', $platforms) . '", languages="' . implode(',', $languages) . '"';
 					// only update timestamp on new version
 				if ($addonCache['existing'][$id]->version != $addon['version']) {
 					$counterUpdated++;
@@ -222,8 +206,8 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			// Add a new add-on if it doesn't exist
 			} else {
 				$counterNewlyAdded++;
-				$query = 'INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, downloads, extension_point, content_types, broken, deleted, repository_id, platforms, languages) ';
-				$query .= 'VALUES ("' . $db->escape($id) . '", "' . $db->escape($name) . '", "' . $db->escape($author) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", ' . $downloadCount . ', "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '", "' . $db->escape($broken) . '", 0, "' . $db->escape($repositoryId) . '", "' . implode(',', $platforms) . '", "' . implode(',', $languages) . '")';
+				$query = 'INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, extension_point, content_types, broken, deleted, repository_id, platforms, languages) ';
+				$query .= 'VALUES ("' . $db->escape($id) . '", "' . $db->escape($name) . '", "' . $db->escape($author) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '", "' . $db->escape($broken) . '", 0, "' . $db->escape($repositoryId) . '", "' . implode(',', $platforms) . '", "' . implode(',', $languages) . '")';
 				$db->query($query);
 			}
 
