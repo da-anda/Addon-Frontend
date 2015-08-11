@@ -34,20 +34,20 @@ $configuration = array(
 	'repositories' => array(
 		'gotham' => array(
 			'name' => 'Kodi v13 - Main Add-On Repository',
-			'dataUrl' => 'http://mirrors.xbmc.org/addons/gotham/',
-			'xmlUrl' => 'http://mirrors.xbmc.org/addons/gotham/addons.xml',
+			'dataUrl' => 'http://mirrors.kodi.tv/addons/gotham/',
+			'xmlUrl' => 'http://mirrors.kodi.tv/addons/gotham/addons.xml',
 			'downloadUrl' => ''
 		),
 		'helix' => array(
 			'name' => 'Kodi v14 - Main Add-On Repository',
-			'dataUrl' => 'http://mirrors.xbmc.org/addons/helix/',
-			'xmlUrl' => 'http://mirrors.xbmc.org/addons/helix/addons.xml',
+			'dataUrl' => 'http://mirrors.kodi.tv/addons/helix/',
+			'xmlUrl' => 'http://mirrors.kodi.tv/addons/helix/addons.xml',
 			'downloadUrl' => ''
 		),
 		'isengard' => array(
 			'name' => 'Kodi v15 - Main Add-On Repository',
-			'dataUrl' => 'http://mirrors.xbmc.org/addons/isengard/',
-			'xmlUrl' => 'http://mirrors.xbmc.org/addons/isengard/addons.xml',
+			'dataUrl' => 'http://mirrors.kodi.tv/addons/isengard/',
+			'xmlUrl' => 'http://mirrors.kodi.tv/addons/isengard/addons.xml',
 			'downloadUrl' => ''
 		)
 	),
