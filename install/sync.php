@@ -84,11 +84,6 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			$platforms = array();
 			$languages = array();
 
-			// check for duplicates in XML and skip those
-			if (isset($addonCache['processed'][$id])) {
-				continue;
-			}
-
 			$meetsRequirements = TRUE;
 
 			foreach ($addon->children() as $nodeName => $node) {
