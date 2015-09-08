@@ -189,17 +189,25 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			$author = strtr(removeKodiFormatting($addon['provider-name']), array('|' => ',', ';' => ',', '&amp;' => ',', ', ' => ','));
 
 			$contentTypes = array_unique($contentTypes);
+			$cacheAddonData = FALSE;
 
 			//Check here to see if the Item already exists
-			if (isset($addonCache['existing'][$id]) || isset($addonCache['processed'][$id])) {
+			$previousVersion = FALSE;
+			if (isset($addonCache['existing'][$id])) {
+				$previousVersion = $addonCache['existing'][$id];
+			} else if (isset($addonCache['processed'][$id])) {
+				$previousVersion = $addonCache['processed'][$id];
+			}
+			if ($previousVersion) {
 				//Item exists
 				//Check here to see if the addon needs to be updated
 				$updateQuery = ' deleted = 0, name = "' . $db->escape($name) . '", provider_name = "' . $db->escape($author) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '", broken="' . $db->escape($broken) . '", repository_id="' . $db->escape($repositoryId) . '", platforms="' . implode(',', $platforms) . '", languages="' . implode(',', $languages) . '"';
 					// only update timestamp on new version
-				if (isset($addonCache['processed'][$id]) || $addonCache['existing'][$id]->version != $addon['version']) {
+				if (version_compare($addon['version'], $previousVersion->version, '>')) {
 					$counterUpdated++;
 					$updateQuery .= ', version = "' . $db->escape($addon['version']) . '", updated = NOW() ';
 					deleteAddonCache($id);
+					$cacheAddonData = TRUE;
 				}
 				$db->query('UPDATE addon SET ' . $updateQuery . ' WHERE id = "' . $db->escape($id) . '"');
 	
@@ -209,10 +217,14 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 				$query = 'INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, extension_point, content_types, broken, deleted, repository_id, platforms, languages) ';
 				$query .= 'VALUES ("' . $db->escape($id) . '", "' . $db->escape($name) . '", "' . $db->escape($author) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '", "' . $db->escape($broken) . '", 0, "' . $db->escape($repositoryId) . '", "' . implode(',', $platforms) . '", "' . implode(',', $languages) . '")';
 				$db->query($query);
+				$cacheAddonData = TRUE;
 			}
 
-			cacheAddonData($id, $repositoryId);
-			$addonCache['processed'][$id] = $id;
+			// only scrape artwork if required
+			if ($cacheAddonData) {
+				cacheAddonData($id, $repositoryId);
+			}
+			$addonCache['processed'][$id] = $addon;
 		}
 
 		$consoleLog[] = 'Repository: ' . $repositoryConfiguration['name'] . ' - Total ' . $counter . ', ' . $counterUpdated . ' Updated, ' . $counterNewlyAdded . ' New';
