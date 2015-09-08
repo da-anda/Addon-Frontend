@@ -191,12 +191,12 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			$contentTypes = array_unique($contentTypes);
 
 			//Check here to see if the Item already exists
-			if (isset($addonCache['existing'][$id])) {
+			if (isset($addonCache['existing'][$id]) || isset($addonCache['processed'][$id])) {
 				//Item exists
 				//Check here to see if the addon needs to be updated
 				$updateQuery = ' deleted = 0, name = "' . $db->escape($name) . '", provider_name = "' . $db->escape($author) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '", broken="' . $db->escape($broken) . '", repository_id="' . $db->escape($repositoryId) . '", platforms="' . implode(',', $platforms) . '", languages="' . implode(',', $languages) . '"';
 					// only update timestamp on new version
-				if ($addonCache['existing'][$id]->version != $addon['version']) {
+				if (isset($addonCache['processed'][$id]) || $addonCache['existing'][$id]->version != $addon['version']) {
 					$counterUpdated++;
 					$updateQuery .= ', version = "' . $db->escape($addon['version']) . '", updated = NOW() ';
 					deleteAddonCache($id);
