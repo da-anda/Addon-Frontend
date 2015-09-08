@@ -186,7 +186,7 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			}
 
 			// unify format of multiple authors
-			$author = strtr(removeKodiFormatting($addon['provider-name']), array('|' => ',', ';' => ',', '&amp;' => ','));
+			$author = strtr(removeKodiFormatting($addon['provider-name']), array('|' => ',', ';' => ',', '&amp;' => ',', ', ' => ','));
 
 			$contentTypes = array_unique($contentTypes);
 
