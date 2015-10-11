@@ -25,6 +25,7 @@ class MarkerResolver {
 	 */
 	public function getRandomAddonsWidgetMarker() {
 		// Show some random Add-ons
+		$items = '';
 		$random = $this->db->get_results('SELECT * FROM addon WHERE 1=1 ' . $this->configuration['addonExcludeClause'] . ' AND NOT broken ORDER BY RAND() DESC LIMIT 5');
 		if (is_array($random) && count($random)) {
 			$items = '<ul class="overview">';
