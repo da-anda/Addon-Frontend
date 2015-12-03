@@ -52,7 +52,7 @@ $configuration = array(
 			'xmlUrl' => 'http://mirrors.kodi.tv/addons/isengard/addons.xml',
 			'downloadUrl' => '',
 			'enableStats' => TRUE
-		)
+		),
 		'jarvis' => array(
 			'name' => 'Kodi v16 - Main Add-On Repository',
 			'dataUrl' => 'http://mirrors.kodi.tv/addons/jarvis/',
