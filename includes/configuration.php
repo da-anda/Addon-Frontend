@@ -53,6 +53,13 @@ $configuration = array(
 			'downloadUrl' => '',
 			'enableStats' => TRUE
 		)
+		'jarvis' => array(
+			'name' => 'Kodi v16 - Main Add-On Repository',
+			'dataUrl' => 'http://mirrors.kodi.tv/addons/jarvis/',
+			'xmlUrl' => 'http://mirrors.kodi.tv/addons/jarvis/addons.xml',
+			'downloadUrl' => '',
+			'enableStats' => TRUE
+		)
 	),
 	// template and rendering related settings
 	'templatePath' => 'templates',
