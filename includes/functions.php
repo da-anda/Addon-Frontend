@@ -105,6 +105,9 @@ function getAddonFanart($addonId, $size) {
 function getThumbnailUrl($source, $size) {
 	global $configuration;
 
+	// as long as the thumb generation is somehow broken, return original image
+	return str_replace($configuration['cache']['pathWrite'], $configuration['cache']['pathRead'], $source);
+
 	if (!file_exists($source) || !is_file($source)) return '';
 
 	$fileInfo = pathinfo($source);
