@@ -25,6 +25,8 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 		foreach ($result as $addon) {
 			$addonCache['existing'][$addon->id] = $addon;
 		}
+		// now flag all add-ons as deleted, imported/updated ones will get the flag removed during import
+		$db->query('UPDATE addon SET deleted = 1');
 	}
 
 	// import addons from each repository
@@ -233,16 +235,13 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 	if (!$error) {
 		// mark addons no longer part of repo xml as deleted
 		$orphaned = array_diff(array_keys($addonCache['existing']), array_keys($addonCache['processed']));
-		$removedAddons = array();
+		$removedAddons = 0;
 		foreach ($orphaned as $addonId) {
 			if (isset($addonCache['existing'][$addonId]) && (bool) $addonCache['existing'][$addonId]->deleted == FALSE) {
-				$removedAddons[] = $db->escape($addonId);
+				++$removedAddons;
 			}
 		}
-		if (count($removedAddons)) {
-			$db->query('UPDATE addon SET deleted = 1 WHERE id IN ("' . implode('","', $removedAddons) . '")');
-		}
-		$consoleLog[] = 'Import finished: ' . date('l jS \of F Y h:i:s A') . ' - ' . count($removedAddons) . ' orphaned addons removed';
+		$consoleLog[] = 'Import finished: ' . date('l jS \of F Y h:i:s A') . ' - ' . $removedAddons . ' orphaned addons removed';
 	} else {
 		$consoleLog[] = 'Import abortet: ' . date('l jS \of F Y h:i:s A') . ' - an error occured during import';
 	}
