@@ -32,6 +32,7 @@ $configuration = array(
 	),
 	// defines some settings needed to interact with the repositories
 	'repositories' => array(
+/*
 		'gotham' => array(
 			'name' => 'Kodi v13 - Main Add-On Repository',
 			'dataUrl' => 'http://mirrors.kodi.tv/addons/gotham/',
@@ -53,6 +54,7 @@ $configuration = array(
 			'downloadUrl' => '',
 			'enableStats' => TRUE
 		),
+*/
 		'jarvis' => array(
 			'name' => 'Kodi v16 - Main Add-On Repository',
 			'dataUrl' => 'http://mirrors.kodi.tv/addons/jarvis/',
