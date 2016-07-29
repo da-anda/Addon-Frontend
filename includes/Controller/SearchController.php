@@ -22,7 +22,7 @@ class SearchController extends AbstractController {
 			$limit = 40;
 			$offset = max(0, isset($_GET['page']) ? (intval($_GET['page']) -1) : 0) * $limit;
 			$keyword = $this->db->escape($_GET['keyword']);
-			$whereClause = 'id LIKE "' . $keyword . '" OR name LIKE "%' . $keyword . '%" OR description LIKE "%' . $keyword . '" OR provider_name LIKE "%' . $keyword . '%"' . $this->configuration['addonExcludeClause'];
+			$whereClause = '(id LIKE "' . $keyword . '" OR name LIKE "%' . $keyword . '%" OR description LIKE "%' . $keyword . '" OR provider_name LIKE "%' . $keyword . '%")' . $this->configuration['addonExcludeClause'];
 			$addons = $this->db->get_results('SELECT * FROM addon WHERE ' . $whereClause . ' ORDER BY name ASC LIMIT ' . $offset . ', ' . $limit);
 			$count = $this->db->get_var('SELECT count(*) FROM addon WHERE ' . $whereClause);
 
