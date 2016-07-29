@@ -76,7 +76,7 @@ class AddonController extends AbstractController {
 
 	public function showAction() {
 		if (count($this->arguments)) {
-			$result = $this->db->get_results('SELECT * FROM addon WHERE id = "' . $this->db->escape($this->arguments[0]) . $this->configuration['addonExcludeClause'] . '" LIMIT 1');
+			$result = $this->db->get_results('SELECT * FROM addon WHERE id = "' . $this->db->escape($this->arguments[0]) . '"' . $this->configuration['addonExcludeClause'] . ' LIMIT 1');
 		}
 
 		$output = '';
