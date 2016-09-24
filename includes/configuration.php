@@ -61,6 +61,13 @@ $configuration = array(
 			'xmlUrl' => 'http://mirrors.kodi.tv/addons/jarvis/addons.xml',
 			'downloadUrl' => '',
 			'enableStats' => TRUE
+		),
+		'krypton' => array(
+			'name' => 'Kodi v17 - Main Add-On Repository',
+			'dataUrl' => 'http://mirrors.kodi.tv/addons/krypton/',
+			'xmlUrl' => 'http://mirrors.kodi.tv/addons/krypton/addons.xml',
+			'downloadUrl' => '',
+			'enableStats' => TRUE
 		)
 	),
 	// template and rendering related settings
