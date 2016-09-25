@@ -1845,7 +1845,8 @@ ol.ordered li p	{
 
 .resultCount {display:block; margin:2em 0 4em; text-align:center; clear:both}
 
-#addonDetail .thumbnail {float:left; margin:0 2em 2em 0}
+#addonDetail .thumbnail {float:left; margin:0 2em 2em 0; width: 256px;}
+#addonDetail .thumbnail img {width: 100%; height:auto; }
 #addonDetail .description {margin-top:1.5em;}
 #addonDetail h2 {text-transform: none;}
 
