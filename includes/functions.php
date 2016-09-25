@@ -526,7 +526,7 @@ function cacheFile($sourceUrl, $targetPath, $forceUpdate = FALSE) {
 					unlink($targetPath);
 				}
 				rename($tempDownloadName, $targetPath);
-			} else {
+			} else if (file_exists($tempDownloadName)){
 				unlink($tempDownloadName);
 			}
 		}
