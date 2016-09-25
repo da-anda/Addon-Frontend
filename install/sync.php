@@ -150,13 +150,13 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 							}
 							// Check for the Description XML Subnode
 							if ($subNodeName == 'description' 
-								&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
+								&& ($subNode['lang'] == 'en' || $subNode['lang'] == 'en_GB' || !isset($subNode['lang']) ) )
 							{
 								$description = removeKodiFormatting($subNode);
 							}
 							// Check for the Summary XML Subnode
 							if ($subNodeName == 'summary' 
-								&& ($subNode['lang'] == 'en' || !isset($subNode['lang']) ) )
+								&& ($subNode['lang'] == 'en' || $subNode['lang'] == 'en_GB' || !isset($subNode['lang']) ) )
 							{
 								$summary = removeKodiFormatting($subNode);
 							}
