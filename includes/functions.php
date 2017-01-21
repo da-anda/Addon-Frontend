@@ -66,7 +66,7 @@ function getAddonThumbnail($addon, $size) {
 	global $configuration;
 
 	$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addon->id . DIRECTORY_SEPARATOR;
-	$addonThumbnailPath = $addonWritePath . $addon->icon;
+	$addonThumbnailPath = $addonWritePath . str_replace('/', DIRECTORY_SEPARATOR, $addon->icon);
 
 	if (!file_exists($addonThumbnailPath)) {
 		$addonThumbnailPath = $configuration['images']['dummy'];
@@ -87,8 +87,9 @@ function getAddonFanart($addon, $size) {
 	$addonThumbnailPath = $configuration['images']['dummyFanart'];
 	if ($addon->fanart) {
 		$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addon->id . DIRECTORY_SEPARATOR;
-		if (file_exists($addonWritePath . $addon->fanart) ) {
-			$addonThumbnailPath = $addonWritePath . $addon->fanart;
+		$fanart = str_replace('/', DIRECTORY_SEPARATOR, $addon->fanart);
+		if (file_exists($addonWritePath . $fanart) ) {
+			$addonThumbnailPath = $addonWritePath . $fanart;
 		}
 	}
 
@@ -106,7 +107,7 @@ function getAddonFanart($addon, $size) {
 function getAddonScreenshot($addon, $screenshot, $size = FALSE) {
 	global $configuration;
 	$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addon->id . DIRECTORY_SEPARATOR;
-	$screenshotPath = $addonWritePath . $screenshot;
+	$screenshotPath = $addonWritePath . str_replace('/', DIRECTORY_SEPARATOR, $screenshot);
 	if (!file_exists($screenshotPath)) {
 		return FALSE;
 	}
@@ -136,7 +137,8 @@ function getThumbnailUrl($source, $size) {
 	if (isset($configuration['images']['sizes'][$size])) {
 		$targetSize = $configuration['images']['sizes'][$size];
 	}
-	$filePath = str_replace($configuration['cache']['pathWrite'], $configuration['cache']['pathRead'], $source);;
+	$filePath = str_replace($configuration['cache']['pathWrite'], $configuration['cache']['pathRead'], $source);
+	$filePath = str_replace(DIRECTORY_SEPARATOR, '/', $filePath);
 
 	if (!file_exists($cacheWritePath)) {
 		mkdir($cacheWritePath, 0777, TRUE);
@@ -493,7 +495,7 @@ function cacheAddonData($addonId, $repositoryId, $imageTypes, $forceUpdate = FAL
 		$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addonId . DIRECTORY_SEPARATOR;
 
 		foreach ($imageTypes as $imageType) {
-			$addonThumbnailPath = $addonWritePath . $imageType;
+			$addonThumbnailPath = $addonWritePath . str_replace('/', DIRECTORY_SEPARATOR, $imageType);
 			$downloadUrl = $repoConfig['dataUrl'] . $addonId . '/' . $imageType;
 			cacheFile($downloadUrl, $addonThumbnailPath, $forceUpdate);
 		}
@@ -543,7 +545,9 @@ function cacheFile($sourceUrl, $targetPath, $forceUpdate = FALSE) {
 				if (file_exists($targetPath)) {
 					unlink($targetPath);
 				}
-				rename($tempDownloadName, $targetPath);
+				if (file_exists($tempDownloadName) && is_file($tempDownloadName)) {
+					rename($tempDownloadName, $targetPath);
+				}
 			} else if (file_exists($tempDownloadName)){
 				unlink($tempDownloadName);
 			}

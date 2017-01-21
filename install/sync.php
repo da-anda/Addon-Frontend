@@ -245,14 +245,15 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			}
 
 			// only scrape artwork if required
-			$forceArtworkCache = isset($_GET['forceArtworkCache']) ? (bool) $_GET['forceArtworkCache'] : FALSE;
+			$forceArtworkCache = isset($_GET['forceArtworkCache']) ? $_GET['forceArtworkCache'] : FALSE;
 			if ($cacheAddonData || $forceArtworkCache) {
 				$imageTypes = $screenshots;
 				$imageTypes[] = $icon;
 				if ($fanart) {
 					$imageTypes[] = $fanart;
 				}
-				cacheAddonData($id, $repositoryId, $imageTypes, $forceArtworkCache);
+				$forceUpdate = $forceArtworkCache == 'update' ? TRUE : FALSE;
+				cacheAddonData($id, $repositoryId, $imageTypes, $forceUpdate);
 			}
 			$addonCache['processed'][$id] = $addon;
 		}
