@@ -99,7 +99,7 @@ class AddonController extends AbstractController {
 
 			// create details view
 			$output .= '<div id="addonDetail">
-				<span class="thumbnail"><img src="' . getAddonThumbnail($addon->id, 'large') . '" alt="' . htmlspecialchars($addon->name) . '" class="pic" /></span>
+				<span class="thumbnail"><img src="' . getAddonThumbnail($addon, 'large') . '" alt="' . htmlspecialchars($addon->name) . '" class="pic" /></span>
 				<h2>' . htmlspecialchars($addon->name) .'</h2>
 				<div id="addonMetaData">
 				<strong>Author:</strong> ' . implode(', ', $authorLinks);
@@ -124,10 +124,30 @@ class AddonController extends AbstractController {
 				$output .= '<br /><strong>License:</strong> ' . str_replace('[CR]', '<br />', $addon->license);
 			}
 			$output .= '</div>';
+			$output .= '<span class="clearfix"></span>';
+
+			if ($addon->news) {
+				$output .= '<blockquote class="news"><strong>New in this version:</strong><br />' . str_replace('[CR]', '<br />', $addon->news) . '</blockquote>';
+			}
+
 			$output .= '<div class="description"><h4>Description:</h4><p>' . str_replace('[CR]', '<br />', $addon->description) . '</p></div>';
 
 			if ($addon->broken) {
 				$output .= renderFlashMessage('Warning', 'This addon is currently reported as broken! <br /><strong>Suggestion / Reason:</strong> ' . htmlspecialchars($addon->broken) . '.', 'error');
+			}
+
+			if ($addon->screenshots) {
+				$screenshots = explode(',', $addon->screenshots);
+				$gallery = '';
+				foreach ($screenshots as $screenshot) {
+					$filePath = getAddonScreenshot($addon, $screenshot);
+					if ($filePath) {
+						$gallery .= '<li><a href="' . $filePath . '" target="_screenshot" rel="lightbox[1]"><img src="' . getAddonScreenshot($addon, $screenshot, 'screenshotPreview') . '" alt="' . $addon->name . ' screenshot" /></li>';
+					}
+				}
+				if ($gallery) {
+					$output .= '<div id="screenshots"><h4>Screenshots</h4><ul>' . $gallery . '</ul></div>';
+				}
 			}
 
 			$output .=  '<ul class="addonLinks">';

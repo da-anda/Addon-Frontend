@@ -31,7 +31,7 @@ class MarkerResolver {
 			$items = '<ul class="overview">';
 			foreach ($random as $addon) {
 				$description = str_replace('[CR]', '', $addon->description);
-				$items .= '<li><a class="thumb" href="' . createLinkUrl('addon', $addon->id) . '"><img src="' . getAddonThumbnail($addon->id, 'addonThumbnail') . '" height="110" alt="' . $addon->name . '" class="pic" /></a>';
+				$items .= '<li><a class="thumb" href="' . createLinkUrl('addon', $addon->id) . '"><img src="' . getAddonThumbnail($addon, 'addonThumbnail') . '" height="110" alt="' . $addon->name . '" class="pic" /></a>';
 				$items .= '<h3>' . htmlspecialchars($addon->name) . '</h3>';
 				$items .= '<p>' . htmlspecialchars( substr($description, 0, 190) ) . (strlen($description) < 190 ? '' : '...') . '</p></li>';
 			}
@@ -151,7 +151,7 @@ class MarkerResolver {
 			$output .= '<ul class="addonteaser">';
 			foreach ($addons as $addon) {
 				$output .= "<li><a href='" . createLinkUrl('addon', $addon->id) . "'>";
-				$output .= "<img src='" . getAddonThumbnail($addon->id, 'addonThumbnailSmall') . "' width='60' height='60' alt='$addon->name' class='pic alignleft' />";
+				$output .= "<img src='" . getAddonThumbnail($addon, 'addonThumbnailSmall') . "' width='60' height='60' alt='$addon->name' class='pic alignleft' />";
 				$output .= "<b>$addon->name</b></a>";
 				$output .= "<span class='date'>".$addon->updated."</span>";
 				$output .= "</li>";

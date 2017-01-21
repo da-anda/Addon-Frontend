@@ -23,7 +23,7 @@ $queryResult = $db->get_results('SELECT * FROM addon WHERE 1=1 ' . $configuratio
 // Build the Add-Ons list
 $itemList = '';
 foreach ($queryResult as $addon) {
-	$thumbnailExternalUrl = getAddonThumbnail($addon->id, 'addonThumbnail');
+	$thumbnailExternalUrl = getAddonThumbnail($addon, 'addonThumbnail');
 	$thumbnailFilePath = str_replace($configuration['cache']['pathRead'], $configuration['cache']['pathWrite'], $thumbnailExternalUrl);
 	$thumbnailSize = 0;
 	if (file_exists($thumbnailFilePath) && is_file($thumbnailFilePath)) {

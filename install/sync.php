@@ -69,6 +69,10 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			$contentTypes = array();
 			$platforms = array();
 			$languages = array();
+			$news = '';
+			$icon = 'icon.png';
+			$fanart = '';
+			$screenshots = array();
 
 			$meetsRequirements = TRUE;
 
@@ -160,6 +164,12 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 							{
 								$summary = removeKodiFormatting($subNode);
 							}
+							// Check for the News XML Subnode
+							if ($subNodeName == 'news' 
+								&& ($subNode['lang'] == 'en' || $subNode['lang'] == 'en_GB' || !isset($subNode['lang']) ) )
+							{
+								$news = removeKodiFormatting($subNode);
+							}
 							// Check for platform status
 							if ($subNodeName == 'platform') {
 								$platforms = array_unique(array_merge($platforms, explode(' ', trim((string) $subNode))));
@@ -173,6 +183,18 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 									}
 								}
 								$languages = array_unique(array_merge($languages, $langs));
+							}
+							// Check for assets
+							if ($subNodeName == 'assets' && $subNode->children()) {
+								foreach ($subNode->children() as $assetName => $assetValue) {
+									if ($assetName == 'icon') {
+										$icon = (string)$assetValue;
+									} else if ($assetName == 'fanart') {
+										$fanart = (string)$assetValue;
+									} else if ($assetName == 'screenshot') {
+										$screenshots[] = (string)$assetValue;
+									}
+								}
 							}
 						}
 						// Merge the description and summary variables
@@ -203,7 +225,7 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			if ($previousVersion) {
 				//Item exists
 				//Check here to see if the addon needs to be updated
-				$updateQuery = ' deleted = 0, name = "' . $db->escape($name) . '", provider_name = "' . $db->escape($author) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '", broken="' . $db->escape($broken) . '", repository_id="' . $db->escape($repositoryId) . '", platforms="' . implode(',', $platforms) . '", languages="' . implode(',', $languages) . '"';
+				$updateQuery = ' deleted = 0, name = "' . $db->escape($name) . '", provider_name = "' . $db->escape($author) . '", description = "' . $db->escape($description) . '", forum = "' . $db->escape($forum) . '", website = "' . $db->escape($website) . '", source = "' . $db->escape($source) . '", license = "' . $db->escape($license) . '", extension_point="' . $extensionPoint . '", content_types="' . implode(',', $contentTypes) . '", broken="' . $db->escape($broken) . '", repository_id="' . $db->escape($repositoryId) . '", platforms="' . implode(',', $platforms) . '", languages="' . implode(',', $languages) . '", news="' . $db->escape($news) . '", icon="' . $db->escape($icon) . '", fanart="' . $db->escape($fanart) . '", screenshots="' . $db->escape(implode(',', $screenshots)) . '"';
 					// only update timestamp on new version
 				if (version_compare($addon['version'], $previousVersion->version, '>')) {
 					$counterUpdated++;
@@ -216,15 +238,21 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 			// Add a new add-on if it doesn't exist
 			} else {
 				$counterNewlyAdded++;
-				$query = 'INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, extension_point, content_types, broken, deleted, repository_id, platforms, languages) ';
-				$query .= 'VALUES ("' . $db->escape($id) . '", "' . $db->escape($name) . '", "' . $db->escape($author) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '", "' . $db->escape($broken) . '", 0, "' . $db->escape($repositoryId) . '", "' . implode(',', $platforms) . '", "' . implode(',', $languages) . '")';
+				$query = 'INSERT INTO addon (id, name, provider_name, version, description, created, updated, forum, website, source, license, extension_point, content_types, broken, deleted, repository_id, platforms, languages, news, icon, fanart, screenshots) ';
+				$query .= 'VALUES ("' . $db->escape($id) . '", "' . $db->escape($name) . '", "' . $db->escape($author) . '", "' . $db->escape($addon['version']) . '", "' . $db->escape($description) . '", NOW(), NOW(), "' . $db->escape($forum) . '", "' . $db->escape($website) . '", "' . $db->escape($source) . '", "' . $db->escape($license) . '", "' . $extensionPoint . '", "' . implode(',', $contentTypes) . '", "' . $db->escape($broken) . '", 0, "' . $db->escape($repositoryId) . '", "' . implode(',', $platforms) . '", "' . implode(',', $languages) . '", "' . $db->escape($news) . '", "' . $db->escape($icon) . '", "' . $db->escape($fanart) . '", "' . $db->escape(implode(',', $screenshots)) . '")';
 				$db->query($query);
 				$cacheAddonData = TRUE;
 			}
 
 			// only scrape artwork if required
 			if ($cacheAddonData) {
-				cacheAddonData($id, $repositoryId);
+				$imageTypes = $screenshots;
+				$imageTypes[] = $icon;
+				if ($fanart) {
+					$imageTypes[] = $fanart;
+				}
+				$forceArtworkCache = isset($_GET['forceArtworkCache']) ? (bool) $_GET['forceArtworkCache'] : FALSE;
+				cacheAddonData($id, $repositoryId, $imageTypes, $forceArtworkCache);
 			}
 			$addonCache['processed'][$id] = $addon;
 		}

@@ -58,15 +58,15 @@ function shutdown() {
 /**
  * Will return the IMG url of the addons thumbnail in defined size
  *
- * @param string $addonId	The id of the addon
+ * @param array $addon		The addon-data
  * @param string $size		Name of the image size to return. Sizes can be defined in the global configuration
  * @return string
  */
-function getAddonThumbnail($addonId, $size) {
+function getAddonThumbnail($addon, $size) {
 	global $configuration;
 
-	$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addonId . DIRECTORY_SEPARATOR;
-	$addonThumbnailPath = $addonWritePath . 'icon.png';
+	$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addon->id . DIRECTORY_SEPARATOR;
+	$addonThumbnailPath = $addonWritePath . $addon->icon;
 
 	if (!file_exists($addonThumbnailPath)) {
 		$addonThumbnailPath = $configuration['images']['dummy'];
@@ -78,21 +78,39 @@ function getAddonThumbnail($addonId, $size) {
 /**
  * Will return the IMG url of the addons fanart in defined size
  *
- * @param string $addonId	The id of the addon
+ * @param array $addon		The addon data
  * @param string $size		Name of the image size to return. Sizes can be defined in the global configuration
  * @return string
  */
-function getAddonFanart($addonId, $size) {
+function getAddonFanart($addon, $size) {
 	global $configuration;
-
-	$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addonId . DIRECTORY_SEPARATOR;
-	$addonThumbnailPath = $addonWritePath . 'fanart.jpg';
-
-	if (!file_exists($addonThumbnailPath)) {
-		$addonThumbnailPath = $configuration['images']['dummyFanart'];
+	$addonThumbnailPath = $configuration['images']['dummyFanart'];
+	if ($addon->fanart) {
+		$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addon->id . DIRECTORY_SEPARATOR;
+		if (file_exists($addonWritePath . $addon->fanart) ) {
+			$addonThumbnailPath = $addonWritePath . $addon->fanart;
+		}
 	}
 
 	return getThumbnailUrl($addonThumbnailPath, $size);
+}
+
+/**
+ * Will return the IMG url of the addons screenshot in defined size
+ *
+ * @param array $addon		The addon data
+ * @param string $screenshot	The filename of the screenshot
+ * @param string $size		Name of the image size to return. Sizes can be defined in the global configuration
+ * @return string
+ */
+function getAddonScreenshot($addon, $screenshot, $size = FALSE) {
+	global $configuration;
+	$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addon->id . DIRECTORY_SEPARATOR;
+	$screenshotPath = $addonWritePath . $screenshot;
+	if (!file_exists($screenshotPath)) {
+		return FALSE;
+	}
+	return getThumbnailUrl($screenshotPath, $size);
 }
 
 /**
@@ -106,7 +124,7 @@ function getThumbnailUrl($source, $size) {
 	global $configuration;
 
 	// as long as the thumb generation is somehow broken, return original image
-	return str_replace($configuration['cache']['pathWrite'], $configuration['cache']['pathRead'], $source);
+	#return str_replace($configuration['cache']['pathWrite'], $configuration['cache']['pathRead'], $source);
 
 	if (!file_exists($source) || !is_file($source)) return '';
 
@@ -118,7 +136,7 @@ function getThumbnailUrl($source, $size) {
 	if (isset($configuration['images']['sizes'][$size])) {
 		$targetSize = $configuration['images']['sizes'][$size];
 	}
-	$filePath = $source;
+	$filePath = str_replace($configuration['cache']['pathWrite'], $configuration['cache']['pathRead'], $source);;
 
 	if (!file_exists($cacheWritePath)) {
 		mkdir($cacheWritePath, 0777, TRUE);
@@ -463,16 +481,16 @@ function removeKodiFormatting($stringToClean) {
  * 
  * @param string $addonId
  * @param string $repositoryId
+ * @param array $imageTypes
  * @param boolean $forceUpdate
  * @return void
  */
-function cacheAddonData($addonId, $repositoryId, $forceUpdate = FALSE) {
+function cacheAddonData($addonId, $repositoryId, $imageTypes, $forceUpdate = FALSE) {
 	global $configuration;
 
 	$repoConfig = getRepositoryConfiguration($repositoryId);
 	if ($repoConfig) {
 		$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addonId . DIRECTORY_SEPARATOR;
-		$imageTypes = array('icon.png', 'fanart.jpg');
 
 		foreach ($imageTypes as $imageType) {
 			$addonThumbnailPath = $addonWritePath . $imageType;

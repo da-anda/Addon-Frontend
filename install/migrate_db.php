@@ -19,6 +19,10 @@ $tables = array(
 				'repository_id' => 'tinytext DEFAULT NULL',
 				'platforms' => 'tinytext DEFAULT \'\'',
 				'languages' => 'tinytext DEFAULT \'\'',
+				'news' => 'text COLLATE utf8_unicode_ci',
+				'icon' => 'tinytext DEFAULT NULL',
+				'fanart' => 'tinytext DEFAULT NULL',
+				'screenshots' => 'text COLLATE utf8_unicode_ci',
 			)
 		),
 		'keys' => array(
