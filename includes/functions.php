@@ -62,7 +62,7 @@ function shutdown() {
  * @param string $size		Name of the image size to return. Sizes can be defined in the global configuration
  * @return string
  */
-function getAddonThumbnail($addon, $size) {
+function getAddonThumbnail($addon, $size = NULL) {
 	global $configuration;
 
 	$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addon->id . DIRECTORY_SEPARATOR;
@@ -82,7 +82,7 @@ function getAddonThumbnail($addon, $size) {
  * @param string $size		Name of the image size to return. Sizes can be defined in the global configuration
  * @return string
  */
-function getAddonFanart($addon, $size) {
+function getAddonFanart($addon, $size = NULL) {
 	global $configuration;
 	$addonThumbnailPath = $configuration['images']['dummyFanart'];
 	if ($addon->fanart) {
@@ -104,7 +104,7 @@ function getAddonFanart($addon, $size) {
  * @param string $size		Name of the image size to return. Sizes can be defined in the global configuration
  * @return string
  */
-function getAddonScreenshot($addon, $screenshot, $size = FALSE) {
+function getAddonScreenshot($addon, $screenshot, $size = NULL) {
 	global $configuration;
 	$addonWritePath = $configuration['cache']['pathWrite'] . 'Addons' . DIRECTORY_SEPARATOR . $addon->id . DIRECTORY_SEPARATOR;
 	$screenshotPath = $addonWritePath . str_replace('/', DIRECTORY_SEPARATOR, $screenshot);
@@ -121,7 +121,7 @@ function getAddonScreenshot($addon, $screenshot, $size = FALSE) {
  * @param string $size		Name of the image size to return. Sizes can be defined in the global configuration
  * @return string
  */
-function getThumbnailUrl($source, $size) {
+function getThumbnailUrl($source, $size = NULL) {
 	global $configuration;
 
 	// as long as the thumb generation is somehow broken, return original image
@@ -151,10 +151,14 @@ function getThumbnailUrl($source, $size) {
 
 	// create cache file
 	if (!file_exists($fileWritePath) && is_array($targetSize)) {
-		$image = new SimpleImage();
-		$image->load($source);
-		$image->resize($targetSize[0], $targetSize[1]);
-		$image->save($fileWritePath);
+		$currentSize = getimagesize($source);
+
+		if ($currentSize[0] > $targetSize[0] || $currentSize[1] > $targetSize[1]) {
+			$image = new SimpleImage();
+			$image->load($source);
+			$image->resize($targetSize[0], $targetSize[1]);
+			$image->save($fileWritePath);
+		}
 	}
 	if (file_exists($fileWritePath)) {
 		$filePath = $configuration['cache']['pathRead'] . 'images/' . $cacheFileName;
