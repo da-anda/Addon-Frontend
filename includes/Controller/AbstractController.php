@@ -51,7 +51,7 @@ abstract class AbstractController {
 			$output .= '<ul id="addonList">';
 			foreach ($addons as $addon) {
 				$output .= '<li>';
-				$output .= '<a href="' . createLinkUrl('addon', $addon->id) . '"><span class="thumbnail"><img src="' . getAddonThumbnail($addon, 'addonThumbnail') . '" width="100%" alt="' . $addon->name . '" class="pic" /></span>';
+				$output .= '<a href="' . createLinkUrl('addon', $addon->id) . '"><span class="thumbnail"><img src="' . getAddonThumbnail($addon, 'large') . '" width="100%" alt="' . $addon->name . '" class="pic" /></span>';
 				$output .= '<strong>' . $addon->name . '</strong></a>';
 				$output .= '</li>';
 			}

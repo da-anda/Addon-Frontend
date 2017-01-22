@@ -31,7 +31,7 @@ class MarkerResolver {
 			$items = '<ul class="overview">';
 			foreach ($random as $addon) {
 				$description = str_replace('[CR]', '', $addon->description);
-				$items .= '<li><a class="thumb" href="' . createLinkUrl('addon', $addon->id) . '"><img src="' . getAddonThumbnail($addon, 'addonThumbnail') . '" height="110" alt="' . $addon->name . '" class="pic" /></a>';
+				$items .= '<li><a class="thumb" href="' . createLinkUrl('addon', $addon->id) . '"><img src="' . getAddonThumbnail($addon, 'large') . '" height="110" alt="' . $addon->name . '" class="pic" /></a>';
 				$items .= '<h3>' . htmlspecialchars($addon->name) . '</h3>';
 				$items .= '<p>' . htmlspecialchars( substr($description, 0, 190) ) . (strlen($description) < 190 ? '' : '...') . '</p></li>';
 			}
