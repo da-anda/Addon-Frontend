@@ -82,7 +82,8 @@ $configuration = array(
 			'addonThumbnail' => array(120,120),
 			'addonThumbnailSmall' => array(60,60),
 			'large' => array(256,256),
-			'screenshotPreview' => array(160,90)
+			'screenshotPreview' => array(160,90),
+			'screenshot' => array(1280,720)
 		)
 	),
 	'analytics' => "<script>

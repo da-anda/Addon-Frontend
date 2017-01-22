@@ -140,7 +140,7 @@ class AddonController extends AbstractController {
 				$screenshots = explode(',', $addon->screenshots);
 				$gallery = '';
 				foreach ($screenshots as $screenshot) {
-					$filePath = getAddonScreenshot($addon, $screenshot);
+					$filePath = getAddonScreenshot($addon, $screenshot, 'screenshot');
 					if ($filePath) {
 						$gallery .= '<li><a href="' . $filePath . '" target="_screenshot" rel="lightbox[1]"><img src="' . getAddonScreenshot($addon, $screenshot, 'screenshotPreview') . '" alt="' . $addon->name . ' screenshot" /></li>';
 					}
