@@ -116,24 +116,24 @@ class AddonController extends AbstractController {
 			if ($repoConfig) {
 				if (count($this->configuration['repositories']) > 1) {
 					$output .= '<br /><strong>Repository:</strong> ';
-					$output .= $repoConfig['downloadUrl'] ? ('<a href="' . $repoConfig['downloadUrl'] . '" rel="nofollow">' . htmlspecialchars($repoConfig['name']) . '</a>') : $repoConfig['name'];
+					$output .= $repoConfig['downloadUrl'] ? ('<a href="' . $repoConfig['downloadUrl'] . '" rel="nofollow">' . htmlspecialchars($repoConfig['name']) . '</a>') : htmlspecialchars($repoConfig['name']);
 				}
 			}
 
 			if ($addon->license) {
-				$output .= '<br /><strong>License:</strong> ' . str_replace('[CR]', '<br />', $addon->license);
+				$output .= '<br /><strong>License:</strong> ' . formatKodiString($addon->license);
 			}
 			$output .= '</div>';
 			$output .= '<span class="clearfix"></span>';
 
 			if ($addon->news) {
-				$output .= '<blockquote class="news"><strong>New in this version:</strong><br />' . str_replace('[CR]', '<br />', $addon->news) . '</blockquote>';
+				$output .= '<blockquote class="news"><strong>New in this version:</strong><br />' . formatKodiString($addon->news) . '</blockquote>';
 			}
 
-			$output .= '<div class="description"><h4>Description:</h4><p>' . str_replace('[CR]', '<br />', $addon->description) . '</p></div>';
+			$output .= '<div class="description"><h4>Description:</h4><p>' . formatKodiString($addon->description) . '</p></div>';
 
 			if ($addon->broken) {
-				$output .= renderFlashMessage('Warning', 'This addon is currently reported as broken! <br /><strong>Suggestion / Reason:</strong> ' . htmlspecialchars($addon->broken) . '.', 'error');
+				$output .= renderFlashMessage('Warning', 'This addon is currently reported as broken! <br /><strong>Suggestion / Reason:</strong> ' . formatKodiString($addon->broken) . '.', 'error');
 			}
 
 			if ($addon->screenshots) {

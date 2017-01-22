@@ -466,16 +466,48 @@ function revertAuthorNameCleanup($authorName) {
 
 /**
  * Removes basic formatting options of Kodi skinning engine from the passed string.
- * So things like [COLOR foo] and [B] will be removed.
+ * So things like [COLOR foo] will be removed.
+ * 
+ * @param string
+ * @return string
+ */
+function removeUnsupportedKodiFormatting($stringToClean) {
+	if (strpos($stringToClean, '[') !== FALSE) {
+		return preg_replace('!\[/?(COLOR)[^]]*\]!is','', $stringToClean);
+	}
+	return $stringToClean;
+}
+
+/**
+ * Removes all formatting options of Kodi skinning engine from the passed string.
+ * So things like [COLOR foo], [B], [I] will be removed.
  * 
  * @param string
  * @return string
  */
 function removeKodiFormatting($stringToClean) {
 	if (strpos($stringToClean, '[') !== FALSE) {
-		return preg_replace('!\[/?(COLOR|B|I)[^]]*\]!is','', $stringToClean);
+		return preg_replace('!\[/?(COLOR|CR|B|I)[^]]*\]!is','', $stringToClean);
 	}
 	return $stringToClean;
+}
+
+/**
+ * Removes basic formatting options of Kodi skinning engine from the passed string.
+ * So things like [COLOR foo] will be removed.
+ * 
+ * @param string
+ * @return string
+ */
+function formatKodiString($stringToClean) {
+	$conversionArray = array(
+		'[B]' => '<strong>',
+		'[/B]' => '</strong>',
+		'[I]' => '<em>',
+		'[/I]' => '</em>',
+		'[CR]' => '<br />'
+	);
+	return strtr(htmlspecialchars($stringToClean), $conversionArray);
 }
 
 /**

@@ -150,25 +150,25 @@ if (isset($configuration['repositories']) && is_array($configuration['repositori
 							}
 							// Check for broken status
 							if ($subNodeName == 'broken') {
-								$broken = $subNode;
+								$broken = removeKodiFormatting($subNode);
 							}
 							// Check for the Description XML Subnode
 							if ($subNodeName == 'description' 
 								&& ($subNode['lang'] == 'en' || $subNode['lang'] == 'en_GB' || !isset($subNode['lang']) ) )
 							{
-								$description = removeKodiFormatting($subNode);
+								$description = removeUnsupportedKodiFormatting($subNode);
 							}
 							// Check for the Summary XML Subnode
 							if ($subNodeName == 'summary' 
 								&& ($subNode['lang'] == 'en' || $subNode['lang'] == 'en_GB' || !isset($subNode['lang']) ) )
 							{
-								$summary = removeKodiFormatting($subNode);
+								$summary = removeUnsupportedKodiFormatting($subNode);
 							}
 							// Check for the News XML Subnode
 							if ($subNodeName == 'news' 
 								&& ($subNode['lang'] == 'en' || $subNode['lang'] == 'en_GB' || !isset($subNode['lang']) ) )
 							{
-								$news = removeKodiFormatting($subNode);
+								$news = removeUnsupportedKodiFormatting($subNode);
 							}
 							// Check for platform status
 							if ($subNodeName == 'platform') {
